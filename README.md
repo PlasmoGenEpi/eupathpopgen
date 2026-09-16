@@ -15,6 +15,8 @@
 
 The scientific methods are Plasmodium-validated; use `-profile plasmodium` for recommended defaults. The pipeline name is pathogen-agnostic so other eukaryotic pathogens can share the same workflow as methods mature.
 
+![nf-core/eupathpopgen metro map](docs/images/nf-core-eupathpopgen_metromap.png)
+
 ## Pipeline summary
 
 1. Optionally extract an allele table (and population map) from `--pmo`

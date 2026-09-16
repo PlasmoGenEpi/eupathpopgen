@@ -9,6 +9,8 @@ Provide exactly one of:
 
 Optional population stratification via `--population_map`, or (with `--pmo`) `--pmo_population_fields`.
 
+![nf-core/eupathpopgen metro map](images/nf-core-eupathpopgen_metromap.png)
+
 ## Allele table
 
 Required columns (see [PGEcore input-formats](https://plasmogenepi.github.io/PGEcore/articles/input-formats.html)):
