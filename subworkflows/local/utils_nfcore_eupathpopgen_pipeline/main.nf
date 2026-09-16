@@ -10,6 +10,9 @@ include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
 
+include { EXTRACT_ALLELE_TABLE            } from '../../../modules/local/extract_allele_table'
+include { EXTRACT_POPULATION_MAP_FROM_PMO } from '../../../modules/local/extract_population_map_from_pmo'
+
 workflow PIPELINE_INITIALISATION {
 
     take:
@@ -18,8 +21,6 @@ workflow PIPELINE_INITIALISATION {
     monochrome_logs
     nextflow_cli_args
     outdir
-    allele_table
-    population_map
     help
     help_full
     show_hidden
@@ -75,14 +76,47 @@ workflow PIPELINE_INITIALISATION {
         nextflow_cli_args
     )
 
-    if (!allele_table) {
-        error("You must provide --allele_table pointing to a PGEcore allele table TSV.")
+    validateInputParameters()
+
+    def ch_allele_table = channel.empty()
+    def ch_population_map = channel.empty()
+
+    // Normalise comma-separated PMO population fields → space-separated for Python nargs='+'
+    def pmo_population_fields_norm = null
+    if (params.pmo_population_fields) {
+        pmo_population_fields_norm = params.pmo_population_fields
+            .tokenize(',')
+            .collect { it.trim() }
+            .findAll { it }
+            .join(' ')
+        if (!pmo_population_fields_norm) {
+            error("`--pmo_population_fields` was provided but no field names remained after parsing.")
+        }
     }
 
-    def ch_allele_table = channel.fromPath(allele_table, checkIfExists: true)
-    def ch_population_map = population_map
-        ? channel.fromPath(population_map, checkIfExists: true)
-        : channel.empty()
+    if (params.pmo) {
+        def ch_pmo = channel.fromPath(params.pmo, checkIfExists: true)
+        EXTRACT_ALLELE_TABLE(ch_pmo)
+        ch_allele_table = EXTRACT_ALLELE_TABLE.out.allele_table
+        ch_versions = ch_versions.mix(EXTRACT_ALLELE_TABLE.out.versions)
+
+        if (params.population_map) {
+            ch_population_map = channel.fromPath(params.population_map, checkIfExists: true)
+        } else if (pmo_population_fields_norm) {
+            EXTRACT_POPULATION_MAP_FROM_PMO(
+                ch_pmo,
+                pmo_population_fields_norm,
+                params.pmo_population_separator ?: '_'
+            )
+            ch_population_map = EXTRACT_POPULATION_MAP_FROM_PMO.out.population_map
+            ch_versions = ch_versions.mix(EXTRACT_POPULATION_MAP_FROM_PMO.out.versions)
+        }
+    } else {
+        ch_allele_table = channel.fromPath(params.allele_table, checkIfExists: true)
+        if (params.population_map) {
+            ch_population_map = channel.fromPath(params.population_map, checkIfExists: true)
+        }
+    }
 
     emit:
     allele_table   = ch_allele_table
@@ -125,10 +159,26 @@ workflow PIPELINE_COMPLETION {
     }
 }
 
+def validateInputParameters() {
+    if (params.pmo && params.allele_table) {
+        error("Provide exactly one of `--pmo` or `--allele_table`, not both.")
+    }
+    if (!params.pmo && !params.allele_table) {
+        error("You must provide either `--pmo` (PMO JSON) or `--allele_table` (PGEcore allele table TSV).")
+    }
+    if (params.pmo_population_fields && params.population_map) {
+        log.warn "`--population_map` takes precedence; `--pmo_population_fields` will be ignored."
+    }
+    if (params.pmo_population_fields && params.allele_table && !params.pmo) {
+        log.warn "`--pmo_population_fields` is only used with `--pmo` and will be ignored for allele-table input."
+    }
+}
+
 def toolCitationText() {
     def citation_text = [
             "Tools used in the workflow included:",
             "PGEcore (PlasmoGenEpi),",
+            params.pmo ? "pmotools (PlasmoGenEpi)," : "",
             (params.coi_method == 'moire' || !params.skip_allele_frequencies || !params.skip_within_host_relatedness) ? "MOIRE (Murphy and Greenhouse)," : "",
             params.skip_between_host_relatedness ? "" : "Dcifer (Gerlovina et al.),",
             "pegas (Paradis),",
@@ -142,11 +192,12 @@ def toolCitationText() {
 def toolBibliographyText() {
     def reference_text = [
             "<li>PlasmoGenEpi. PGEcore. https://github.com/PlasmoGenEpi/PGEcore</li>",
+            params.pmo ? "<li>PlasmoGenEpi. pmotools-python. https://github.com/PlasmoGenEpi/pmotools-python</li>" : "",
             "<li>Murphy M, Greenhouse B. MOIRE.</li>",
             "<li>Gerlovina I, et al. Dcifer.</li>",
             "<li>Paradis E. pegas: an R package for population genetics. Bioinformatics.</li>",
             "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics , 32(19), 3047–3048. doi: /10.1093/bioinformatics/btw354</li>"
-        ].join(' ').trim()
+        ].findAll { it }.join(' ').trim()
 
     return reference_text
 }

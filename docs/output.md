@@ -30,9 +30,10 @@ outdir/
 │   │   └── allele_summary_by_target.tsv
 │   └── popgen/
 │       └── per_locus_popgen_summary.tsv
-├── populations/               # only when --population_map is set
+├── populations/               # when --population_map or PMO population fields are set
 ├── multiqc/
 └── pipeline_info/
+    └── pmo/                   # extracted allele_table / population_map when --pmo
 ```
 
 ## Notes

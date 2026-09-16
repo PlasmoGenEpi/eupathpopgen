@@ -10,16 +10,25 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["allele_table", "outdir"],
+            "required": ["outdir"],
             "properties": {
+                "pmo": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.json$",
+                    "description": "Path to a Portable Microhaplotype Object (PMO) JSON file.",
+                    "help_text": "Mandatory if `--allele_table` is not set. The pipeline extracts an allele table (and optionally a population map) with pmotools. See https://plasmogenepi.github.io/PMO_Docs/.",
+                    "fa_icon": "fas fa-file-code"
+                },
                 "allele_table": {
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
                     "mimetype": "text/tab-separated-values",
-                    "pattern": "^\\S+$",
+                    "pattern": "^\\S+\\.[ct]sv$",
                     "description": "Path to allele table TSV (specimen_name, target_name, seq, reads).",
-                    "help_text": "Canonical PGEcore allele table. Columns: specimen_name, target_name, seq, and usually reads. See the PGEcore input-formats vignette.",
+                    "help_text": "Mandatory if `--pmo` is not set. Canonical PGEcore allele table. See the PGEcore input-formats vignette.",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "population_map": {
@@ -27,8 +36,20 @@
                     "format": "file-path",
                     "exists": true,
                     "description": "Optional TSV mapping specimen_name to population for stratified analyses.",
-                    "help_text": "When provided, the allele table is split by population before metric estimation. Requires columns specimen_name and population.",
+                    "help_text": "When provided, the allele table is split by population before metric estimation. Requires columns specimen_name and population. Takes precedence over `--pmo_population_fields`.",
                     "fa_icon": "fas fa-users"
+                },
+                "pmo_population_fields": {
+                    "type": "string",
+                    "description": "Comma-separated PMO specimen metadata fields used to build population labels.",
+                    "help_text": "Used only with `--pmo` when `--population_map` is not set. Fields are joined with `--pmo_population_separator`.",
+                    "fa_icon": "fas fa-tags"
+                },
+                "pmo_population_separator": {
+                    "type": "string",
+                    "default": "_",
+                    "description": "Separator used to join `--pmo_population_fields` into population labels.",
+                    "fa_icon": "fas fa-minus"
                 },
                 "outdir": {
                     "type": "string",

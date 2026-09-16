@@ -1,0 +1,33 @@
+name: extract_allele_table
+description: Extract an allele table from a PMO JSON file
+keywords:
+  - pmo
+  - pmotools
+  - allele table
+tools:
+  - pmotools:
+      description: |
+        pmotools-python extract_allele_table CLI.
+      homepage: https://github.com/PlasmoGenEpi/pmotools-python
+      documentation: https://github.com/PlasmoGenEpi/pmotools-python
+      licence: ["MIT"]
+input:
+  - pmo:
+      type: file
+      description: PMO JSON file
+      pattern: "*.json"
+output:
+  - allele_table:
+      - allele_table.tsv:
+          type: file
+          description: Extracted allele table TSV
+          pattern: allele_table.tsv
+  - versions:
+      - versions.yml:
+          type: file
+          description: Software versions
+          pattern: versions.yml
+authors:
+  - "@kathrynmurie"
+maintainers:
+  - "@kathrynmurie"

@@ -11,18 +11,19 @@
 
 ## Introduction
 
-**nf-core/eupathpopgen** estimates population-genetic metrics from **microhaplotype / allele-table** data for eukaryotic pathogens (for example *Plasmodium*). Infections are often polyclonal, so the pipeline focuses on COI, allele frequencies, within-host relatedness, between-host IBD, and per-locus summaries using [PGEcore](https://github.com/PlasmoGenEpi/PGEcore) and specialist tools (MOIRE, Dcifer).
+**nf-core/eupathpopgen** estimates population-genetic metrics from **microhaplotype / allele-table** data (or a [PMO](https://plasmogenepi.github.io/PMO_Docs/) JSON) for eukaryotic pathogens (for example *Plasmodium*). Infections are often polyclonal, so the pipeline focuses on COI, allele frequencies, within-host relatedness, between-host IBD, and per-locus summaries using [PGEcore](https://github.com/PlasmoGenEpi/PGEcore) and specialist tools (MOIRE, Dcifer).
 
 The scientific methods are Plasmodium-validated; use `-profile plasmodium` for recommended defaults. The pipeline name is pathogen-agnostic so other eukaryotic pathogens can share the same workflow as methods mature.
 
 ## Pipeline summary
 
-1. Optionally split the allele table by user-defined populations
-2. Estimate COI with `--coi_method naive` or `moire`
-3. Optionally estimate allele frequencies and within-host relatedness (MOIRE; single run when needed)
-4. Optionally estimate between-host relatedness / IBD (Dcifer)
-5. Always generate per-locus allele and popgen summaries
-6. Collate software versions with MultiQC
+1. Optionally extract an allele table (and population map) from `--pmo`
+2. Optionally split the allele table by user-defined populations
+3. Estimate COI with `--coi_method naive` or `moire`
+4. Optionally estimate allele frequencies and within-host relatedness (MOIRE; single run when needed)
+5. Optionally estimate between-host relatedness / IBD (Dcifer)
+6. Always generate per-locus allele and popgen summaries
+7. Collate software versions with MultiQC
 
 ## Quick start
 
@@ -30,6 +31,15 @@ The scientific methods are Plasmodium-validated; use `-profile plasmodium` for r
 nextflow run nf-core/eupathpopgen \
   -profile docker,plasmodium \
   --allele_table alleles.tsv \
+  --outdir results
+```
+
+Or from a PMO:
+
+```bash
+nextflow run nf-core/eupathpopgen \
+  -profile docker,plasmodium \
+  --pmo input.json \
   --outdir results
 ```
 

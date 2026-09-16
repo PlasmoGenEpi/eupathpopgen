@@ -1,0 +1,39 @@
+name: extract_population_map_from_pmo
+description: Extract specimen population assignment from PMO metadata
+keywords:
+  - pmo
+  - pmotools
+  - population
+tools:
+  - pmotools:
+      description: |
+        pmotools export plus helper script to build a population assignment table.
+      homepage: https://github.com/PlasmoGenEpi/pmotools-python
+      documentation: https://github.com/PlasmoGenEpi/pmotools-python
+      licence: ["MIT"]
+input:
+  - pmo:
+      type: file
+      description: PMO JSON file
+      pattern: "*.json"
+  - population_fields:
+      type: string
+      description: Space-separated PMO metadata fields for population label
+  - separator:
+      type: string
+      description: String used to join population fields
+output:
+  - population_map:
+      - population_map.tsv:
+          type: file
+          description: Specimen to population assignment TSV
+          pattern: population_map.tsv
+  - versions:
+      - versions.yml:
+          type: file
+          description: Software versions
+          pattern: versions.yml
+authors:
+  - "@kathrynmurie"
+maintainers:
+  - "@kathrynmurie"

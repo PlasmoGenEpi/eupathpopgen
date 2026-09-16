@@ -31,6 +31,7 @@ workflow EUPATHPOPGEN {
     take:
     ch_allele_table
     ch_population_map
+    ch_versions
     multiqc_config
     multiqc_logo
     multiqc_methods_description
@@ -38,15 +39,17 @@ workflow EUPATHPOPGEN {
 
     main:
 
-    def ch_versions = channel.empty()
+    def ch_versions = ch_versions
     def ch_multiqc_files = channel.empty()
 
     //
     // Optional population split → per-population allele tables
+    // Use params (not channel truthiness) — channel handles are always truthy.
     //
     def ch_allele_for_tools = ch_allele_table
+    def has_population_map = params.population_map || (params.pmo && params.pmo_population_fields)
 
-    if (params.population_map) {
+    if (has_population_map) {
         INDEX_POPULATION_ASSIGNMENT(ch_population_map)
         ch_versions = ch_versions.mix(INDEX_POPULATION_ASSIGNMENT.out.versions)
 

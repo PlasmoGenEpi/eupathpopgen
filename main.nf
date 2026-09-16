@@ -18,11 +18,13 @@ workflow NFCORE_EUPATHPOPGEN {
     take:
     ch_allele_table
     ch_population_map
+    ch_versions
 
     main:
     EUPATHPOPGEN (
         ch_allele_table,
         ch_population_map,
+        ch_versions,
         params.multiqc_config,
         params.multiqc_logo,
         params.multiqc_methods_description,
@@ -41,8 +43,6 @@ workflow {
         params.monochrome_logs,
         args,
         params.outdir,
-        params.allele_table,
-        params.population_map,
         params.help,
         params.help_full,
         params.show_hidden
@@ -50,7 +50,8 @@ workflow {
 
     NFCORE_EUPATHPOPGEN (
         PIPELINE_INITIALISATION.out.allele_table,
-        PIPELINE_INITIALISATION.out.population_map
+        PIPELINE_INITIALISATION.out.population_map,
+        PIPELINE_INITIALISATION.out.versions
     )
 
     PIPELINE_COMPLETION (

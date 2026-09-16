@@ -2,9 +2,14 @@
 
 ## Introduction
 
-Primary input is a **PGEcore allele table** TSV (`--allele_table`), not FASTQ. Optional `--population_map` splits analyses by population.
+Provide exactly one of:
 
-## Samples / allele table
+- `--allele_table` — PGEcore allele-table TSV
+- `--pmo` — [Portable Microhaplotype Object](https://plasmogenepi.github.io/PMO_Docs/) JSON (allele table extracted with pmotools)
+
+Optional population stratification via `--population_map`, or (with `--pmo`) `--pmo_population_fields`.
+
+## Allele table
 
 Required columns (see [PGEcore input-formats](https://plasmogenepi.github.io/PGEcore/articles/input-formats.html)):
 
@@ -14,6 +19,22 @@ Required columns (see [PGEcore input-formats](https://plasmogenepi.github.io/PGE
 | `target_name` | Locus / amplicon ID |
 | `seq` | Allele sequence |
 | `reads` | Read count (needed for naive COI and Dcifer) |
+
+## PMO input
+
+```bash
+nextflow run nf-core/eupathpopgen \
+  -profile docker,plasmodium \
+  --pmo input.json \
+  --pmo_population_fields "collection_country,collection_date" \
+  --outdir results
+```
+
+- `--pmo_population_fields` — comma-separated specimen metadata fields joined into `population` labels
+- `--pmo_population_separator` — join string (default `_`)
+- `--population_map` — if set, overrides PMO-derived population labels
+
+Extracted allele table / population map are published under `pipeline_info/pmo/`.
 
 ## Running the pipeline
 
@@ -29,8 +50,9 @@ nextflow run nf-core/eupathpopgen \
 | Profile | Purpose |
 |---------|---------|
 | `plasmodium` | Plasmodium-validated defaults (`--coi_method moire`, all relatedness/AF estimates on) |
-| `test` | Shared drugres allele table from nf-core/test-datasets (`eupathpopgen`); naive COI only |
-| `test_full` | Same allele table + population map; MOIRE COI + AF + relatedness (reduced MCMC) |
+| `test` | Shared drugres allele table from test-datasets; naive COI only |
+| `test_pmo` | Shared drugres example PMO (+ `collection_country` population fields); naive COI only |
+| `test_full` | Allele table + population map; MOIRE COI + AF + relatedness (reduced MCMC) |
 | `pgecore_local` | Use `PGECORE_HOME` source checkout instead of the GitHub pin |
 | `docker` / `singularity` / `conda` / `wave` | Standard nf-core executors |
 
@@ -51,7 +73,7 @@ MOIRE is invoked **at most once**. It runs when `--coi_method moire` and/or alle
 
 ### Test data
 
-`-profile test` / `test_full` use the allele table and population map from the [`eupathpopgen` branch of test-datasets](https://github.com/kathrynmurie/test-datasets/tree/eupathpopgen) (copied from plasmodiumdrugres). After the branch is merged into [nf-core/test-datasets](https://github.com/nf-core/test-datasets), update `pipelines_testdata_base_path` in `conf/test.config` / `conf/test_full.config` to `https://raw.githubusercontent.com/nf-core/test-datasets/`.
+`-profile test` / `test_pmo` / `test_full` use inputs from the [`eupathpopgen` branch of test-datasets](https://github.com/kathrynmurie/test-datasets/tree/eupathpopgen) (shared with plasmodiumdrugres). After that branch is merged into [nf-core/test-datasets](https://github.com/nf-core/test-datasets), update `pipelines_testdata_base_path` in the test configs to `https://raw.githubusercontent.com/nf-core/test-datasets/`.
 
 ### Docker notes
 

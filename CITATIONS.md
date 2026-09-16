@@ -14,6 +14,10 @@
 
   > PlasmoGenEpi. PGEcore: R package and CLIs for malaria genomics analysis.
 
+- [pmotools](https://github.com/PlasmoGenEpi/pmotools-python)
+
+  > PlasmoGenEpi. pmotools-python: CLI tools for Portable Microhaplotype Objects (PMO).
+
 - [MOIRE](https://github.com/EPPIcenter/moire)
 
   > Murphy M, Greenhouse B. MOIRE: complexity of infection and relatedness from polyclonal malaria infections.

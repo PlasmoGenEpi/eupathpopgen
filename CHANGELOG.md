@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- Allele-table population genetics workflow organised around estimates (`--coi_method`, skip flags for AF / relatedness)
-- Optional population split via `--population_map`
+- Allele-table or PMO population genetics workflow organised around estimates (`--coi_method`, skip flags for AF / relatedness)
+- Optional PMO entry via `--pmo` (pmotools extract) with optional `--pmo_population_fields`
+- Optional population split via `--population_map` (or PMO-derived map)
 - `-profile plasmodium` with Plasmodium-validated defaults (`coi_method=moire`)
 - PGEcore GitHub pin (`conf/pgecore.config`) and `-profile pgecore_local` for parallel package development
 - Local copies of shared test inputs under `tests/input/` (canonical files live on the `eupathpopgen` branch of nf-core/test-datasets, reused from plasmodiumdrugres)
@@ -16,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Dependencies`
 
 - PGEcore (GitHub pin until conda publication)
+- pmotools (PMO input)
 - moire, dcifer, pegas (via module environments / runtime install)
 
 ### Conda cutover (when PGEcore is published)
