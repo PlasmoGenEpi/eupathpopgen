@@ -1,0 +1,24 @@
+repository_type: pipeline
+
+nf_core_version: 4.1.0
+
+lint:
+  files_exist:
+    - conf/igenomes.config
+    - conf/igenomes_ignored.config
+
+template:
+  org: nf-core
+  name: eupathpopgen
+  description: Pipeline for generating population genetic metrics from microhaplotype
+    data of eukaryotic pathogens (e.g. Plasmodium). Designed for infections containing
+    multiple genetically distinct clones, the pipeline estimates complexity of infection
+    (COI), identity by descent (IBD), allele frequencies, within-host relateness,
+    and other population genetic metrics.
+  author: Kathryn Murie
+  version: 1.0.0dev
+  force: true
+  outdir: .
+  skip_features:
+    - igenomes
+  is_nfcore: true
