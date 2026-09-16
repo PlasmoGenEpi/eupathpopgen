@@ -9,77 +9,50 @@
 ----------------------------------------------------------------------------------------
 */
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
 include { EUPATHPOPGEN  } from './workflows/eupathpopgen'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_eupathpopgen_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_eupathpopgen_pipeline'
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    NAMED WORKFLOWS FOR PIPELINE
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
 
-//
-// WORKFLOW: Run main analysis pipeline depending on type of input
-//
 workflow NFCORE_EUPATHPOPGEN {
 
     take:
-    samplesheet // channel: samplesheet read in from --input
+    ch_allele_table
+    ch_population_map
 
     main:
-
-    //
-    // WORKFLOW: Run pipeline
-    //
     EUPATHPOPGEN (
-        samplesheet,
+        ch_allele_table,
+        ch_population_map,
         params.multiqc_config,
         params.multiqc_logo,
         params.multiqc_methods_description,
         params.outdir,
     )
     emit:
-    multiqc_report = EUPATHPOPGEN.out.multiqc_report // channel: /path/to/multiqc_report.html
+    multiqc_report = EUPATHPOPGEN.out.multiqc_report
 }
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    RUN MAIN WORKFLOW
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
 
 workflow {
 
     main:
-    //
-    // SUBWORKFLOW: Run initialisation tasks
-    //
     PIPELINE_INITIALISATION (
         params.version,
         params.validate_params,
         params.monochrome_logs,
         args,
         params.outdir,
-        params.input,
+        params.allele_table,
+        params.population_map,
         params.help,
         params.help_full,
         params.show_hidden
     )
 
-    //
-    // WORKFLOW: Run main workflow
-    //
     NFCORE_EUPATHPOPGEN (
-        PIPELINE_INITIALISATION.out.samplesheet
+        PIPELINE_INITIALISATION.out.allele_table,
+        PIPELINE_INITIALISATION.out.population_map
     )
-    //
-    // SUBWORKFLOW: Run completion tasks
-    //
+
     PIPELINE_COMPLETION (
         params.email,
         params.email_on_fail,
@@ -89,9 +62,3 @@ workflow {
         NFCORE_EUPATHPOPGEN.out.multiqc_report
     )
 }
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    THE END
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/

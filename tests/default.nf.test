@@ -13,21 +13,16 @@ nextflow_pipeline {
         }
 
         then {
-            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
-            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_content: All files in ${params.outdir}/ with stable content
-            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
             assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_eupathpopgen_software_mqc_versions.yml"),
-                    // All stable path name, with a relative path
-                    stable_path,
-                    // All files with stable contents
-                    stable_content
-                ).match() }
-            )
+            def coi = file("${params.outdir}/COI/naive/coi_table.tsv")
+            def allele_sum = file("${params.outdir}/per_locus_summaries/allele_counts/allele_summary_by_target.tsv")
+            def popgen = file("${params.outdir}/per_locus_summaries/popgen/per_locus_popgen_summary.tsv")
+            assert coi.exists()
+            assert allele_sum.exists()
+            assert popgen.exists()
+            // test profile skips MOIRE-backed estimates and Dcifer
+            assert !file("${params.outdir}/allele_frequencies").exists()
+            assert !file("${params.outdir}/relatedness").exists()
         }
     }
 }

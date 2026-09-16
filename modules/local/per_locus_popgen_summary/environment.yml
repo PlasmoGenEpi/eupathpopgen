@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/environment-schema.json
+name: per_locus_popgen_summary
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  # Bioconductor-msa has no osx-arm64 bioconda build; Biostrings/msa/pwalign
+  # are installed at runtime via BiocManager (see process script).
+  - conda-forge::r-base=4.4
+  - conda-forge::r-biocmanager
+  - conda-forge::r-dplyr
+  - conda-forge::r-magrittr
+  - conda-forge::r-optparse
+  - conda-forge::r-purrr
+  - conda-forge::r-readr
+  - conda-forge::r-remotes
+  - conda-forge::r-rlang
+  - conda-forge::r-stringr
+  - conda-forge::r-tibble
+  - conda-forge::r-tidyr
+  - conda-forge::r-ape
+  - conda-forge::r-pegas
+  - bioconda::muscle=5.1

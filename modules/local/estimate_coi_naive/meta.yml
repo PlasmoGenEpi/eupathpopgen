@@ -1,0 +1,16 @@
+name: estimate_coi_naive
+description: Estimate COI using naive integer or quantile methods via PGEcore
+keywords:
+  - popgen
+  - microhaplotype
+  - plasmodium
+tools:
+  - PGEcore:
+      description: R package / CLIs for malaria genomics analysis
+      homepage: https://github.com/PlasmoGenEpi/PGEcore
+      documentation: https://plasmogenepi.github.io/PGEcore/
+      licence: ["MIT"]
+authors:
+  - "@kathrynmurie"
+maintainers:
+  - "@kathrynmurie"

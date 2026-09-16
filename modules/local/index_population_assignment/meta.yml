@@ -1,0 +1,16 @@
+name: index_population_assignment
+description: Add stable population_index labels to a population map
+keywords:
+  - popgen
+  - microhaplotype
+  - plasmodium
+tools:
+  - PGEcore:
+      description: R package / CLIs for malaria genomics analysis
+      homepage: https://github.com/PlasmoGenEpi/PGEcore
+      documentation: https://plasmogenepi.github.io/PGEcore/
+      licence: ["MIT"]
+authors:
+  - "@kathrynmurie"
+maintainers:
+  - "@kathrynmurie"

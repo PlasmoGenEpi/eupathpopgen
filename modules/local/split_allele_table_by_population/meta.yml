@@ -1,0 +1,16 @@
+name: split_allele_table_by_population
+description: Split an allele table into per-population tables
+keywords:
+  - popgen
+  - microhaplotype
+  - plasmodium
+tools:
+  - PGEcore:
+      description: R package / CLIs for malaria genomics analysis
+      homepage: https://github.com/PlasmoGenEpi/PGEcore
+      documentation: https://plasmogenepi.github.io/PGEcore/
+      licence: ["MIT"]
+authors:
+  - "@kathrynmurie"
+maintainers:
+  - "@kathrynmurie"

@@ -1,0 +1,16 @@
+name: per_locus_popgen_summary
+description: Per-locus popgen summary statistics via PGEcore
+keywords:
+  - popgen
+  - microhaplotype
+  - plasmodium
+tools:
+  - PGEcore:
+      description: R package / CLIs for malaria genomics analysis
+      homepage: https://github.com/PlasmoGenEpi/PGEcore
+      documentation: https://plasmogenepi.github.io/PGEcore/
+      licence: ["MIT"]
+authors:
+  - "@kathrynmurie"
+maintainers:
+  - "@kathrynmurie"

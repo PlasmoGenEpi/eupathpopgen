@@ -10,9 +10,21 @@
 
 ## Pipeline tools
 
-- [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+- [PGEcore](https://github.com/PlasmoGenEpi/PGEcore)
 
-> Andrews, S. (2010). FastQC: A Quality Control Tool for High Throughput Sequence Data [Online].
+  > PlasmoGenEpi. PGEcore: R package and CLIs for malaria genomics analysis.
+
+- [MOIRE](https://github.com/EPPIcenter/moire)
+
+  > Murphy M, Greenhouse B. MOIRE: complexity of infection and relatedness from polyclonal malaria infections.
+
+- [Dcifer](https://cran.r-project.org/package=dcifer)
+
+  > Gerlovina I, et al. Dcifer: relatedness estimation from polyclonal malaria infections.
+
+- [pegas](https://cran.r-project.org/package=pegas)
+
+  > Paradis E. pegas: an R package for population genetics with an integrated-modular approach. Bioinformatics.
 
 - [MultiQC](https://pubmed.ncbi.nlm.nih.gov/27312411/)
 
