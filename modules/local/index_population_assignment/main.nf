@@ -29,4 +29,15 @@ process INDEX_POPULATION_ASSIGNMENT {
         r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
     END_VERSIONS
     """
+
+    stub:
+    """
+    touch population_map_indexed.tsv
+    touch population_index_lookup.tsv
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
+    END_VERSIONS
+    """
 }

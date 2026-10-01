@@ -53,4 +53,22 @@ process RUN_MOIRE {
         r-moire: \$( Rscript -e 'cat(as.character(packageVersion("moire")))' )
     END_VERSIONS
     """
+
+    stub:
+    prefix = allele_table.getBaseName(3)
+    """
+    touch ${prefix}.coi_summary.tsv
+    touch ${prefix}.he_summary.tsv
+    touch ${prefix}.allele_freq_summary.tsv
+    touch ${prefix}.relatedness_summary.tsv
+    touch ${prefix}.effective_coi_summary.tsv
+    touch ${prefix}.convergence_summary.tsv
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
+        r-pgecore: \$( Rscript -e 'cat(as.character(packageVersion("PGEcore")))' )
+        r-moire: \$( Rscript -e 'cat(as.character(packageVersion("moire")))' )
+    END_VERSIONS
+    """
 }

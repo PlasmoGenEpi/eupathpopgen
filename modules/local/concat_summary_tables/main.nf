@@ -27,4 +27,14 @@ process CONCAT_SUMMARY_TABLES {
         r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
     END_VERSIONS
     """
+
+    stub:
+    """
+    touch ${out_name}
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
+    END_VERSIONS
+    """
 }

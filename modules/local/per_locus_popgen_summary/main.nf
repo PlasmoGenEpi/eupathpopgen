@@ -36,4 +36,19 @@ process PER_LOCUS_POPGEN_SUMMARY {
         muscle: \$(muscle -version 2>/dev/null | sed -n 's/^muscle \\([0-9.]*[0-9]\\).*/\\1/p')
     END_VERSIONS
     """
+
+    stub:
+    prefix = allele_table.getBaseName(3)
+    """
+    touch ${prefix}.per_locus_popgen_summary.tsv
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
+        r-pgecore: \$( Rscript -e 'cat(as.character(packageVersion("PGEcore")))' )
+        pegas: \$(Rscript -e 'cat(as.character(packageVersion("pegas")))' 2>/dev/null || echo 'NA')
+        bioconductor-msa: \$(Rscript -e 'cat(as.character(packageVersion("msa")))' 2>/dev/null || echo 'NA')
+        muscle: \$(muscle -version 2>/dev/null | sed -n 's/^muscle \\([0-9.]*[0-9]\\).*/\\1/p')
+    END_VERSIONS
+    """
 }

@@ -49,4 +49,14 @@ process MERGE_PER_LOCUS_SUMMARY {
         r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
     END_VERSIONS
     """
+
+    stub:
+    """
+    touch ${prefix}.per_locus_summary.tsv
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
+    END_VERSIONS
+    """
 }

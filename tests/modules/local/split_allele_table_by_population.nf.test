@@ -1,0 +1,59 @@
+nextflow_process {
+
+    name "Test Process SPLIT_ALLELE_TABLE_BY_POP"
+    script "modules/local/split_allele_table_by_population/main.nf"
+    process "SPLIT_ALLELE_TABLE_BY_POP"
+    tag "modules"
+    tag "modules_local"
+    tag "split_allele_table_by_population"
+
+    test("Should split the allele table into one table per population") {
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/allele_table.tsv', checkIfExists: true)
+                input[1] = file(params.pipelines_testdata_base_path + 'testdata/population_map_indexed.tsv', checkIfExists: true)
+                """
+            }
+        }
+
+        // gzip headers can differ between runs, so compare decompressed content
+        then {
+            def tables = process.out.per_pop_tables.get(0).collect { f -> path(f) }.sort { f -> f.fileName.toString() }
+            assertAll(
+                { assert process.success },
+                { assert tables*.fileName*.toString() == ['popidx_001.allele_table.tsv.gz', 'popidx_002.allele_table.tsv.gz', 'popidx_003.allele_table.tsv.gz'] },
+                { assert process.out.unassigned_report == [] },
+                { assert snapshot(
+                    tables.collect { f -> [f.fileName.toString(), f.linesGzip] },
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("Stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/allele_table.tsv', checkIfExists: true)
+                input[1] = file(params.pipelines_testdata_base_path + 'testdata/population_map_indexed.tsv', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(
+                    process.out.per_pop_tables.collect { f -> file(f).name },
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+}

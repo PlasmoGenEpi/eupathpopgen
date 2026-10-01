@@ -32,4 +32,14 @@ process EXTRACT_ALLELE_TABLE {
         pmotools-python: \$( pmotools-python --version 2>/dev/null || echo 'N/A' )
     END_VERSIONS
     """
+
+    stub:
+    """
+    touch allele_table.tsv
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        pmotools-python: \$( pmotools-python --version 2>/dev/null || echo 'N/A' )
+    END_VERSIONS
+    """
 }

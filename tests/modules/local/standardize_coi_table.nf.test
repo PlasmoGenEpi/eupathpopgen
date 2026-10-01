@@ -1,0 +1,51 @@
+nextflow_process {
+
+    name "Test Process STANDARDIZE_COI_TABLE"
+    script "modules/local/standardize_coi_table/main.nf"
+    process "STANDARDIZE_COI_TABLE"
+    tag "modules"
+    tag "modules_local"
+    tag "standardize_coi_table"
+
+    test("Should standardise a naive COI table") {
+
+        when {
+            process {
+                """
+                input[0] = ['popidx_001', file(params.pipelines_testdata_base_path + 'testdata/popidx_001.coi_table.tsv', checkIfExists: true)]
+                input[1] = 'naive'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.coi_table.get(0)[1] == 'naive' },
+                { assert path(process.out.coi_table.get(0)[2]).readLines()[0] == "coi_method\tspecimen_name\tcoi" },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("Stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = ['popidx_001', file(params.pipelines_testdata_base_path + 'testdata/popidx_001.coi_table.tsv', checkIfExists: true)]
+                input[1] = 'naive'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+}

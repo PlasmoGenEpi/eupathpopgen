@@ -1,0 +1,143 @@
+// when.params are written to a JSON file before Nextflow loads config,
+// so params.pipelines_testdata_base_path is not available inside params {} blocks.
+// Keep in sync with tests/nextflow.config.
+def pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/eupathpopgen/'
+
+nextflow_workflow {
+
+    name "Test Workflow PIPELINE_INITIALISATION"
+    script "subworkflows/local/utils_nfcore_eupathpopgen_pipeline/main.nf"
+    workflow "PIPELINE_INITIALISATION"
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "utils_nfcore_eupathpopgen_pipeline"
+
+    // Global profile "test" sets allele_table
+    test("Allele table only") {
+
+        when {
+            workflow {
+                """
+                input[0] = false             // version
+                input[1] = true              // validate_params
+                input[2] = true              // monochrome_logs
+                input[3] = []                // nextflow_cli_args
+                input[4] = "$outputDir"      // outdir
+                input[5] = false             // help
+                input[6] = false             // help_full
+                input[7] = false             // show_hidden
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.trace.tasks().size() == 0 },
+                { assert workflow.out.allele_table.size() == 1 },
+                { assert workflow.out.population_assignment == [] },
+                { assert workflow.out.population_index_lookup == [] }
+            )
+        }
+    }
+
+    test("Allele table with population assignment") {
+
+        when {
+            params {
+                population_assignment = pipelines_testdata_base_path + 'testdata/population_assignment.tsv'
+            }
+            workflow {
+                """
+                input[0] = false
+                input[1] = true
+                input[2] = true
+                input[3] = []
+                input[4] = "$outputDir"
+                input[5] = false
+                input[6] = false
+                input[7] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.trace.tasks().size() == 1 },
+                { assert snapshot(
+                    workflow.out.population_assignment,
+                    workflow.out.population_index_lookup,
+                    workflow.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("PMO with population fields") {
+
+        when {
+            params {
+                pmo                   = pipelines_testdata_base_path + 'testdata/example_PMO.json'
+                allele_table          = null
+                pmo_population_fields = "collection_country,collection_date"
+            }
+            workflow {
+                """
+                input[0] = false
+                input[1] = true
+                input[2] = true
+                input[3] = []
+                input[4] = "$outputDir"
+                input[5] = false
+                input[6] = false
+                input[7] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.trace.tasks().size() == 3 },
+                { assert snapshot(
+                    workflow.out.allele_table,
+                    workflow.out.population_assignment,
+                    workflow.out.population_index_lookup,
+                    workflow.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("PMO with population assignment skips PMO population extraction") {
+
+        when {
+            params {
+                pmo                   = pipelines_testdata_base_path + 'testdata/example_PMO.json'
+                allele_table          = null
+                population_assignment = pipelines_testdata_base_path + 'testdata/population_assignment.tsv'
+            }
+            workflow {
+                """
+                input[0] = false
+                input[1] = true
+                input[2] = true
+                input[3] = []
+                input[4] = "$outputDir"
+                input[5] = false
+                input[6] = false
+                input[7] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.trace.tasks().size() == 2 },
+                { assert workflow.trace.tasks()*.name.every { name -> !name.contains('EXTRACT_POPULATION_MAP_FROM_PMO') } }
+            )
+        }
+    }
+}

@@ -1,0 +1,60 @@
+{
+    "Stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "popidx_001.naive.sample_count_per_coi.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,051c6080009b225b7206acdebd3524bb"
+                ],
+                "sample_count_per_coi": [
+                    [
+                        "popidx_001",
+                        "popidx_001.naive.sample_count_per_coi.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,051c6080009b225b7206acdebd3524bb"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:23:19.237074",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Should count samples per COI and prepend the method": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "popidx_001.naive.sample_count_per_coi.tsv:md5,b7c5fe774790e1516b1081e8288b3121"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,051c6080009b225b7206acdebd3524bb"
+                ],
+                "sample_count_per_coi": [
+                    [
+                        "popidx_001",
+                        "popidx_001.naive.sample_count_per_coi.tsv:md5,b7c5fe774790e1516b1081e8288b3121"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,051c6080009b225b7206acdebd3524bb"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:23:15.604796",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

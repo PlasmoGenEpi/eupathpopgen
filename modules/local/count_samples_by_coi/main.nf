@@ -31,4 +31,15 @@ process COUNT_SAMPLES_BY_COI {
         r-pgecore: \$( Rscript -e 'cat(as.character(packageVersion("PGEcore")))' )
     END_VERSIONS
     """
+
+    stub:
+    """
+    touch ${prefix}.${method}.sample_count_per_coi.tsv
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
+        r-pgecore: \$( Rscript -e 'cat(as.character(packageVersion("PGEcore")))' )
+    END_VERSIONS
+    """
 }

@@ -1,0 +1,72 @@
+nextflow_process {
+
+    name "Test Process EXTRACT_POPULATION_MAP_FROM_PMO"
+    script "modules/local/extract_population_map_from_pmo/main.nf"
+    process "EXTRACT_POPULATION_MAP_FROM_PMO"
+    tag "modules"
+    tag "modules_local"
+    tag "extract_population_map_from_pmo"
+
+    test("Should build a population map from one PMO field") {
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/example_PMO.json', checkIfExists: true)
+                input[1] = 'collection_country'
+                input[2] = '_'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.population_map.get(0)).readLines()[0] == "specimen_name\tpopulation" },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("Should join multiple PMO fields with the separator") {
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/example_PMO.json', checkIfExists: true)
+                input[1] = 'collection_country collection_date'
+                input[2] = '-'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("Stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/example_PMO.json', checkIfExists: true)
+                input[1] = 'collection_country'
+                input[2] = '_'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+}

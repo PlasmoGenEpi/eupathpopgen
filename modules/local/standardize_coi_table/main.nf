@@ -27,4 +27,14 @@ process STANDARDIZE_COI_TABLE {
         r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
     END_VERSIONS
     """
+
+    stub:
+    """
+    touch ${prefix}.${method}.coi_table.tsv
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
+    END_VERSIONS
+    """
 }

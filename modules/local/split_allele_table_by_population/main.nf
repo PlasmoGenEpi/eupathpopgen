@@ -30,4 +30,14 @@ process SPLIT_ALLELE_TABLE_BY_POP {
         r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
     END_VERSIONS
     """
+
+    stub:
+    """
+    echo "" | gzip > popidx_001.allele_table.tsv.gz
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
+    END_VERSIONS
+    """
 }

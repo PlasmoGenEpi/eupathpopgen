@@ -1,0 +1,71 @@
+{
+    "Should use the index as the label when the lookup is empty": {
+        "content": [
+            {
+                "0": [
+                    "popidx_001.naive.coi_table.labeled.tsv:md5,c78c9924b2a6869b931b9ac528c02490"
+                ],
+                "1": [
+                    "versions.yml:md5,985d06d2571349e02a98b2523d8d39c1"
+                ],
+                "labeled_table": [
+                    "popidx_001.naive.coi_table.labeled.tsv:md5,c78c9924b2a6869b931b9ac528c02490"
+                ],
+                "versions": [
+                    "versions.yml:md5,985d06d2571349e02a98b2523d8d39c1"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:22:44.602684",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Should resolve the population label from the lookup": {
+        "content": [
+            {
+                "0": [
+                    "popidx_001.naive.coi_table.labeled.tsv:md5,db27c172181335c1023da5320373e9cc"
+                ],
+                "1": [
+                    "versions.yml:md5,985d06d2571349e02a98b2523d8d39c1"
+                ],
+                "labeled_table": [
+                    "popidx_001.naive.coi_table.labeled.tsv:md5,db27c172181335c1023da5320373e9cc"
+                ],
+                "versions": [
+                    "versions.yml:md5,985d06d2571349e02a98b2523d8d39c1"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:22:40.535785",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Stub": {
+        "content": [
+            {
+                "0": [
+                    "popidx_001.naive.coi_table.labeled.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "versions.yml:md5,985d06d2571349e02a98b2523d8d39c1"
+                ],
+                "labeled_table": [
+                    "popidx_001.naive.coi_table.labeled.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "versions": [
+                    "versions.yml:md5,985d06d2571349e02a98b2523d8d39c1"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:22:51.786049",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

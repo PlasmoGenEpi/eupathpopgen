@@ -38,4 +38,14 @@ process EXTRACT_POPULATION_MAP_FROM_PMO {
         pmotools-python: \$( pmotools-python --version 2>/dev/null || echo 'N/A' )
     END_VERSIONS
     """
+
+    stub:
+    """
+    touch population_map.tsv
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        pmotools-python: \$( pmotools-python --version 2>/dev/null || echo 'N/A' )
+    END_VERSIONS
+    """
 }
