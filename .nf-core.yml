@@ -10,7 +10,7 @@ lint:
 template:
   org: nf-core
   name: eupathpopgen
-    description: Pipeline for generating population genetic metrics from microhaplotype
+  description: Pipeline for generating population genetic metrics from microhaplotype
     data of eukaryotic pathogens (e.g. Plasmodium). Designed for infections containing
     multiple genetically distinct clones, the pipeline estimates complexity of infection
     (COI), identity by descent (IBD), allele frequencies, within-host relatedness,
