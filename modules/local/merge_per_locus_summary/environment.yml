@@ -4,4 +4,4 @@ name: merge_per_locus_summary
 channels:
   - conda-forge
 dependencies:
-  - conda-forge::r-base=4.4
+  - conda-forge::r-base=4.5

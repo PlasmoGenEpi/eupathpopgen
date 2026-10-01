@@ -3,9 +3,9 @@ process MERGE_PER_LOCUS_SUMMARY {
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container ?
-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/b8/b8b5976e182bb3b8f3b3073fe7ccb663bfa240ef8476d59faf2cccf8b180fe6f/data' :
-        'docker.io/rocker/r-ver:4.4.2' }"
+    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/50/50c7890c34e1947af8358cb959dec80816bdb20368162fdbc2643c116105445b/data'
+:         'community.wave.seqera.io/library/merge_per_locus_summary:cd27cc7980d17f7e' }"
 
     input:
     tuple val(prefix), path(allele_summary), path(popgen_summary), path(he_summary)

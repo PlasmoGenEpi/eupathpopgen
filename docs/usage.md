@@ -79,10 +79,7 @@ MOIRE is invoked **at most once**. It runs when `--coi_method` includes `moire` 
 
 ### Software notes
 
-All tools come from conda (bioconda / conda-forge) or matching Seqera community containers, with two exceptions that are installed at runtime (needs network):
-
-- MOIRE is not on conda, so `RUN_MOIRE` installs it from GitHub into the task work directory.
-- `bioconductor-msa` has no osx-arm64 conda build, so on Apple Silicon with `-profile conda`, `PER_LOCUS_POPGEN_SUMMARY` installs it via BiocManager. The containers already include it.
+All tools come from conda (bioconda / conda-forge) or matching Seqera community containers built per module for linux/amd64 and linux/arm64.
 
 ### MOIRE / Dcifer tuning
 

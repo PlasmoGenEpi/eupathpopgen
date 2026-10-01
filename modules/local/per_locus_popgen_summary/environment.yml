@@ -10,8 +10,6 @@ dependencies:
   - conda-forge::r-ape
   - conda-forge::r-pegas
   - bioconda::bioconductor-biostrings
+  - bioconda::bioconductor-msa
   - bioconda::bioconductor-pwalign
-  # bioconductor-msa has no osx-arm64 build, so it is omitted here and installed at
-  # runtime when missing; the containers include it.
-  - conda-forge::r-biocmanager
-  - bioconda::muscle=5.1
+  - bioconda::muscle=5.3

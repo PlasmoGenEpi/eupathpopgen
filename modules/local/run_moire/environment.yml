@@ -9,13 +9,5 @@ dependencies:
   - bioconda::r-pgecore=0.1.0
   - conda-forge::r-checkmate
   - conda-forge::r-coda
+  - conda-forge::r-moire=3.7.0
   - conda-forge::r-posterior
-  # moire is not on conda; it is installed from GitHub at runtime and needs these to compile
-  - conda-forge::r-remotes
-  - conda-forge::r-rcpp
-  - conda-forge::r-rcppprogress
-  - conda-forge::r-rcppparallel
-  - conda-forge::r-bh
-  - conda-forge::r-ggplot2
-  - conda-forge::cxx-compiler
-  - conda-forge::make

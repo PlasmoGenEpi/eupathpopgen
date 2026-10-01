@@ -19,5 +19,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - PGEcore 0.1.0 (`bioconda::r-pgecore`)
 - pmotools 1.1.0 (`bioconda::pmotools`, PMO input)
-- dcifer 1.5.2, pegas, ape, Biostrings, pwalign, msa, muscle 5.1 (conda)
-- moire (not on conda; installed from GitHub at runtime)
+- moire 3.7.0 (`conda-forge::r-moire`)
+- dcifer 1.5.2, pegas, ape, Biostrings, pwalign, msa, muscle 5.3 (conda)

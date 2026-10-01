@@ -3,9 +3,9 @@ process ESTIMATE_COI_NAIVE {
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container ?
-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/a3/a3f6b6ae8a3fa56533afbf35e8b01adde48df5640095715373bbfda0380593bc/data' :
-        'community.wave.seqera.io/library/r-base_r-pgecore:3c5180998a8cccc0' }"
+    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/7b/7b7ca5eb26f1bbaf3fba4ea585e789071aa49902df3182030df649f596ac97b1/data'
+:         'community.wave.seqera.io/library/pgecore:e9024a6dc6e9a694' }"
 
     input:
     path allele_table

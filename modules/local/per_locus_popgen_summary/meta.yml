@@ -14,3 +14,27 @@ authors:
   - "@kathrynmurie"
 maintainers:
   - "@kathrynmurie"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/per_locus_popgen_summary:7f6f43c8231ce06f
+      build_id: bd-7f6f43c8231ce06f_1
+      scan_id: sc-20bdd27f2a228a37_1
+    linux/arm64:
+      name: community.wave.seqera.io/library/per_locus_popgen_summary:d2b418696a2a4930
+      build_id: bd-d2b418696a2a4930_1
+      scan_id: sc-9d05ede7e26a732e_1
+  singularity:
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/per_locus_popgen_summary:64b0fe46c60659d5
+      build_id: bd-64b0fe46c60659d5_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/db/dbb51b67dbbd6a08700210318fe04831dfe0dc5d88a28ce2653b5be516638cff/data
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/per_locus_popgen_summary:c44e8b31ba4f812e
+      build_id: bd-c44e8b31ba4f812e_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/5c/5cf58632508eb0af0e240343c102a1aefa374dcd46458fbfc8a102f2e6328921/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/per_locus_popgen_summary/.conda-lock/linux_amd64-bd-7f6f43c8231ce06f_1.txt
+    linux/arm64:
+      lock_file: modules/local/per_locus_popgen_summary/.conda-lock/linux_arm64-bd-d2b418696a2a4930_1.txt

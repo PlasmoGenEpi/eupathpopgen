@@ -24,11 +24,6 @@ process RUN_MOIRE {
     prefix = allele_table.getBaseName(3)
     def extra_args = task.ext.args ?: ''
     """
-
-    # MOIRE is not on conda; install into ./r_libs when missing.
-    Rscript -e 'libs <- file.path(getwd(), "r_libs"); dir.create(libs, recursive=TRUE, showWarnings=FALSE); .libPaths(c(libs, .libPaths())); Sys.setenv(R_LIBS_USER=libs); if (!requireNamespace("moire", quietly=TRUE)) remotes::install_github("EPPIcenter/moire", lib=libs, upgrade="never")'
-
-    export R_LIBS_USER="\$PWD/r_libs"
     export PATH="\$(Rscript -e 'cat(system.file("exec", package = "PGEcore"))'):\${PATH}"
     moire_wrapper \\
         --allele_table ${allele_table} \\
@@ -55,7 +50,7 @@ process RUN_MOIRE {
     "${task.process}":
         r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
         r-pgecore: \$( Rscript -e 'cat(as.character(packageVersion("PGEcore")))' )
-        moire: \$(R_LIBS_USER=\$PWD/r_libs Rscript -e 'cat(as.character(packageVersion("moire")))' 2>/dev/null || echo 'NA')
+        r-moire: \$( Rscript -e 'cat(as.character(packageVersion("moire")))' )
     END_VERSIONS
     """
 }

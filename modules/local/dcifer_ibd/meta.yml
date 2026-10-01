@@ -14,3 +14,27 @@ authors:
   - "@kathrynmurie"
 maintainers:
   - "@kathrynmurie"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/dcifer_ibd:04eaabd9a8a3f281
+      build_id: bd-04eaabd9a8a3f281_1
+      scan_id: sc-0df6cf3127254204_1
+    linux/arm64:
+      name: community.wave.seqera.io/library/dcifer_ibd:d7e4b47f976552cf
+      build_id: bd-d7e4b47f976552cf_1
+      scan_id: sc-4855af4f0f48a1a4_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/dcifer_ibd:aad70529bd12bf14
+      build_id: bd-aad70529bd12bf14_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/b1/b136d93933a1fd1a035e54963270afeb7f4b6b3fd7b1d755dc994466987c62e7/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/dcifer_ibd:3ea351d3f9aa904f
+      build_id: bd-3ea351d3f9aa904f_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/41/4144d38d1793fada128918fd1f5f57d3b89205652dc626953e9a60e66e9cbef9/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/dcifer_ibd/.conda-lock/linux_amd64-bd-04eaabd9a8a3f281_1.txt
+    linux/arm64:
+      lock_file: modules/local/dcifer_ibd/.conda-lock/linux_arm64-bd-d7e4b47f976552cf_1.txt
