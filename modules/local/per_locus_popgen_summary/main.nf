@@ -33,7 +33,7 @@ process PER_LOCUS_POPGEN_SUMMARY {
         r-pgecore: \$( Rscript -e 'cat(as.character(packageVersion("PGEcore")))' )
         pegas: \$(Rscript -e 'cat(as.character(packageVersion("pegas")))' 2>/dev/null || echo 'NA')
         bioconductor-msa: \$(Rscript -e 'cat(as.character(packageVersion("msa")))' 2>/dev/null || echo 'NA')
-        muscle: \$(muscle -version 2>&1 | head -n 1 || echo 'NA')
+        muscle: \$(muscle -version 2>/dev/null | sed -n 's/^muscle \\([0-9.]*[0-9]\\).*/\\1/p')
     END_VERSIONS
     """
 }
