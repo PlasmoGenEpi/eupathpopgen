@@ -54,7 +54,7 @@ process RUN_MOIRE {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
-        PGEcore: \$(Rscript -e 'cat(as.character(packageVersion("PGEcore")))' 2>/dev/null || echo 'NA')
+        r-pgecore: \$( Rscript -e 'cat(as.character(packageVersion("PGEcore")))' )
         moire: \$(R_LIBS_USER=\$PWD/r_libs Rscript -e 'cat(as.character(packageVersion("moire")))' 2>/dev/null || echo 'NA')
     END_VERSIONS
     """

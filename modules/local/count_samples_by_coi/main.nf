@@ -28,7 +28,7 @@ process COUNT_SAMPLES_BY_COI {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         r-base: \$(R --version | sed -n '1s/.*version \\([0-9.]*\\).*/\\1/p')
-        PGEcore: \$(Rscript -e 'cat(as.character(packageVersion("PGEcore")))' 2>/dev/null || echo 'NA')
+        r-pgecore: \$( Rscript -e 'cat(as.character(packageVersion("PGEcore")))' )
     END_VERSIONS
     """
 }
