@@ -11,9 +11,10 @@ fi
 CLI_NAME="$1"
 shift
 
-# Always use a work-dir library so docker -u can load packages installed by ensure_pgecore.R
-export R_LIBS_USER="${PWD}/r_libs"
-mkdir -p "${R_LIBS_USER}"
+# Prefer work-dir library for module installs (docker -u / Suggests), but keep any
+# existing R_LIBS_USER (e.g. PGECORE_HOME/.r_libs from -profile pgecore_local).
+mkdir -p "${PWD}/r_libs"
+export R_LIBS_USER="${PWD}/r_libs${R_LIBS_USER:+:${R_LIBS_USER}}"
 export R_LIBS="${R_LIBS_USER}${R_LIBS:+:${R_LIBS}}"
 
 resolve_cli() {

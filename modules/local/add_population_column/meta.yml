@@ -1,0 +1,28 @@
+name: add_population_column
+description: Prepend a human-readable population column using the population index lookup.
+keywords:
+  - population
+  - merge
+tools:
+  - r:
+      description: R scripting
+      homepage: https://www.r-project.org/
+input:
+  - pop_index:
+      type: string
+      description: Population index key (e.g. popidx_001) or single-pop label
+  - table:
+      type: file
+      description: Per-population estimate TSV
+  - population_index_lookup:
+      type: file
+      description: Lookup of population_index to population label (may be empty)
+output:
+  - labeled_table:
+      - "*.tsv":
+          description: Input table with a leading population column
+  - versions:
+      - versions.yml:
+          description: Software versions
+authors:
+  - "@kathrynmurie"

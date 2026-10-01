@@ -1,3 +1,8 @@
+// Pipeline-test when.params are written to a JSON file before Nextflow loads config,
+// so params.pipelines_testdata_base_path is not available here (becomes "null" + path).
+// Keep in sync with nextflow.config / tests/nextflow.config.
+def pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/eupathpopgen/'
+
 nextflow_pipeline {
 
     name "Test pipeline"
@@ -14,15 +19,38 @@ nextflow_pipeline {
 
         then {
             assert workflow.success
-            def coi = file("${params.outdir}/COI/naive/coi_table.tsv")
-            def allele_sum = file("${params.outdir}/per_locus_summaries/allele_counts/allele_summary_by_target.tsv")
-            def popgen = file("${params.outdir}/per_locus_summaries/popgen/per_locus_popgen_summary.tsv")
+            def coi = file("${params.outdir}/coi_table.tsv")
+            def locus = file("${params.outdir}/per_locus_summary.tsv")
             assert coi.exists()
-            assert allele_sum.exists()
-            assert popgen.exists()
+            assert coi.readLines()[0].split('\t').toList() == ['population', 'coi_method', 'specimen_name', 'coi']
+            assert file("${params.outdir}/sample_count_per_coi.tsv").readLines()[0].startsWith('population\tcoi_method\t')
+            assert locus.exists()
             // test profile skips MOIRE-backed estimates and Dcifer
-            assert !file("${params.outdir}/allele_frequencies").exists()
+            assert !file("${params.outdir}/allele_freq_summary.tsv").exists()
+            assert !file("${params.outdir}/he_summary.tsv").exists()
             assert !file("${params.outdir}/relatedness").exists()
+            assert !file("${params.outdir}/COI").exists()
+            assert !file("${params.outdir}/coi_summary.tsv").exists()
+        }
+    }
+
+    // Two specimens in the allele table are absent from the population assignment
+    test("-profile test with unassigned specimens") {
+
+        when {
+            params {
+                outdir                = "$outputDir"
+                population_assignment = pipelines_testdata_base_path + 'testdata/population_assignment_unassigned.tsv'
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert path("$outputDir/unassigned_specimens.txt").readLines() == ["Vietnam2018-23", "Vietnam2018-24"] },
+                // Warned once mid-run and repeated after completion; nf-test does not capture console log output
+                { assert path("$outputDir/../meta/nextflow.log").readLines().count { line -> line.contains("2 specimen(s) not found in the population assignment") } == 2 }
+            )
         }
     }
 }

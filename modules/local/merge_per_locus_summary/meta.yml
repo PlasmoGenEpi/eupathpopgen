@@ -1,0 +1,15 @@
+name: merge_per_locus_summary
+description: Join allele-count and popgen per-locus summaries on target_name
+keywords:
+  - popgen
+  - microhaplotype
+  - summary
+tools:
+  - r-base:
+      description: R statistical computing environment
+      homepage: https://www.r-project.org/
+      licence: ["GPL-2", "GPL-3"]
+authors:
+  - "@kathrynmurie"
+maintainers:
+  - "@kathrynmurie"

@@ -1,0 +1,28 @@
+name: standardize_coi_table
+description: Reduce a COI estimate table to coi_method, specimen_name and coi so results from multiple COI methods can be combined.
+keywords:
+  - coi
+  - merge
+tools:
+  - r:
+      description: R scripting
+      homepage: https://www.r-project.org/
+input:
+  - prefix:
+      type: string
+      description: Population index key (e.g. popidx_001)
+  - coi_table:
+      type: file
+      description: COI TSV with specimen_name and coi columns (naive coi_table or MOIRE coi_summary)
+  - method:
+      type: string
+      description: COI method label written to the coi_method column (e.g. naive, moire)
+output:
+  - coi_table:
+      - "*.coi_table.tsv":
+          description: TSV with columns coi_method, specimen_name, coi
+  - versions:
+      - versions.yml:
+          description: Software versions
+authors:
+  - "@kathrynmurie"

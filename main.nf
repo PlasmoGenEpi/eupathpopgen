@@ -17,13 +17,15 @@ workflow NFCORE_EUPATHPOPGEN {
 
     take:
     ch_allele_table
-    ch_population_map
+    ch_population_assignment
+    ch_population_index_lookup
     ch_versions
 
     main:
     EUPATHPOPGEN (
         ch_allele_table,
-        ch_population_map,
+        ch_population_assignment,
+        ch_population_index_lookup,
         ch_versions,
         params.multiqc_config,
         params.multiqc_logo,
@@ -31,7 +33,8 @@ workflow NFCORE_EUPATHPOPGEN {
         params.outdir,
     )
     emit:
-    multiqc_report = EUPATHPOPGEN.out.multiqc_report
+    multiqc_report   = EUPATHPOPGEN.out.multiqc_report
+    unassigned_count = EUPATHPOPGEN.out.unassigned_count
 }
 
 workflow {
@@ -50,7 +53,8 @@ workflow {
 
     NFCORE_EUPATHPOPGEN (
         PIPELINE_INITIALISATION.out.allele_table,
-        PIPELINE_INITIALISATION.out.population_map,
+        PIPELINE_INITIALISATION.out.population_assignment,
+        PIPELINE_INITIALISATION.out.population_index_lookup,
         PIPELINE_INITIALISATION.out.versions
     )
 
@@ -60,6 +64,7 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        NFCORE_EUPATHPOPGEN.out.multiqc_report
+        NFCORE_EUPATHPOPGEN.out.multiqc_report,
+        NFCORE_EUPATHPOPGEN.out.unassigned_count,
     )
 }

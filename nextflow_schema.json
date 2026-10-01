@@ -18,7 +18,7 @@
                     "exists": true,
                     "pattern": "^\\S+\\.json$",
                     "description": "Path to a Portable Microhaplotype Object (PMO) JSON file.",
-                    "help_text": "Mandatory if `--allele_table` is not set. The pipeline extracts an allele table (and optionally a population map) with pmotools. See https://plasmogenepi.github.io/PMO_Docs/.",
+                    "help_text": "Mandatory if `--allele_table` is not set. The pipeline extracts an allele table (and optionally a population assignment) with pmotools. See https://plasmogenepi.github.io/PMO_Docs/.",
                     "fa_icon": "fas fa-file-code"
                 },
                 "allele_table": {
@@ -31,25 +31,36 @@
                     "help_text": "Mandatory if `--pmo` is not set. Canonical PGEcore allele table. See the PGEcore input-formats vignette.",
                     "fa_icon": "fas fa-file-csv"
                 },
-                "population_map": {
+                "population_assignment": {
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
-                    "description": "Optional TSV mapping specimen_name to population for stratified analyses.",
-                    "help_text": "When provided, the allele table is split by population before metric estimation. Requires columns specimen_name and population. Takes precedence over `--pmo_population_fields`.",
-                    "fa_icon": "fas fa-users"
+                    "schema": "assets/schema_population_map.json",
+                    "mimetype": "text/tsv",
+                    "pattern": "^\\S+\\.[ct]sv$",
+                    "description": "Path to tab separated file containing population assignment for each specimen_name.",
+                    "help_text": "This file is used to split specimens into separate populations to calculate metrics for each. It has to be tab separated and include columns specimen_name, population. Takes precedence over `--pmo_population_fields`.",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "population_label": {
+                    "type": "string",
+                    "description": "Label for a single-population run when `--population_assignment` is not set.",
+                    "help_text": "If `--population_assignment` is not set this labels the population these estimates are for.",
+                    "default": "pop1",
+                    "fa_icon": "fas fa-users-cog"
                 },
                 "pmo_population_fields": {
-                    "type": "string",
-                    "description": "Comma-separated PMO specimen metadata fields used to build population labels.",
-                    "help_text": "Used only with `--pmo` when `--population_map` is not set. Fields are joined with `--pmo_population_separator`.",
-                    "fa_icon": "fas fa-tags"
+                    "type": ["string", "null"],
+                    "description": "Comma-separated list of PMO specimen metadata field names to combine into the population label (e.g. \"collection_country, collection_date\"). Whitespace is ignored.",
+                    "help_text": "Used only when providing `--pmo` without `--population_assignment`. The selected fields are concatenated by `pmo_population_separator` to build the `population` values.",
+                    "default": null,
+                    "fa_icon": "fas fa-list"
                 },
                 "pmo_population_separator": {
-                    "type": "string",
+                    "type": ["string", "null"],
+                    "description": "String used to join the selected `pmo_population_fields` when building the population label.",
                     "default": "_",
-                    "description": "Separator used to join `--pmo_population_fields` into population labels.",
-                    "fa_icon": "fas fa-minus"
+                    "fa_icon": "fas fa-link"
                 },
                 "outdir": {
                     "type": "string",
@@ -85,16 +96,16 @@
                 "coi_method": {
                     "type": "string",
                     "default": "naive",
-                    "enum": ["naive", "moire"],
-                    "description": "Method for complexity of infection (COI) estimation.",
-                    "help_text": "Always estimated. Use naive or moire. Additional methods may be added later. If moire is also needed for allele frequencies or within-host relatedness, MOIRE still runs only once.",
+                    "pattern": "^\\s*(naive|moire)\\s*(,\\s*(naive|moire)\\s*)*$",
+                    "description": "Method(s) for complexity of infection (COI) estimation. Comma-separate to run several (e.g. 'naive,moire').",
+                    "help_text": "Always estimated. Allowed values: naive, moire. When several methods are given, each is run and the results are combined into coi_table.tsv and sample_count_per_coi.tsv with a coi_method column. If moire is also needed for allele frequencies or within-host relatedness, MOIRE still runs only once.",
                     "fa_icon": "fas fa-users-cog"
                 },
                 "naive_coi_method": {
                     "type": "string",
                     "default": "integer_method",
                     "enum": ["integer_method", "quantile_method"],
-                    "description": "Naive COI estimator when --coi_method is naive.",
+                    "description": "Naive COI estimator when --coi_method includes naive.",
                     "fa_icon": "fas fa-users-cog"
                 },
                 "naive_coi_threshold": {
@@ -266,7 +277,7 @@
                     "type": "string",
                     "fa_icon": "far fa-check-circle",
                     "description": "Base URL or local path to location of pipeline test dataset files",
-                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/",
+                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/eupathpopgen/",
                     "hidden": true
                 },
                 "trace_report_suffix": {
@@ -286,16 +297,6 @@
                 "show_hidden": {
                     "type": "boolean",
                     "description": "Display hidden parameters in the help message."
-                },
-                "pgecore_git_ref": {
-                    "type": "string",
-                    "description": "Git commit/tag of PlasmoGenEpi/PGEcore to install when not using pgecore_local.",
-                    "hidden": true
-                },
-                "pgecore_git_repo": {
-                    "type": "string",
-                    "description": "GitHub repo path for PGEcore.",
-                    "hidden": true
                 },
                 "pgecore_local": {
                     "type": "boolean",

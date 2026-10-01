@@ -12,6 +12,7 @@ include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipelin
 
 include { EXTRACT_ALLELE_TABLE            } from '../../../modules/local/extract_allele_table'
 include { EXTRACT_POPULATION_MAP_FROM_PMO } from '../../../modules/local/extract_population_map_from_pmo'
+include { INDEX_POPULATION_ASSIGNMENT     } from '../../../modules/local/index_population_assignment'
 
 workflow PIPELINE_INITIALISATION {
 
@@ -79,7 +80,7 @@ workflow PIPELINE_INITIALISATION {
     validateInputParameters()
 
     def ch_allele_table = channel.empty()
-    def ch_population_map = channel.empty()
+    def raw_population_assignment_ch = null
 
     // Normalise comma-separated PMO population fields → space-separated for Python nargs='+'
     def pmo_population_fields_norm = null
@@ -100,28 +101,38 @@ workflow PIPELINE_INITIALISATION {
         ch_allele_table = EXTRACT_ALLELE_TABLE.out.allele_table
         ch_versions = ch_versions.mix(EXTRACT_ALLELE_TABLE.out.versions)
 
-        if (params.population_map) {
-            ch_population_map = channel.fromPath(params.population_map, checkIfExists: true)
+        if (params.population_assignment) {
+            raw_population_assignment_ch = channel.fromPath(params.population_assignment, checkIfExists: true)
         } else if (pmo_population_fields_norm) {
             EXTRACT_POPULATION_MAP_FROM_PMO(
                 ch_pmo,
                 pmo_population_fields_norm,
                 params.pmo_population_separator ?: '_'
             )
-            ch_population_map = EXTRACT_POPULATION_MAP_FROM_PMO.out.population_map
+            raw_population_assignment_ch = EXTRACT_POPULATION_MAP_FROM_PMO.out.population_map
             ch_versions = ch_versions.mix(EXTRACT_POPULATION_MAP_FROM_PMO.out.versions)
         }
     } else {
         ch_allele_table = channel.fromPath(params.allele_table, checkIfExists: true)
-        if (params.population_map) {
-            ch_population_map = channel.fromPath(params.population_map, checkIfExists: true)
+        if (params.population_assignment) {
+            raw_population_assignment_ch = channel.fromPath(params.population_assignment, checkIfExists: true)
         }
     }
 
+    def ch_population_assignment = channel.empty()
+    def ch_population_index_lookup = channel.empty()
+    if (raw_population_assignment_ch) {
+        INDEX_POPULATION_ASSIGNMENT(raw_population_assignment_ch)
+        ch_population_assignment = INDEX_POPULATION_ASSIGNMENT.out.population_map_indexed
+        ch_population_index_lookup = INDEX_POPULATION_ASSIGNMENT.out.population_index_lookup
+        ch_versions = ch_versions.mix(INDEX_POPULATION_ASSIGNMENT.out.versions)
+    }
+
     emit:
-    allele_table   = ch_allele_table
-    population_map = ch_population_map
-    versions       = ch_versions
+    allele_table              = ch_allele_table
+    population_assignment     = ch_population_assignment
+    population_index_lookup   = ch_population_index_lookup
+    versions                  = ch_versions
 }
 
 workflow PIPELINE_COMPLETION {
@@ -133,10 +144,12 @@ workflow PIPELINE_COMPLETION {
     outdir
     monochrome_logs
     multiqc_report
+    unassigned_count // channel: number of specimens missing from the population assignment
 
     main:
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
     def multiqc_reports = multiqc_report.toList()
+    def unassigned_counts = unassigned_count.toList()
 
     workflow.onComplete {
         if (email || email_on_fail) {
@@ -152,6 +165,13 @@ workflow PIPELINE_COMPLETION {
         }
 
         completionSummary(monochrome_logs)
+
+        // Repeated from the mid-run warning, which the ANSI progress display can overwrite
+        def n_unassigned = unassigned_counts.isBound() ? unassigned_counts.getVal().sum() ?: 0 : 0
+        if (n_unassigned > 0) {
+            log.warn "${n_unassigned} specimen(s) not found in the population assignment were excluded from all outputs. " +
+                "See ${outdir}/unassigned_specimens.txt"
+        }
     }
 
     workflow.onError {
@@ -166,11 +186,14 @@ def validateInputParameters() {
     if (!params.pmo && !params.allele_table) {
         error("You must provide either `--pmo` (PMO JSON) or `--allele_table` (PGEcore allele table TSV).")
     }
-    if (params.pmo_population_fields && params.population_map) {
-        log.warn "`--population_map` takes precedence; `--pmo_population_fields` will be ignored."
+    if (params.pmo_population_fields && params.population_assignment) {
+        log.warn "`--population_assignment` takes precedence; `--pmo_population_fields` will be ignored."
     }
     if (params.pmo_population_fields && params.allele_table && !params.pmo) {
         log.warn "`--pmo_population_fields` is only used with `--pmo` and will be ignored for allele-table input."
+    }
+    if (params.population_assignment && params.population_label != 'pop1') {
+        log.warn "`--population_assignment` takes precedence; `--population_label` will be ignored."
     }
 }
 
@@ -179,7 +202,7 @@ def toolCitationText() {
             "Tools used in the workflow included:",
             "PGEcore (PlasmoGenEpi),",
             params.pmo ? "pmotools (PlasmoGenEpi)," : "",
-            (params.coi_method == 'moire' || !params.skip_allele_frequencies || !params.skip_within_host_relatedness) ? "MOIRE (Murphy and Greenhouse)," : "",
+            ('moire' in params.coi_method.toString().tokenize(',')*.trim() || !params.skip_allele_frequencies || !params.skip_within_host_relatedness) ? "MOIRE (Murphy and Greenhouse)," : "",
             params.skip_between_host_relatedness ? "" : "Dcifer (Gerlovina et al.),",
             "pegas (Paradis),",
             "MultiQC (Ewels et al. 2016)",

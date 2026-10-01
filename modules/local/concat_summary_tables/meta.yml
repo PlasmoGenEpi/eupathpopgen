@@ -1,0 +1,25 @@
+name: concat_summary_tables
+description: Row-bind per-population labeled summary tables into one final TSV.
+keywords:
+  - population
+  - concat
+tools:
+  - r:
+      description: R scripting
+      homepage: https://www.r-project.org/
+input:
+  - tables:
+      type: file
+      description: One or more labeled per-population TSVs
+  - out_name:
+      type: string
+      description: Final summary filename
+output:
+  - summary:
+      - "*.tsv":
+          description: Concatenated summary table
+  - versions:
+      - versions.yml:
+          description: Software versions
+authors:
+  - "@kathrynmurie"

@@ -10,6 +10,31 @@ tools:
       homepage: https://github.com/PlasmoGenEpi/PGEcore
       documentation: https://plasmogenepi.github.io/PGEcore/
       licence: ["MIT"]
+input:
+  - allele_table:
+      type: file
+      description: Allele table TSV
+      pattern: "*"
+  - population_map:
+      type: file
+      description: Indexed population assignment TSV
+      pattern: "*"
+output:
+  - per_pop_tables:
+      - "*.allele_table.tsv.gz":
+          type: file
+          description: Per-population allele tables
+          pattern: "*.allele_table.tsv.gz"
+  - unassigned_report:
+      - unassigned_specimens.txt:
+          type: file
+          description: Optional list of specimens not in the population map
+          pattern: unassigned_specimens.txt
+  - versions:
+      - versions.yml:
+          type: file
+          description: Software versions
+          pattern: versions.yml
 authors:
   - "@kathrynmurie"
 maintainers:
