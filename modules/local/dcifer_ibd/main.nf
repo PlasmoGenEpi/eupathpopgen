@@ -17,16 +17,14 @@ process DCIFER_IBD {
 
     script:
     prefix = allele_table.getBaseName(3)
-    def rnull = params.dcifer_rnull != null ? "--rnull ${params.dcifer_rnull}" : ''
-    def alpha = params.dcifer_alpha != null ? "--alpha ${params.dcifer_alpha}" : ''
-    def estm  = params.dcifer_use_estm ? '--use_estm' : ''
+    def extra_args = task.ext.args ?: ''
     """
 
     ${projectDir}/bin/pgecore_cli.sh dcifer_ibd_wrapper \\
         --allele_table ${allele_table} \\
         --relatedness_output ${prefix}.btwn_host_rel.tsv \\
         --threads ${task.cpus} \\
-        ${rnull} ${alpha} ${estm}
+        ${extra_args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

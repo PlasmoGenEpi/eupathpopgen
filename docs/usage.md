@@ -96,7 +96,7 @@ nextflow run . \
 
 ### MOIRE / Dcifer tuning
 
-Optional hidden `--moire_*` and `--dcifer_*` parameters map to PGEcore wrapper flags.
+Optional hidden `--moire_*` and `--dcifer_*` parameters (see `--help --show_hidden`) map to PGEcore wrapper flags via `conf/tools.config`. Leave them unset to use the wrapper defaults. Thread counts come from the process `cpus`, so set those through a custom config rather than a parameter.
 
 ## Outputs
 
