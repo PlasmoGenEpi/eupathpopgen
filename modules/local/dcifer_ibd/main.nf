@@ -1,7 +1,6 @@
 process DCIFER_IBD {
     tag "${prefix}"
     label 'process_low'
-    label 'pgecore'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container ?
@@ -20,7 +19,8 @@ process DCIFER_IBD {
     def extra_args = task.ext.args ?: ''
     """
 
-    ${projectDir}/bin/pgecore_cli.sh dcifer_ibd_wrapper \\
+    export PATH="\$(Rscript -e 'cat(system.file("exec", package = "PGEcore"))'):\${PATH}"
+    dcifer_ibd_wrapper \\
         --allele_table ${allele_table} \\
         --relatedness_output ${prefix}.btwn_host_rel.tsv \\
         --threads ${task.cpus} \\

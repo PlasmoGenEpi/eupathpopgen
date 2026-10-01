@@ -56,7 +56,6 @@ nextflow run nf-core/eupathpopgen \
 | `test` | Shared drugres allele table from test-datasets; naive COI only |
 | `test_pmo` | Shared drugres example PMO (+ `collection_country` population fields); naive COI only |
 | `test_full` | Allele table + population assignment; MOIRE COI + AF + relatedness (reduced MCMC) |
-| `pgecore_local` | Use `PGECORE_HOME` source checkout instead of the bioconda `r-pgecore` package |
 | `docker` / `singularity` / `conda` / `wave` | Standard nf-core executors |
 
 ### Estimates (not tools)
@@ -84,15 +83,6 @@ All tools come from conda (bioconda / conda-forge) or matching Seqera community 
 
 - MOIRE is not on conda, so `RUN_MOIRE` installs it from GitHub into the task work directory.
 - `bioconductor-msa` has no osx-arm64 conda build, so on Apple Silicon with `-profile conda`, `PER_LOCUS_POPGEN_SUMMARY` installs it via BiocManager. The containers already include it.
-
-### Local PGEcore development (`pgecore_local`)
-
-```bash
-export PGECORE_HOME=/path/to/PGEcore
-nextflow run . \
-  -profile conda,pgecore_local,test \
-  --outdir results
-```
 
 ### MOIRE / Dcifer tuning
 

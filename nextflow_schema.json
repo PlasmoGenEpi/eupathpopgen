@@ -542,16 +542,6 @@
                 "show_hidden": {
                     "type": "boolean",
                     "description": "Display hidden parameters in the help message."
-                },
-                "pgecore_local": {
-                    "type": "boolean",
-                    "description": "Use local PGEcore checkout via PGECORE_HOME.",
-                    "hidden": true
-                },
-                "pgecore_home": {
-                    "type": "string",
-                    "description": "Path to local PGEcore source checkout.",
-                    "hidden": true
                 }
             }
         }

@@ -1,7 +1,6 @@
 process ESTIMATE_COI_NAIVE {
     tag "${prefix}"
     label 'process_single'
-    label 'pgecore'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container ?
@@ -25,7 +24,8 @@ process ESTIMATE_COI_NAIVE {
     }
     """
 
-    ${projectDir}/bin/pgecore_cli.sh estimate_coi_naive \\
+    export PATH="\$(Rscript -e 'cat(system.file("exec", package = "PGEcore"))'):\${PATH}"
+    estimate_coi_naive \\
         --allele_table ${allele_table} \\
         --output ${prefix}.coi_table.tsv \\
         --method ${method} \\

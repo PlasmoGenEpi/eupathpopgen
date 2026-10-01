@@ -1,7 +1,6 @@
 process PER_LOCUS_POPGEN_SUMMARY {
     tag "${prefix}"
     label 'process_single'
-    label 'pgecore'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container ?
@@ -34,7 +33,9 @@ process PER_LOCUS_POPGEN_SUMMARY {
       }
     '
 
-    ${projectDir}/bin/pgecore_cli.sh per_locus_popgen_summary \\
+    export R_LIBS_USER="\$PWD/r_libs"
+    export PATH="\$(Rscript -e 'cat(system.file("exec", package = "PGEcore"))'):\${PATH}"
+    per_locus_popgen_summary \\
         --allele_table ${allele_table} \\
         --output ${prefix}.per_locus_popgen_summary.tsv
 

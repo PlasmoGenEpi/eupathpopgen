@@ -13,7 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optional population split via `--population_assignment` (or PMO-derived map); parallel `popidx` runs are labeled and concatenated into final summaries. Specimens missing from the population assignment are listed in `unassigned_specimens.txt` and reported with a warning rather than dropped silently
 - Flat estimate outputs under `--outdir` (no `COI/` or `allele_frequencies/` nesting); merged `per_locus_summary.tsv`
 - `-profile plasmodium` with Plasmodium-validated defaults (naive COI, all AF / relatedness estimates on)
-- `-profile pgecore_local` for developing against a local PGEcore checkout
 - Local copies of shared test inputs under `tests/input/` (canonical files live on the `eupathpopgen` branch of nf-core/test-datasets, reused from plasmodiumdrugres)
 
 ### `Dependencies`

@@ -1,7 +1,6 @@
 process ALLELE_PER_LOCUS_SUMMARY {
     tag "${prefix}"
     label 'process_single'
-    label 'pgecore'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container ?
@@ -19,7 +18,8 @@ process ALLELE_PER_LOCUS_SUMMARY {
     prefix = allele_table.getBaseName(3)
     """
 
-    ${projectDir}/bin/pgecore_cli.sh allele_per_locus_summary \\
+    export PATH="\$(Rscript -e 'cat(system.file("exec", package = "PGEcore"))'):\${PATH}"
+    allele_per_locus_summary \\
         --allele_table ${allele_table} \\
         --output ${prefix}.allele_summary_by_target.tsv
 

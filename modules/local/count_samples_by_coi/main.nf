@@ -1,7 +1,6 @@
 process COUNT_SAMPLES_BY_COI {
     tag "${prefix}:${method}"
     label 'process_single'
-    label 'pgecore'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container ?
@@ -18,7 +17,8 @@ process COUNT_SAMPLES_BY_COI {
     script:
     """
 
-    ${projectDir}/bin/pgecore_cli.sh count_samples_by_coi \\
+    export PATH="\$(Rscript -e 'cat(system.file("exec", package = "PGEcore"))'):\${PATH}"
+    count_samples_by_coi \\
         --coi_table ${coi_table} \\
         --output counts.tsv
 

@@ -1,7 +1,6 @@
 process RUN_MOIRE {
     tag "${prefix}"
     label 'process_low'
-    label 'pgecore'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container ?
@@ -29,7 +28,9 @@ process RUN_MOIRE {
     # MOIRE is not on conda; install into ./r_libs when missing.
     Rscript -e 'libs <- file.path(getwd(), "r_libs"); dir.create(libs, recursive=TRUE, showWarnings=FALSE); .libPaths(c(libs, .libPaths())); Sys.setenv(R_LIBS_USER=libs); if (!requireNamespace("moire", quietly=TRUE)) remotes::install_github("EPPIcenter/moire", lib=libs, upgrade="never")'
 
-    ${projectDir}/bin/pgecore_cli.sh moire_wrapper \\
+    export R_LIBS_USER="\$PWD/r_libs"
+    export PATH="\$(Rscript -e 'cat(system.file("exec", package = "PGEcore"))'):\${PATH}"
+    moire_wrapper \\
         --allele_table ${allele_table} \\
         --coi_output ${prefix}.coi_summary.tsv \\
         --he_output ${prefix}.he_summary.tsv \\
