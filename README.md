@@ -60,7 +60,7 @@ Or with an allele table:
 
 ```bash
 nextflow run nf-core/eupathpopgen \
-  -profile <docker/singularity/.../institute>,plasmodium,plasmodium \
+  -profile <docker/singularity/.../institute>,plasmodium \
   --allele_table alleles.tsv \
   --outdir results
 ```
@@ -81,8 +81,10 @@ For more details about the output files and reports, please refer to the
 nf-core/eupathpopgen was originally written by Kathryn Murie.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
-* Alfred Hubbard
-<!-- TODO change this around after we have finished-->
+
+- Alfred Hubbard
+
+A special thanks to everyone in the community who contributes to PGEcore and continues to do so.
 
 ## Contributions and Support
 

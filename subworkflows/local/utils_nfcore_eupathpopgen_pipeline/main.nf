@@ -4,7 +4,6 @@
 
 include { UTILS_NFSCHEMA_PLUGIN     } from '../../nf-core/utils_nfschema_plugin'
 include { paramsSummaryMap          } from 'plugin/nf-schema'
-include { paramsHelp                } from 'plugin/nf-schema'
 include { completionEmail           } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
@@ -197,14 +196,18 @@ def validateInputParameters() {
     }
 }
 
+def moireUsed() {
+    return ('moire' in params.coi_method.toString().tokenize(',')*.trim()) || !params.skip_allele_frequencies || !params.skip_within_host_relatedness
+}
+
 def toolCitationText() {
     def citation_text = [
             "Tools used in the workflow included:",
             "PGEcore (PlasmoGenEpi),",
             params.pmo ? "pmotools (PlasmoGenEpi)," : "",
-            ('moire' in params.coi_method.toString().tokenize(',')*.trim() || !params.skip_allele_frequencies || !params.skip_within_host_relatedness) ? "MOIRE (Murphy and Greenhouse)," : "",
-            params.skip_between_host_relatedness ? "" : "Dcifer (Gerlovina et al.),",
-            "pegas (Paradis),",
+            moireUsed() ? "MOIRE (Murphy and Greenhouse 2024)," : "",
+            params.skip_between_host_relatedness ? "" : "Dcifer (Gerlovina et al. 2022),",
+            "pegas (Paradis 2010),",
             "MultiQC (Ewels et al. 2016)",
             "."
         ].findAll { it }.join(' ').trim()
@@ -214,12 +217,12 @@ def toolCitationText() {
 
 def toolBibliographyText() {
     def reference_text = [
-            "<li>PlasmoGenEpi. PGEcore. https://github.com/PlasmoGenEpi/PGEcore</li>",
-            params.pmo ? "<li>PlasmoGenEpi. pmotools-python. https://github.com/PlasmoGenEpi/pmotools-python</li>" : "",
-            "<li>Murphy M, Greenhouse B. MOIRE.</li>",
-            "<li>Gerlovina I, et al. Dcifer.</li>",
-            "<li>Paradis E. pegas: an R package for population genetics. Bioinformatics.</li>",
-            "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics , 32(19), 3047–3048. doi: /10.1093/bioinformatics/btw354</li>"
+            "<li>PlasmoGenEpi. PGEcore: R package and CLIs for malaria genomics analysis. <a href=\"https://github.com/PlasmoGenEpi/PGEcore\">https://github.com/PlasmoGenEpi/PGEcore</a></li>",
+            params.pmo ? "<li>PlasmoGenEpi. pmotools-python: CLI tools for Portable Microhaplotype Objects (PMO). <a href=\"https://github.com/PlasmoGenEpi/pmotools-python\">https://github.com/PlasmoGenEpi/pmotools-python</a></li>" : "",
+            moireUsed() ? "<li>Murphy, M., & Greenhouse, B. (2024). MOIRE: a software package for the estimation of allele frequencies and effective multiplicity of infection from polyallelic data. Bioinformatics, 40(10), btae619. doi: <a href=\"https://doi.org/10.1093/bioinformatics/btae619\">10.1093/bioinformatics/btae619</a></li>" : "",
+            params.skip_between_host_relatedness ? "" : "<li>Gerlovina, I., Gerlovin, B., Rodríguez-Barraquer, I., & Greenhouse, B. (2022). Dcifer: an IBD-based method to calculate genetic distance between polyclonal infections. Genetics, 222(2), iyac126. doi: <a href=\"https://doi.org/10.1093/genetics/iyac126\">10.1093/genetics/iyac126</a></li>",
+            "<li>Paradis, E. (2010). pegas: an R package for population genetics with an integrated-modular approach. Bioinformatics, 26(3), 419–420. doi: <a href=\"https://doi.org/10.1093/bioinformatics/btp696\">10.1093/bioinformatics/btp696</a></li>",
+            "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics, 32(19), 3047–3048. doi: <a href=\"https://doi.org/10.1093/bioinformatics/btw354\">10.1093/bioinformatics/btw354</a></li>"
         ].findAll { it }.join(' ').trim()
 
     return reference_text
