@@ -13,4 +13,3 @@ dependencies:
   - conda-forge::r-stringr
   - conda-forge::r-tibble
   - conda-forge::r-tidyr
-

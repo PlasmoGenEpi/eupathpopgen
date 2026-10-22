@@ -15,12 +15,12 @@ Optional population stratification via `--population_assignment`, or (with `--pm
 
 Required columns (see [PGEcore input-formats](https://plasmogenepi.github.io/PGEcore/articles/input-formats.html)):
 
-| Column | Description |
-|--------|-------------|
-| `specimen_name` | Sample / specimen ID |
-| `target_name` | Locus / amplicon ID |
-| `seq` | Allele sequence |
-| `reads` | Read count (needed for naive COI and Dcifer) |
+| Column          | Description                                  |
+| --------------- | -------------------------------------------- |
+| `specimen_name` | Sample / specimen ID                         |
+| `target_name`   | Locus / amplicon ID                          |
+| `seq`           | Allele sequence                              |
+| `reads`         | Read count (needed for naive COI and Dcifer) |
 
 ## PMO input
 
@@ -50,24 +50,24 @@ nextflow run nf-core/eupathpopgen \
 
 ### Profiles
 
-| Profile | Purpose |
-|---------|---------|
-| `plasmodium` | Plasmodium-validated defaults (`--coi_method naive`, all relatedness/AF estimates on) |
-| `test` | Shared drugres allele table from test-datasets; naive COI only |
-| `test_pmo` | Shared drugres example PMO (+ `collection_country` population fields); naive COI only |
-| `test_full` | Allele table + population assignment; MOIRE COI + AF + relatedness (reduced MCMC) |
-| `docker` / `singularity` / `conda` / `wave` | Standard nf-core executors |
+| Profile                                     | Purpose                                                                               |
+| ------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `plasmodium`                                | Plasmodium-validated defaults (`--coi_method naive`, all relatedness/AF estimates on) |
+| `test`                                      | Shared drugres allele table from test-datasets; naive COI only                        |
+| `test_pmo`                                  | Shared drugres example PMO (+ `collection_country` population fields); naive COI only |
+| `test_full`                                 | Allele table + population assignment; MOIRE COI + AF + relatedness (reduced MCMC)     |
+| `docker` / `singularity` / `conda` / `wave` | Standard nf-core executors                                                            |
 
 ### Estimates (not tools)
 
-| Parameter | Meaning |
-|-----------|---------|
-| `--coi_method` | `naive`, `moire`, or a comma-separated list such as `naive,moire` (COI is always estimated; multiple methods are combined into one table with a `coi_method` column) |
-| `--naive_coi_method` | `integer_method` or `quantile_method` when `--coi_method` includes `naive` |
-| `--naive_coi_threshold` | Integer index or quantile in \[0, 1] |
-| `--skip_allele_frequencies` | Skip allele-frequency outputs (currently from MOIRE) |
-| `--skip_within_host_relatedness` | Skip within-host relatedness outputs (currently from MOIRE) |
-| `--skip_between_host_relatedness` | Skip between-host IBD outputs (currently from Dcifer) |
+| Parameter                         | Meaning                                                                                                                                                              |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--coi_method`                    | `naive`, `moire`, or a comma-separated list such as `naive,moire` (COI is always estimated; multiple methods are combined into one table with a `coi_method` column) |
+| `--naive_coi_method`              | `integer_method` or `quantile_method` when `--coi_method` includes `naive`                                                                                           |
+| `--naive_coi_threshold`           | Integer index or quantile in \[0, 1]                                                                                                                                 |
+| `--skip_allele_frequencies`       | Skip allele-frequency outputs (currently from MOIRE)                                                                                                                 |
+| `--skip_within_host_relatedness`  | Skip within-host relatedness outputs (currently from MOIRE)                                                                                                          |
+| `--skip_between_host_relatedness` | Skip between-host IBD outputs (currently from Dcifer)                                                                                                                |
 
 Per-locus allele counts and popgen summaries always run.
 

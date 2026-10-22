@@ -61,7 +61,6 @@ workflow EUPATHPOPGEN {
 
     main:
 
-    def ch_versions = ch_versions
     def ch_multiqc_files = channel.empty()
 
     //
@@ -178,7 +177,9 @@ workflow EUPATHPOPGEN {
     }
 
     ADD_POP_COI_TABLE(
-        ch_coi_by_method.map { pop_index, _method, table -> remap_pop(pop_index, table) },
+        ch_coi_by_method.map { pop_index, _method, table ->
+            has_population_assignment ? [pop_index, table] : [params.population_label, table]
+        },
         ch_lookup
     )
     ch_versions = ch_versions.mix(ADD_POP_COI_TABLE.out.versions)

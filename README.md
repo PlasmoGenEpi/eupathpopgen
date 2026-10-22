@@ -19,10 +19,9 @@
 
 [![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23eupathpopgen-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/eupathpopgen)[![Follow on Bluesky](https://img.shields.io/badge/bluesky-%40nf__core-1185fe?labelColor=000000&logo=bluesky)](https://bsky.app/profile/nf-co.re)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
-
 ## Introduction
 
-**nf-core/eupathpopgen** estimates population-genetic metrics from **microhaplotype** data for eukaryotic pathogens (for example *Plasmodium*). Infections are often polyclonal, so the pipeline focuses on COI, allele frequencies, within-host relatedness, between-host IBD, and per-locus summaries using [PGEcore](https://github.com/PlasmoGenEpi/PGEcore) and specialist tools (MOIRE, Dcifer). Microhaplotype data can be supplied in the form of an allele table or a [PMO](https://plasmogenepi.github.io/PMO_Docs/).
+**nf-core/eupathpopgen** estimates population-genetic metrics from **microhaplotype** data for eukaryotic pathogens (for example _Plasmodium_). Infections are often polyclonal, so the pipeline focuses on COI, allele frequencies, within-host relatedness, between-host IBD, and per-locus summaries using [PGEcore](https://github.com/PlasmoGenEpi/PGEcore) and specialist tools (MOIRE, Dcifer). Microhaplotype data can be supplied in the form of an allele table or a [PMO](https://plasmogenepi.github.io/PMO_Docs/).
 
 The scientific methods are Plasmodium-validated; use `-profile plasmodium` for recommended defaults. The pipeline name is pathogen-agnostic so other eukaryotic pathogens can share the same workflow as methods mature.
 
@@ -33,8 +32,8 @@ The scientific methods are Plasmodium-validated; use `-profile plasmodium` for r
 1. Optionally extract an allele table (and population assignment) from `--pmo` ([pmotools-python](https://github.com/PlasmoGenEpi/pmotools-python))
 2. Optionally split the allele table by user-defined populations
 3. Estimate COI. Choice of method between:
-  i. naive method ([PGEcore](https://github.com/PlasmoGenEpi/PGEcore))
-  ii. [moire](https://github.com/EPPIcenter/moire) ([PGEcore wrapper](https://github.com/PlasmoGenEpi/PGEcore))
+   i. naive method ([PGEcore](https://github.com/PlasmoGenEpi/PGEcore))
+   ii. [moire](https://github.com/EPPIcenter/moire) ([PGEcore wrapper](https://github.com/PlasmoGenEpi/PGEcore))
 4. Optionally estimate allele frequencies and within-host relatedness ([moire](https://github.com/EPPIcenter/moire); single run when needed)
 5. Optionally estimate between-host relatedness / IBD ([Dcifer](https://github.com/EPPIcenter/dcifer))
 6. Generate per-locus allele and popgen summaries
@@ -96,7 +95,6 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
 <!-- If you use nf-core/eupathpopgen for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
-
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 

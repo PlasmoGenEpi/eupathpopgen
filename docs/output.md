@@ -34,17 +34,17 @@ outdir/
 
 ## Grain (what each row is)
 
-| File | Grain |
-|------|--------|
-| `coi_table.tsv` | **Per sample × COI method** (`specimen_name`, `coi_method`) within each `population` — columns `population`, `coi_method`, `specimen_name`, `coi` |
-| `coi_summary.tsv` / `effective_coi_summary.tsv` | **Per sample** (`specimen_name`) within each `population` |
-| `relatedness/within_host.tsv` | **Per sample** within each `population` |
-| `relatedness/between_host.tsv` | **Per sample pair** (`specimen_name_a`, `specimen_name_b`) within each `population` |
-| `sample_count_per_coi.tsv` | Per COI method × COI value (counts of samples) within each `population` |
-| `allele_freq_summary.tsv` | Per locus × allele (`target_name`, `seq`) within each `population` — columns start `population`, `target_name`, `seq`, `freq`, then CI/other |
-| `per_locus_summary.tsv` | **Per locus** (`target_name`) within each `population` |
-| `raw_outputs/he_summary.tsv` | **Per locus** within each `population` |
-| `convergence_summary.tsv` | Run-level per `population` |
+| File                                            | Grain                                                                                                                                             |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `coi_table.tsv`                                 | **Per sample × COI method** (`specimen_name`, `coi_method`) within each `population` — columns `population`, `coi_method`, `specimen_name`, `coi` |
+| `coi_summary.tsv` / `effective_coi_summary.tsv` | **Per sample** (`specimen_name`) within each `population`                                                                                         |
+| `relatedness/within_host.tsv`                   | **Per sample** within each `population`                                                                                                           |
+| `relatedness/between_host.tsv`                  | **Per sample pair** (`specimen_name_a`, `specimen_name_b`) within each `population`                                                               |
+| `sample_count_per_coi.tsv`                      | Per COI method × COI value (counts of samples) within each `population`                                                                           |
+| `allele_freq_summary.tsv`                       | Per locus × allele (`target_name`, `seq`) within each `population` — columns start `population`, `target_name`, `seq`, `freq`, then CI/other      |
+| `per_locus_summary.tsv`                         | **Per locus** (`target_name`) within each `population`                                                                                            |
+| `raw_outputs/he_summary.tsv`                    | **Per locus** within each `population`                                                                                                            |
+| `convergence_summary.tsv`                       | Run-level per `population`                                                                                                                        |
 
 ## Notes
 

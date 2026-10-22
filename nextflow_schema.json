@@ -49,20 +49,14 @@
                     "fa_icon": "fas fa-users-cog"
                 },
                 "pmo_population_fields": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": ["string", "null"],
                     "description": "Comma-separated list of PMO specimen metadata field names to combine into the population label (e.g. \"collection_country, collection_date\"). Whitespace is ignored.",
                     "help_text": "Used only when providing `--pmo` without `--population_assignment`. The selected fields are concatenated by `pmo_population_separator` to build the `population` values.",
                     "default": null,
                     "fa_icon": "fas fa-list"
                 },
                 "pmo_population_separator": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": ["string", "null"],
                     "description": "String used to join the selected `pmo_population_fields` when building the population label.",
                     "default": "_",
                     "fa_icon": "fas fa-link"
@@ -110,10 +104,7 @@
                 "naive_coi_method": {
                     "type": "string",
                     "default": "integer_method",
-                    "enum": [
-                        "integer_method",
-                        "quantile_method"
-                    ],
+                    "enum": ["integer_method", "quantile_method"],
                     "description": "Naive COI estimator when --coi_method includes naive.",
                     "fa_icon": "fas fa-users-cog"
                 },
@@ -155,226 +146,151 @@
             "description": "Optional flags passed to the PGEcore MOIRE and Dcifer wrappers. Leave unset to use the wrapper defaults.",
             "properties": {
                 "moire_seed": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE random seed for reproducible sampling. Default in PGEcore wrapper: unset (non-deterministic).",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_allow_relatedness": {
-                    "type": [
-                        "boolean",
-                        "null"
-                    ],
+                    "type": ["boolean", "null"],
                     "description": "MOIRE: allow within-host relatedness. Default in PGEcore wrapper: true.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_burnin": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: number of MCMC burn-in iterations. Default in PGEcore wrapper: 10000.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_samples_per_chain": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: number of samples per MCMC chain. Default in PGEcore wrapper: 1000.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_n_chains": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: number of independent MCMC chains (needed for R-hat). Default in PGEcore wrapper: 3.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_thin": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: thinning interval; keep every n-th sample. Default in PGEcore wrapper: 1.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_verbose": {
-                    "type": [
-                        "boolean",
-                        "null"
-                    ],
+                    "type": ["boolean", "null"],
                     "description": "MOIRE: verbose output. Default in PGEcore wrapper: false.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_eps_pos_alpha": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: alpha of the positive error rate prior. Default in PGEcore wrapper: 1.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_eps_pos_beta": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: beta of the positive error rate prior. Default in PGEcore wrapper: 1.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_eps_neg_alpha": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: alpha of the negative error rate prior. Default in PGEcore wrapper: 1.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_eps_neg_beta": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: beta of the negative error rate prior. Default in PGEcore wrapper: 1.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_r_alpha": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: alpha of the relatedness prior. Default in PGEcore wrapper: 1.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_r_beta": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: beta of the relatedness prior. Default in PGEcore wrapper: 1.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_mean_coi_shape": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
+                    "type": ["number", "null"],
                     "description": "MOIRE: shape of the mean COI prior. Default in PGEcore wrapper: 0.1.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_mean_coi_scale": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: scale of the mean COI prior. Default in PGEcore wrapper: 10.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_max_eps_pos": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: maximum positive error rate. Default in PGEcore wrapper: 2.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_max_eps_neg": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: maximum negative error rate. Default in PGEcore wrapper: 2.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_record_latent_genotypes": {
-                    "type": [
-                        "boolean",
-                        "null"
-                    ],
+                    "type": ["boolean", "null"],
                     "description": "MOIRE: record latent genotypes. Default in PGEcore wrapper: false.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_pt_chains": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: number of parallel tempering chains. Default in PGEcore wrapper: 1.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_pt_grad_lower": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
+                    "type": ["number", "null"],
                     "description": "MOIRE: lower bound of the parallel tempering gradient. Default in PGEcore wrapper: 0.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_pt_num_threads": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "MOIRE: threads for parallel tempering. Default in PGEcore wrapper: 1.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_adapt_temp": {
-                    "type": [
-                        "boolean",
-                        "null"
-                    ],
+                    "type": ["boolean", "null"],
                     "description": "MOIRE: adaptive temperature in the MCMC. Default in PGEcore wrapper: true.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "moire_max_runtime": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
+                    "type": ["number", "null"],
                     "description": "MOIRE: maximum MCMC runtime. Default in PGEcore wrapper: Inf.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "dcifer_rnull": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
+                    "type": ["number", "null"],
                     "description": "Dcifer: null relatedness value for hypothesis testing. Default in PGEcore wrapper: 0.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "dcifer_alpha": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
+                    "type": ["number", "null"],
                     "description": "Dcifer: significance level for hypothesis testing. Default in PGEcore wrapper: 0.05.",
                     "hidden": true,
                     "fa_icon": "fas fa-sliders-h"
@@ -451,14 +367,7 @@
                     "default": "copy",
                     "description": "Method used to save pipeline results to output directory.",
                     "fa_icon": "fas fa-copy",
-                    "enum": [
-                        "symlink",
-                        "rellink",
-                        "link",
-                        "copy",
-                        "copyNoFollow",
-                        "move"
-                    ],
+                    "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
                     "hidden": true
                 },
                 "email_on_fail": {
@@ -527,10 +436,7 @@
                     "hidden": true
                 },
                 "help": {
-                    "type": [
-                        "boolean",
-                        "string"
-                    ],
+                    "type": ["boolean", "string"],
                     "description": "Display the help message."
                 },
                 "help_full": {
