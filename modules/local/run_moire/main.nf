@@ -3,9 +3,9 @@ process RUN_MOIRE {
     label 'process_low'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container ?
-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/fe/fe4159476d1ff8c12fa288b7d23c64897aec4e4776404ecefcd20636be009503/data' :
-        'community.wave.seqera.io/library/r-base_r-pgecore_r-checkmate_r-coda_pruned:798d543fcec75dd0' }"
+    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/a0/a008b0a1a8622f765e834e55c6b40deb06e5926eac2bd58e5d3e3742c5043dd2/data'
+:         'community.wave.seqera.io/library/run_moire:f74cf1676c557e50' }"
 
     input:
     path allele_table

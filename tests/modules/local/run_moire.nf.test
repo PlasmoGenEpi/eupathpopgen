@@ -7,21 +7,24 @@ nextflow_process {
     tag "modules_local"
     tag "run_moire"
 
-    test("Should run MOIRE for one population") {
+    // Keep MCMC tractable; same reduced settings as conf/test_full.config
+    config "tests/modules/local/run_moire.nextflow.config"
+
+    test("Should run MOIRE") {
 
         when {
             process {
                 """
-                input[0] = file(params.pipelines_testdata_base_path + 'testdata/popidx_001.allele_table.tsv.gz', checkIfExists: true)
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/allele_table.tsv', checkIfExists: true)
                 """
             }
         }
 
         // MCMC output is stochastic, so only headers and file names are checked
         then {
-            assert process.success
             assertAll(
-                { assert process.out.coi_summary.get(0)[0] == 'popidx_001' },
+                { assert process.success },
+                { assert process.out.coi_summary.get(0)[0] == 'allele_table' },
                 { assert path(process.out.allele_freq_summary.get(0)[1]).readLines()[0].startsWith("target_name\tseq\tfreq") },
                 { assert snapshot(
                     process.out.coi_summary.collect { prefix, f -> [prefix, file(f).name] },
@@ -43,7 +46,7 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = file(params.pipelines_testdata_base_path + 'testdata/popidx_001.allele_table.tsv.gz', checkIfExists: true)
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/allele_table.tsv', checkIfExists: true)
                 """
             }
         }

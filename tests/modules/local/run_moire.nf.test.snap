@@ -1,77 +1,125 @@
 {
+    "Should run MOIRE": {
+        "content": [
+            [
+                [
+                    "allele_table",
+                    "allele_table.coi_summary.tsv"
+                ]
+            ],
+            [
+                [
+                    "allele_table",
+                    "allele_table.he_summary.tsv"
+                ]
+            ],
+            [
+                [
+                    "allele_table",
+                    "allele_table.allele_freq_summary.tsv"
+                ]
+            ],
+            [
+                [
+                    "allele_table",
+                    "allele_table.relatedness_summary.tsv"
+                ]
+            ],
+            [
+                [
+                    "allele_table",
+                    "allele_table.effective_coi_summary.tsv"
+                ]
+            ],
+            [
+                [
+                    "allele_table",
+                    "allele_table.convergence_summary.tsv"
+                ]
+            ],
+            [
+                "versions.yml:md5,cc032dce6d9015749b7c000f829af3de"
+            ]
+        ],
+        "timestamp": "2026-10-21T16:45:52.833367",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
     "Stub": {
         "content": [
             {
                 "0": [
                     [
-                        "popidx_001",
-                        "popidx_001.coi_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "allele_table",
+                        "allele_table.coi_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "1": [
                     [
-                        "popidx_001",
-                        "popidx_001.he_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "allele_table",
+                        "allele_table.he_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "2": [
                     [
-                        "popidx_001",
-                        "popidx_001.allele_freq_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "allele_table",
+                        "allele_table.allele_freq_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "3": [
                     [
-                        "popidx_001",
-                        "popidx_001.relatedness_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "allele_table",
+                        "allele_table.relatedness_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "4": [
                     [
-                        "popidx_001",
-                        "popidx_001.effective_coi_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "allele_table",
+                        "allele_table.effective_coi_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "5": [
                     [
-                        "popidx_001",
-                        "popidx_001.convergence_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "allele_table",
+                        "allele_table.convergence_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "6": [
                     
                 ],
                 "7": [
-                    "versions.yml:md5,3f613eb4de07a4de75749d34ad3c94c2"
+                    "versions.yml:md5,cc032dce6d9015749b7c000f829af3de"
                 ],
                 "allele_freq_summary": [
                     [
-                        "popidx_001",
-                        "popidx_001.allele_freq_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "allele_table",
+                        "allele_table.allele_freq_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "coi_summary": [
                     [
-                        "popidx_001",
-                        "popidx_001.coi_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "allele_table",
+                        "allele_table.coi_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "convergence_summary": [
                     [
-                        "popidx_001",
-                        "popidx_001.convergence_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "allele_table",
+                        "allele_table.convergence_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "effective_coi_summary": [
                     [
-                        "popidx_001",
-                        "popidx_001.effective_coi_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "allele_table",
+                        "allele_table.effective_coi_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "he_summary": [
                     [
-                        "popidx_001",
-                        "popidx_001.he_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "allele_table",
+                        "allele_table.he_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "mcmc_results": [
@@ -79,16 +127,16 @@
                 ],
                 "relatedness_summary": [
                     [
-                        "popidx_001",
-                        "popidx_001.relatedness_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "allele_table",
+                        "allele_table.relatedness_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,3f613eb4de07a4de75749d34ad3c94c2"
+                    "versions.yml:md5,cc032dce6d9015749b7c000f829af3de"
                 ]
             }
         ],
-        "timestamp": "2026-10-01T16:25:41.256321",
+        "timestamp": "2026-10-21T16:45:57.173245",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
