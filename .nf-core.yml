@@ -8,6 +8,9 @@ lint:
     - conf/igenomes_ignored.config
   files_unchanged:
     - .gitignore
+    - assets/nf-core-eupathpopgen_logo_light.png
+    - docs/images/nf-core-eupathpopgen_logo_light.png
+    - docs/images/nf-core-eupathpopgen_logo_dark.png
 
 template:
   org: nf-core
