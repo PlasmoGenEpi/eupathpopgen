@@ -1,0 +1,60 @@
+{
+    "Stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "popidx_001.per_locus_popgen_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,591c807d03e19a44b487b41955ab9886"
+                ],
+                "per_locus_popgen_summary": [
+                    [
+                        "popidx_001",
+                        "popidx_001.per_locus_popgen_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,591c807d03e19a44b487b41955ab9886"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:24:32.587393",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Should compute per-locus popgen statistics for one population": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "popidx_001.per_locus_popgen_summary.tsv:md5,6c6a9ec0cd0023ffe18d9f137df34d96"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,591c807d03e19a44b487b41955ab9886"
+                ],
+                "per_locus_popgen_summary": [
+                    [
+                        "popidx_001",
+                        "popidx_001.per_locus_popgen_summary.tsv:md5,6c6a9ec0cd0023ffe18d9f137df34d96"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,591c807d03e19a44b487b41955ab9886"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:24:28.493481",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

@@ -1,0 +1,53 @@
+nextflow_process {
+
+    name "Test Process INDEX_POPULATION_ASSIGNMENT"
+    script "modules/local/index_population_assignment/main.nf"
+    process "INDEX_POPULATION_ASSIGNMENT"
+    tag "modules"
+    tag "modules_local"
+    tag "index_population_assignment"
+
+    test("Should assign stable indices to population labels") {
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/population_assignment.tsv', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.population_index_lookup.get(0)).readLines() == [
+                    "population_index\tpopulation",
+                    "popidx_001\tLaos_201701-01",
+                    "popidx_002\tVietnam_201701-01",
+                    "popidx_003\tVietnam_201801-01"
+                ] },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("Stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/population_assignment.tsv', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+}

@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: "PIPELINE_INITIALISATION"
+description: Pipeline-specific initialisation, completion, and input validation for nf-core/eupathpopgen
+keywords:
+  - utility
+  - validation
+  - initialisation
+  - completion
+components:
+  - utils_nfschema_plugin
+  - utils_nfcore_pipeline
+  - utils_nextflow_pipeline
+  - extract/allele/table
+  - extract/population/map/from/pmo
+  - index/population/assignment
+  - completionemail
+  - completionsummary
+input:
+  - version:
+      type: boolean
+      description: Display version and exit
+  - validate_params:
+      type: boolean
+      description: Validate parameters against the schema at runtime
+  - monochrome_logs:
+      type: boolean
+      description: Do not use coloured log outputs
+  - nextflow_cli_args:
+      type: list
+      description: Array of positional Nextflow CLI args
+  - outdir:
+      type: string
+      description: Output directory where results will be saved
+  - help:
+      type: boolean
+      description: Display help message and exit
+  - help_full:
+      type: boolean
+      description: Show the full help message
+  - show_hidden:
+      type: boolean
+      description: Show hidden parameters in the help message
+output:
+  - allele_table:
+      type: file
+      description: |
+        Allele table channel prepared from PMO or --allele_table.
+        Structure: [ path(allele_table) ]
+  - population_assignment:
+      type: file
+      description: |
+        Indexed population assignment map; empty when no population assignment is used.
+        Structure: [ path(population_map) ]
+  - population_index_lookup:
+      type: file
+      description: |
+        Population index lookup table; empty when no population assignment is used.
+        Structure: [ path(lookup) ]
+  - versions:
+      type: file
+      description: |
+        Software versions collected during initialisation.
+        Structure: [ path(versions.yml) ]
+      pattern: "versions.yml"
+authors:
+  - "@kathrynmurie"
+maintainers:
+  - "@kathrynmurie"

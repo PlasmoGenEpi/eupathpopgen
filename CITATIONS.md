@@ -10,9 +10,25 @@
 
 ## Pipeline tools
 
-- [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+- [PGEcore](https://github.com/PlasmoGenEpi/PGEcore)
 
-> Andrews, S. (2010). FastQC: A Quality Control Tool for High Throughput Sequence Data [Online].
+  > PlasmoGenEpi. PGEcore: R package and CLIs for malaria genomics analysis.
+
+- [pmotools](https://github.com/PlasmoGenEpi/pmotools-python)
+
+  > PlasmoGenEpi. pmotools-python: CLI tools for Portable Microhaplotype Objects (PMO).
+
+- [MOIRE](https://github.com/EPPIcenter/moire)
+
+  > Murphy M, Greenhouse B. MOIRE: a software package for the estimation of allele frequencies and effective multiplicity of infection from polyallelic data. Bioinformatics. 2024;40(10):btae619. doi: 10.1093/bioinformatics/btae619.
+
+- [Dcifer](https://cran.r-project.org/package=dcifer)
+
+  > Gerlovina I, Gerlovin B, Rodríguez-Barraquer I, Greenhouse B. Dcifer: an IBD-based method to calculate genetic distance between polyclonal infections. Genetics. 2022;222(2):iyac126. doi: 10.1093/genetics/iyac126.
+
+- [pegas](https://cran.r-project.org/package=pegas)
+
+  > Paradis E. pegas: an R package for population genetics with an integrated-modular approach. Bioinformatics. 2010;26(3):419-420. doi: 10.1093/bioinformatics/btp696.
 
 - [MultiQC](https://pubmed.ncbi.nlm.nih.gov/27312411/)
 

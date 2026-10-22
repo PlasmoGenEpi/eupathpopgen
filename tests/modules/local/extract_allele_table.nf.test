@@ -1,0 +1,48 @@
+nextflow_process {
+
+    name "Test Process EXTRACT_ALLELE_TABLE"
+    script "modules/local/extract_allele_table/main.nf"
+    process "EXTRACT_ALLELE_TABLE"
+    tag "modules"
+    tag "modules_local"
+    tag "extract_allele_table"
+
+    test("Should extract an allele table from a PMO") {
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/example_PMO.json', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.allele_table.get(0)).readLines()[0].split('\t').toList().containsAll(['specimen_name', 'target_name', 'seq', 'reads']) },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("Stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/example_PMO.json', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+}

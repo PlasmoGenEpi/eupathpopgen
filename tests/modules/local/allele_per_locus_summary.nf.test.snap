@@ -1,0 +1,60 @@
+{
+    "Should summarise alleles per locus for one population": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "popidx_001.allele_summary_by_target.tsv:md5,c79353a4c07b09185c265f9258806a00"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,1220a877e88ba83c93570b1494d6d2af"
+                ],
+                "allele_summary_by_target": [
+                    [
+                        "popidx_001",
+                        "popidx_001.allele_summary_by_target.tsv:md5,c79353a4c07b09185c265f9258806a00"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,1220a877e88ba83c93570b1494d6d2af"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:22:56.170778",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "popidx_001.allele_summary_by_target.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,1220a877e88ba83c93570b1494d6d2af"
+                ],
+                "allele_summary_by_target": [
+                    [
+                        "popidx_001",
+                        "popidx_001.allele_summary_by_target.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,1220a877e88ba83c93570b1494d6d2af"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:22:59.86245",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

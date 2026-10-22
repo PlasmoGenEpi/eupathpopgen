@@ -2,7 +2,7 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://raw.githubusercontent.com/nf-core/eupathpopgen/master/nextflow_schema.json",
     "title": "nf-core/eupathpopgen pipeline parameters",
-    "description": "Pipeline for generating population genetic metrics from microhaplotype data of eukaryotic pathogens (e.g. Plasmodium). Designed for infections containing multiple genetically distinct clones, the pipeline estimates complexity of infection (COI), identity by descent (IBD), allele frequencies, within-host relateness, and other population genetic metrics.",
+    "description": "Pipeline for generating population genetic metrics from microhaplotype data of eukaryotic pathogens (e.g. Plasmodium). Designed for infections containing multiple genetically distinct clones, the pipeline estimates complexity of infection (COI), identity by descent (IBD), allele frequencies, within-host relatedness, and other population genetic metrics.",
     "type": "object",
     "$defs": {
         "input_output_options": {
@@ -10,36 +10,297 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "outdir"],
             "properties": {
-                "input": {
+                "pmo": {
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
-                    "schema": "assets/schema_input.json",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/eupathpopgen/usage#samplesheet-input).",
+                    "pattern": "^\\S+\\.json$",
+                    "description": "Path to a Portable Microhaplotype Object (PMO) JSON file.",
+                    "help_text": "Mandatory if `--allele_table` is not set. The pipeline extracts an allele table (and optionally a population assignment) with pmotools. See https://plasmogenepi.github.io/PMO_Docs/.",
+                    "fa_icon": "fas fa-file-code"
+                },
+                "allele_table": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "mimetype": "text/tab-separated-values",
+                    "pattern": "^\\S+\\.[ct]sv$",
+                    "description": "Path to allele table TSV (specimen_name, target_name, seq, reads).",
+                    "help_text": "Mandatory if `--pmo` is not set. Canonical PGEcore allele table. See the PGEcore input-formats vignette.",
                     "fa_icon": "fas fa-file-csv"
+                },
+                "population_assignment": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "schema": "assets/schema_population_map.json",
+                    "mimetype": "text/tsv",
+                    "pattern": "^\\S+\\.[ct]sv$",
+                    "description": "Path to tab separated file containing population assignment for each specimen_name.",
+                    "help_text": "This file is used to split specimens into separate populations to calculate metrics for each. It has to be tab separated and include columns specimen_name, population. Takes precedence over `--pmo_population_fields`.",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "population_label": {
+                    "type": "string",
+                    "description": "Label for a single-population run when `--population_assignment` is not set.",
+                    "help_text": "If `--population_assignment` is not set this labels the population these estimates are for.",
+                    "default": "pop1",
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "pmo_population_fields": {
+                    "type": ["string", "null"],
+                    "description": "Comma-separated list of PMO specimen metadata field names to combine into the population label (e.g. \"collection_country, collection_date\"). Whitespace is ignored.",
+                    "help_text": "Used only when providing `--pmo` without `--population_assignment`. The selected fields are concatenated by `pmo_population_separator` to build the `population` values.",
+                    "default": null,
+                    "fa_icon": "fas fa-list"
+                },
+                "pmo_population_separator": {
+                    "type": ["string", "null"],
+                    "description": "String used to join the selected `pmo_population_fields` when building the population label.",
+                    "default": "_",
+                    "fa_icon": "fas fa-link"
                 },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
+                    "fa_icon": "fas fa-folder-open",
+                    "default": "output"
                 },
                 "email": {
                     "type": "string",
                     "description": "Email address for completion summary.",
                     "fa_icon": "fas fa-envelope",
-                    "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
                 },
                 "multiqc_title": {
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                },
+                "input": {
+                    "type": "string",
+                    "description": "Unused legacy parameter retained for template compatibility.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-file-csv"
+                }
+            }
+        },
+        "analysis_options": {
+            "title": "Analysis options",
+            "type": "object",
+            "fa_icon": "fas fa-dna",
+            "description": "Select which population-genetic estimates to produce and how to compute them.",
+            "properties": {
+                "coi_method": {
+                    "type": "string",
+                    "default": "naive",
+                    "pattern": "^\\s*(naive|moire)\\s*(,\\s*(naive|moire)\\s*)*$",
+                    "description": "Method(s) for complexity of infection (COI) estimation. Comma-separate to run several (e.g. 'naive,moire').",
+                    "help_text": "Always estimated. Allowed values: naive, moire. When several methods are given, each is run and the results are combined into coi_table.tsv and sample_count_per_coi.tsv with a coi_method column. If moire is also needed for allele frequencies or within-host relatedness, MOIRE still runs only once.",
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "naive_coi_method": {
+                    "type": "string",
+                    "default": "integer_method",
+                    "enum": ["integer_method", "quantile_method"],
+                    "description": "Naive COI estimator when --coi_method includes naive.",
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "naive_coi_threshold": {
+                    "type": "number",
+                    "default": 1,
+                    "description": "Integer index (integer_method) or quantile in 0-1 (quantile_method) for naive COI.",
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "skip_allele_frequencies": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Skip allele-frequency estimation (currently via MOIRE).",
+                    "fa_icon": "fas fa-forward"
+                },
+                "skip_within_host_relatedness": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Skip within-host relatedness estimation (currently via MOIRE).",
+                    "fa_icon": "fas fa-forward"
+                },
+                "skip_between_host_relatedness": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Skip between-host relatedness / IBD estimation (currently via Dcifer).",
+                    "fa_icon": "fas fa-forward"
+                },
+                "skip_multiqc": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Skip MultiQC report generation."
+                }
+            }
+        },
+        "tool_options": {
+            "title": "Tool options",
+            "type": "object",
+            "fa_icon": "fas fa-sliders-h",
+            "description": "Optional flags passed to the PGEcore MOIRE and Dcifer wrappers. Leave unset to use the wrapper defaults.",
+            "properties": {
+                "moire_seed": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE random seed for reproducible sampling. Default in PGEcore wrapper: unset (non-deterministic).",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_allow_relatedness": {
+                    "type": ["boolean", "null"],
+                    "description": "MOIRE: allow within-host relatedness. Default in PGEcore wrapper: true.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_burnin": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: number of MCMC burn-in iterations. Default in PGEcore wrapper: 10000.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_samples_per_chain": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: number of samples per MCMC chain. Default in PGEcore wrapper: 1000.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_n_chains": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: number of independent MCMC chains (needed for R-hat). Default in PGEcore wrapper: 3.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_thin": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: thinning interval; keep every n-th sample. Default in PGEcore wrapper: 1.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_verbose": {
+                    "type": ["boolean", "null"],
+                    "description": "MOIRE: verbose output. Default in PGEcore wrapper: false.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_eps_pos_alpha": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: alpha of the positive error rate prior. Default in PGEcore wrapper: 1.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_eps_pos_beta": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: beta of the positive error rate prior. Default in PGEcore wrapper: 1.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_eps_neg_alpha": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: alpha of the negative error rate prior. Default in PGEcore wrapper: 1.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_eps_neg_beta": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: beta of the negative error rate prior. Default in PGEcore wrapper: 1.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_r_alpha": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: alpha of the relatedness prior. Default in PGEcore wrapper: 1.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_r_beta": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: beta of the relatedness prior. Default in PGEcore wrapper: 1.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_mean_coi_shape": {
+                    "type": ["number", "null"],
+                    "description": "MOIRE: shape of the mean COI prior. Default in PGEcore wrapper: 0.1.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_mean_coi_scale": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: scale of the mean COI prior. Default in PGEcore wrapper: 10.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_max_eps_pos": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: maximum positive error rate. Default in PGEcore wrapper: 2.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_max_eps_neg": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: maximum negative error rate. Default in PGEcore wrapper: 2.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_record_latent_genotypes": {
+                    "type": ["boolean", "null"],
+                    "description": "MOIRE: record latent genotypes. Default in PGEcore wrapper: false.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_pt_chains": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: number of parallel tempering chains. Default in PGEcore wrapper: 1.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_pt_grad_lower": {
+                    "type": ["number", "null"],
+                    "description": "MOIRE: lower bound of the parallel tempering gradient. Default in PGEcore wrapper: 0.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_pt_num_threads": {
+                    "type": ["integer", "null"],
+                    "description": "MOIRE: threads for parallel tempering. Default in PGEcore wrapper: 1.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_adapt_temp": {
+                    "type": ["boolean", "null"],
+                    "description": "MOIRE: adaptive temperature in the MCMC. Default in PGEcore wrapper: true.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "moire_max_runtime": {
+                    "type": ["number", "null"],
+                    "description": "MOIRE: maximum MCMC runtime. Default in PGEcore wrapper: Inf.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "dcifer_rnull": {
+                    "type": ["number", "null"],
+                    "description": "Dcifer: null relatedness value for hypothesis testing. Default in PGEcore wrapper: 0.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "dcifer_alpha": {
+                    "type": ["number", "null"],
+                    "description": "Dcifer: significance level for hypothesis testing. Default in PGEcore wrapper: 0.05.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "dcifer_use_estm": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Dcifer: use dcifer::ibdEstM instead of dcifer::ibdPair.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-sliders-h"
                 }
             }
         },
@@ -48,7 +309,6 @@
             "type": "object",
             "fa_icon": "fas fa-university",
             "description": "Parameters used to describe centralised config profiles. These should not be edited.",
-            "help_text": "The centralised nf-core configuration profiles use a handful of pipeline parameters to describe themselves. This information is then printed to the Nextflow log when you run a pipeline. You should not need to change these values when you run a pipeline.",
             "properties": {
                 "custom_config_version": {
                     "type": "string",
@@ -62,7 +322,6 @@
                     "description": "Base directory for Institutional configs.",
                     "default": "https://raw.githubusercontent.com/nf-core/configs/master",
                     "hidden": true,
-                    "help_text": "If you're running offline, Nextflow will not be able to fetch the institutional config files from the internet. If you don't need them, then this is not a problem. If you do need them, you should download the files from the repo and tell Nextflow where to find them with this parameter.",
                     "fa_icon": "fas fa-users-cog"
                 },
                 "config_profile_name": {
@@ -96,7 +355,6 @@
             "type": "object",
             "fa_icon": "fas fa-file-import",
             "description": "Less common options for the pipeline, typically set in a config file.",
-            "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
             "properties": {
                 "version": {
                     "type": "boolean",
@@ -108,7 +366,6 @@
                     "type": "string",
                     "default": "copy",
                     "description": "Method used to save pipeline results to output directory.",
-                    "help_text": "The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.",
                     "fa_icon": "fas fa-copy",
                     "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
                     "hidden": true
@@ -118,7 +375,6 @@
                     "description": "Email address for completion summary, only when pipeline fails.",
                     "fa_icon": "fas fa-exclamation-triangle",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
-                    "help_text": "An email address to send a summary email to when the pipeline is completed - ONLY sent if the pipeline does not exit successfully.",
                     "hidden": true
                 },
                 "plaintext_email": {
@@ -150,7 +406,7 @@
                 },
                 "multiqc_logo": {
                     "type": "string",
-                    "description": "Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file",
+                    "description": "Custom logo file to supply to MultiQC.",
                     "fa_icon": "fas fa-image",
                     "hidden": true
                 },
@@ -170,13 +426,13 @@
                     "type": "string",
                     "fa_icon": "far fa-check-circle",
                     "description": "Base URL or local path to location of pipeline test dataset files",
-                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/",
+                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/eupathpopgen/",
                     "hidden": true
                 },
                 "trace_report_suffix": {
                     "type": "string",
                     "fa_icon": "far calendar",
-                    "description": "Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss.",
+                    "description": "Suffix to add to the trace report filename.",
                     "hidden": true
                 },
                 "help": {
@@ -189,7 +445,7 @@
                 },
                 "show_hidden": {
                     "type": "boolean",
-                    "description": "Display hidden parameters in the help message (only works when --help or --help_full are provided)."
+                    "description": "Display hidden parameters in the help message."
                 }
             }
         }
@@ -197,6 +453,12 @@
     "allOf": [
         {
             "$ref": "#/$defs/input_output_options"
+        },
+        {
+            "$ref": "#/$defs/analysis_options"
+        },
+        {
+            "$ref": "#/$defs/tool_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"

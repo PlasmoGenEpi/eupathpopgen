@@ -1,0 +1,60 @@
+{
+    "Should assign stable indices to population labels": {
+        "content": [
+            {
+                "0": [
+                    "population_map_indexed.tsv:md5,0ffec6e94352e9b80c8eced4037e4312"
+                ],
+                "1": [
+                    "population_index_lookup.tsv:md5,7562b16d798dcfe889d7138a4f06a1a9"
+                ],
+                "2": [
+                    "versions.yml:md5,0f5de503ab6bd600eed2b728f3e99a3e"
+                ],
+                "population_index_lookup": [
+                    "population_index_lookup.tsv:md5,7562b16d798dcfe889d7138a4f06a1a9"
+                ],
+                "population_map_indexed": [
+                    "population_map_indexed.tsv:md5,0ffec6e94352e9b80c8eced4037e4312"
+                ],
+                "versions": [
+                    "versions.yml:md5,0f5de503ab6bd600eed2b728f3e99a3e"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:24:11.816718",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Stub": {
+        "content": [
+            {
+                "0": [
+                    "population_map_indexed.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "population_index_lookup.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "2": [
+                    "versions.yml:md5,0f5de503ab6bd600eed2b728f3e99a3e"
+                ],
+                "population_index_lookup": [
+                    "population_index_lookup.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "population_map_indexed": [
+                    "population_map_indexed.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "versions": [
+                    "versions.yml:md5,0f5de503ab6bd600eed2b728f3e99a3e"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:24:15.366795",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

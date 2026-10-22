@@ -2,47 +2,33 @@
 // Subworkflow with functionality specific to the nf-core/eupathpopgen pipeline
 //
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
 include { UTILS_NFSCHEMA_PLUGIN     } from '../../nf-core/utils_nfschema_plugin'
 include { paramsSummaryMap          } from 'plugin/nf-schema'
-include { samplesheetToList         } from 'plugin/nf-schema'
-include { paramsHelp                } from 'plugin/nf-schema'
 include { completionEmail           } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    SUBWORKFLOW TO INITIALISE PIPELINE
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+include { EXTRACT_ALLELE_TABLE            } from '../../../modules/local/extract_allele_table'
+include { EXTRACT_POPULATION_MAP_FROM_PMO } from '../../../modules/local/extract_population_map_from_pmo'
+include { INDEX_POPULATION_ASSIGNMENT     } from '../../../modules/local/index_population_assignment'
 
 workflow PIPELINE_INITIALISATION {
 
     take:
-    version           // boolean: Display version and exit
-    validate_params   // boolean: Boolean whether to validate parameters against the schema at runtime
-    monochrome_logs   // boolean: Do not use coloured log outputs
-    nextflow_cli_args //   array: List of positional nextflow CLI args
-    outdir            //  string: The output directory where the results will be saved
-    input             //  string: Path to input samplesheet
-    help              // boolean: Display help message and exit
-    help_full         // boolean: Show the full help message
-    show_hidden       // boolean: Show hidden parameters in the help message
+    version
+    validate_params
+    monochrome_logs
+    nextflow_cli_args
+    outdir
+    help
+    help_full
+    show_hidden
 
     main:
 
     ch_versions = channel.empty()
 
-    //
-    // Print version and exit if required and dump pipeline parameters to JSON file
-    //
     UTILS_NEXTFLOW_PIPELINE (
         version,
         true,
@@ -50,13 +36,7 @@ workflow PIPELINE_INITIALISATION {
         workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1
     )
 
-    //
-    // Validate parameters and generate parameter summary to stdout
-    //
-
-    def before_text = ""
-    def after_text = ""
-    before_text = """
+    def before_text = """
 -\033[2m----------------------------------------------------\033[0m-
                                         \033[0;32m,--.\033[0;30m/\033[0;32m,-.\033[0m
 \033[0;34m        ___     __   __   __   ___     \033[0;32m/,-._.--~\'\033[0m
@@ -66,7 +46,7 @@ workflow PIPELINE_INITIALISATION {
 \033[0;35m  nf-core/eupathpopgen ${workflow.manifest.version}\033[0m
 -\033[2m----------------------------------------------------\033[0m-
 """
-    after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/','')}"}.join("\n")}${workflow.manifest.doi ? "\n" : ""}
+    def after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/','')}"}.join("\n")}${workflow.manifest.doi ? "\n" : ""}
 * The nf-core framework
     https://doi.org/10.1038/s41587-020-0439-x
 
@@ -77,7 +57,7 @@ workflow PIPELINE_INITIALISATION {
         before_text = before_text.replaceAll(/\033\[[0-9;]*m/, '')
     }
 
-    command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
+    def command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute>,plasmodium --allele_table <ALLELE_TABLE.tsv> --outdir <OUTDIR>"
 
     UTILS_NFSCHEMA_PLUGIN (
         workflow,
@@ -92,65 +72,84 @@ workflow PIPELINE_INITIALISATION {
         false
     )
 
-    //
-    // Check config provided to the pipeline
-    //
     UTILS_NFCORE_PIPELINE (
         nextflow_cli_args
     )
 
-    //
-    // Create channel from input file provided through params.input
-    //
+    validateInputParameters()
 
-    channel
-        .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-                }
+    def ch_allele_table = channel.empty()
+    def raw_population_assignment_ch = null
+
+    // Normalise comma-separated PMO population fields → space-separated for Python nargs='+'
+    def pmo_population_fields_norm = null
+    if (params.pmo_population_fields) {
+        pmo_population_fields_norm = params.pmo_population_fields
+            .tokenize(',')
+            .collect { it.trim() }
+            .findAll { it }
+            .join(' ')
+        if (!pmo_population_fields_norm) {
+            error("`--pmo_population_fields` was provided but no field names remained after parsing.")
         }
-        .groupTuple()
-        .map { samplesheet ->
-            validateInputSamplesheet(samplesheet)
+    }
+
+    if (params.pmo) {
+        def ch_pmo = channel.fromPath(params.pmo, checkIfExists: true)
+        EXTRACT_ALLELE_TABLE(ch_pmo)
+        ch_allele_table = EXTRACT_ALLELE_TABLE.out.allele_table
+        ch_versions = ch_versions.mix(EXTRACT_ALLELE_TABLE.out.versions)
+
+        if (params.population_assignment) {
+            raw_population_assignment_ch = channel.fromPath(params.population_assignment, checkIfExists: true)
+        } else if (pmo_population_fields_norm) {
+            EXTRACT_POPULATION_MAP_FROM_PMO(
+                ch_pmo,
+                pmo_population_fields_norm,
+                params.pmo_population_separator ?: '_'
+            )
+            raw_population_assignment_ch = EXTRACT_POPULATION_MAP_FROM_PMO.out.population_map
+            ch_versions = ch_versions.mix(EXTRACT_POPULATION_MAP_FROM_PMO.out.versions)
         }
-        .map {
-            meta, fastqs ->
-                return [ meta, fastqs.flatten() ]
+    } else {
+        ch_allele_table = channel.fromPath(params.allele_table, checkIfExists: true)
+        if (params.population_assignment) {
+            raw_population_assignment_ch = channel.fromPath(params.population_assignment, checkIfExists: true)
         }
-        .set { ch_samplesheet }
+    }
+
+    def ch_population_assignment = channel.empty()
+    def ch_population_index_lookup = channel.empty()
+    if (raw_population_assignment_ch) {
+        INDEX_POPULATION_ASSIGNMENT(raw_population_assignment_ch)
+        ch_population_assignment = INDEX_POPULATION_ASSIGNMENT.out.population_map_indexed
+        ch_population_index_lookup = INDEX_POPULATION_ASSIGNMENT.out.population_index_lookup
+        ch_versions = ch_versions.mix(INDEX_POPULATION_ASSIGNMENT.out.versions)
+    }
 
     emit:
-    samplesheet = ch_samplesheet
-    versions    = ch_versions
+    allele_table              = ch_allele_table
+    population_assignment     = ch_population_assignment
+    population_index_lookup   = ch_population_index_lookup
+    versions                  = ch_versions
 }
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    SUBWORKFLOW FOR PIPELINE COMPLETION
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
 
 workflow PIPELINE_COMPLETION {
 
     take:
-    email           //  string: email address
-    email_on_fail   //  string: email address sent on pipeline failure
-    plaintext_email // boolean: Send plain-text email instead of HTML
-    outdir          //    path: Path to output directory where results will be published
-    monochrome_logs // boolean: Disable ANSI colour codes in log output
-    multiqc_report  //  string: Path to MultiQC report
+    email
+    email_on_fail
+    plaintext_email
+    outdir
+    monochrome_logs
+    multiqc_report
+    unassigned_count // channel: number of specimens missing from the population assignment
 
     main:
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
     def multiqc_reports = multiqc_report.toList()
+    def unassigned_counts = unassigned_count.toList()
 
-    //
-    // Completion email and summary
-    //
     workflow.onComplete {
         if (email || email_on_fail) {
             completionEmail(
@@ -166,6 +165,12 @@ workflow PIPELINE_COMPLETION {
 
         completionSummary(monochrome_logs)
 
+        // Repeated from the mid-run warning, which the ANSI progress display can overwrite
+        def n_unassigned = unassigned_counts.isBound() ? unassigned_counts.getVal().sum() ?: 0 : 0
+        if (n_unassigned > 0) {
+            log.warn "${n_unassigned} specimen(s) not found in the population assignment were excluded from all outputs. " +
+                "See ${outdir}/unassigned_specimens.txt"
+        }
     }
 
     workflow.onError {
@@ -173,66 +178,62 @@ workflow PIPELINE_COMPLETION {
     }
 }
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    FUNCTIONS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-//
-// Validate channels from input samplesheet
-//
-def validateInputSamplesheet(input) {
-    def (metas, fastqs) = input[1..2]
-
-    // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
-    def endedness_ok = metas.collect{ meta -> meta.single_end }.unique().size == 1
-    if (!endedness_ok) {
-        error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
+def validateInputParameters() {
+    if (params.pmo && params.allele_table) {
+        error("Provide exactly one of `--pmo` or `--allele_table`, not both.")
     }
-
-    return [ metas[0], fastqs ]
+    if (!params.pmo && !params.allele_table) {
+        error("You must provide either `--pmo` (PMO JSON) or `--allele_table` (PGEcore allele table TSV).")
+    }
+    if (params.pmo_population_fields && params.population_assignment) {
+        log.warn "`--population_assignment` takes precedence; `--pmo_population_fields` will be ignored."
+    }
+    if (params.pmo_population_fields && params.allele_table && !params.pmo) {
+        log.warn "`--pmo_population_fields` is only used with `--pmo` and will be ignored for allele-table input."
+    }
+    if (params.population_assignment && params.population_label != 'pop1') {
+        log.warn "`--population_assignment` takes precedence; `--population_label` will be ignored."
+    }
 }
-//
-// Generate methods description for MultiQC
-//
+
+def moireUsed() {
+    return ('moire' in params.coi_method.toString().tokenize(',')*.trim()) || !params.skip_allele_frequencies || !params.skip_within_host_relatedness
+}
+
 def toolCitationText() {
-    // TODO nf-core: Optionally add in-text citation tools to this list.
-    // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "Tool (Foo et al. 2023)" : "",
-    // Uncomment function in methodsDescriptionText to render in MultiQC report
     def citation_text = [
             "Tools used in the workflow included:",
-            "FastQC (Andrews 2010),",
+            "PGEcore (PlasmoGenEpi),",
+            params.pmo ? "pmotools (PlasmoGenEpi)," : "",
+            moireUsed() ? "MOIRE (Murphy and Greenhouse 2024)," : "",
+            params.skip_between_host_relatedness ? "" : "Dcifer (Gerlovina et al. 2022),",
+            "pegas (Paradis 2010),",
             "MultiQC (Ewels et al. 2016)",
             "."
-        ].join(' ').trim()
+        ].findAll { it }.join(' ').trim()
 
     return citation_text
 }
 
 def toolBibliographyText() {
-    // TODO nf-core: Optionally add bibliographic entries to this list.
-    // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "<li>Author (2023) Pub name, Journal, DOI</li>" : "",
-    // Uncomment function in methodsDescriptionText to render in MultiQC report
     def reference_text = [
-            "<li>Andrews S, (2010) FastQC, URL: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).</li>",
-            "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics , 32(19), 3047–3048. doi: /10.1093/bioinformatics/btw354</li>"
-        ].join(' ').trim()
+            "<li>PlasmoGenEpi. PGEcore: R package and CLIs for malaria genomics analysis. <a href=\"https://github.com/PlasmoGenEpi/PGEcore\">https://github.com/PlasmoGenEpi/PGEcore</a></li>",
+            params.pmo ? "<li>PlasmoGenEpi. pmotools-python: CLI tools for Portable Microhaplotype Objects (PMO). <a href=\"https://github.com/PlasmoGenEpi/pmotools-python\">https://github.com/PlasmoGenEpi/pmotools-python</a></li>" : "",
+            moireUsed() ? "<li>Murphy, M., & Greenhouse, B. (2024). MOIRE: a software package for the estimation of allele frequencies and effective multiplicity of infection from polyallelic data. Bioinformatics, 40(10), btae619. doi: <a href=\"https://doi.org/10.1093/bioinformatics/btae619\">10.1093/bioinformatics/btae619</a></li>" : "",
+            params.skip_between_host_relatedness ? "" : "<li>Gerlovina, I., Gerlovin, B., Rodríguez-Barraquer, I., & Greenhouse, B. (2022). Dcifer: an IBD-based method to calculate genetic distance between polyclonal infections. Genetics, 222(2), iyac126. doi: <a href=\"https://doi.org/10.1093/genetics/iyac126\">10.1093/genetics/iyac126</a></li>",
+            "<li>Paradis, E. (2010). pegas: an R package for population genetics with an integrated-modular approach. Bioinformatics, 26(3), 419–420. doi: <a href=\"https://doi.org/10.1093/bioinformatics/btp696\">10.1093/bioinformatics/btp696</a></li>",
+            "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics, 32(19), 3047–3048. doi: <a href=\"https://doi.org/10.1093/bioinformatics/btw354\">10.1093/bioinformatics/btw354</a></li>"
+        ].findAll { it }.join(' ').trim()
 
     return reference_text
 }
 
 def methodsDescriptionText(mqc_methods_yaml) {
-    // Convert  to a named map so can be used as with familiar NXF ${workflow} variable syntax in the MultiQC YML file
     def meta = [:]
     meta.workflow = workflow.toMap()
     meta["manifest_map"] = workflow.manifest.toMap()
 
-    // Pipeline DOI
     if (meta.manifest_map.doi) {
-        // Using a loop to handle multiple DOIs
-        // Removing `https://doi.org/` to handle pipelines using DOIs vs DOI resolvers
-        // Removing ` ` since the manifest.doi is a string and not a proper list
         def temp_doi_ref = ""
         def manifest_doi = meta.manifest_map.doi.tokenize(",")
         manifest_doi.each { doi_ref ->
@@ -242,17 +243,10 @@ def methodsDescriptionText(mqc_methods_yaml) {
     } else meta["doi_text"] = ""
     meta["nodoi_text"] = meta.manifest_map.doi ? "" : "<li>If available, make sure to update the text to include the Zenodo DOI of version of the pipeline used. </li>"
 
-    // Tool references
-    meta["tool_citations"] = ""
-    meta["tool_bibliography"] = ""
-
-    // TODO nf-core: Only uncomment below if logic in toolCitationText/toolBibliographyText has been filled!
-    // meta["tool_citations"] = toolCitationText().replaceAll(", \\.", ".").replaceAll("\\. \\.", ".").replaceAll(", \\.", ".")
-    // meta["tool_bibliography"] = toolBibliographyText()
-
+    meta["tool_citations"] = toolCitationText().replaceAll(", \\.", ".").replaceAll("\\. \\.", ".").replaceAll(", \\.", ".")
+    meta["tool_bibliography"] = toolBibliographyText()
 
     def methods_text = mqc_methods_yaml.text
-
     def engine =  new groovy.text.SimpleTemplateEngine()
     def description_html = engine.createTemplate(methods_text).make(meta)
 

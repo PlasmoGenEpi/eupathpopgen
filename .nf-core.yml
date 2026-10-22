@@ -6,6 +6,11 @@ lint:
   files_exist:
     - conf/igenomes.config
     - conf/igenomes_ignored.config
+  files_unchanged:
+    - .gitignore
+    - assets/nf-core-eupathpopgen_logo_light.png
+    - docs/images/nf-core-eupathpopgen_logo_light.png
+    - docs/images/nf-core-eupathpopgen_logo_dark.png
 
 template:
   org: nf-core
@@ -13,7 +18,7 @@ template:
   description: Pipeline for generating population genetic metrics from microhaplotype
     data of eukaryotic pathogens (e.g. Plasmodium). Designed for infections containing
     multiple genetically distinct clones, the pipeline estimates complexity of infection
-    (COI), identity by descent (IBD), allele frequencies, within-host relateness,
+    (COI), identity by descent (IBD), allele frequencies, within-host relatedness,
     and other population genetic metrics.
   author: Kathryn Murie
   version: 1.0.0dev

@@ -1,0 +1,71 @@
+{
+    "Should join multiple PMO fields with the separator": {
+        "content": [
+            {
+                "0": [
+                    "population_map.tsv:md5,2be102dcdb827eb090a959f71a9912cc"
+                ],
+                "1": [
+                    "versions.yml:md5,ff57dc4ef1cd4e3c3620c604332520fe"
+                ],
+                "population_map": [
+                    "population_map.tsv:md5,2be102dcdb827eb090a959f71a9912cc"
+                ],
+                "versions": [
+                    "versions.yml:md5,ff57dc4ef1cd4e3c3620c604332520fe"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:24:03.37976",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Should build a population map from one PMO field": {
+        "content": [
+            {
+                "0": [
+                    "population_map.tsv:md5,067d56492b997a48523e1d8fc728b0ab"
+                ],
+                "1": [
+                    "versions.yml:md5,ff57dc4ef1cd4e3c3620c604332520fe"
+                ],
+                "population_map": [
+                    "population_map.tsv:md5,067d56492b997a48523e1d8fc728b0ab"
+                ],
+                "versions": [
+                    "versions.yml:md5,ff57dc4ef1cd4e3c3620c604332520fe"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:23:58.417517",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Stub": {
+        "content": [
+            {
+                "0": [
+                    "population_map.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "versions.yml:md5,ff57dc4ef1cd4e3c3620c604332520fe"
+                ],
+                "population_map": [
+                    "population_map.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "versions": [
+                    "versions.yml:md5,ff57dc4ef1cd4e3c3620c604332520fe"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:24:07.725222",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

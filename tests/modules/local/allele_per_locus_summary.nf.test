@@ -1,0 +1,48 @@
+nextflow_process {
+
+    name "Test Process ALLELE_PER_LOCUS_SUMMARY"
+    script "modules/local/allele_per_locus_summary/main.nf"
+    process "ALLELE_PER_LOCUS_SUMMARY"
+    tag "modules"
+    tag "modules_local"
+    tag "allele_per_locus_summary"
+
+    test("Should summarise alleles per locus for one population") {
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/popidx_001.allele_table.tsv.gz', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.allele_summary_by_target.get(0)[0] == 'popidx_001' },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("Stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/popidx_001.allele_table.tsv.gz', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+}

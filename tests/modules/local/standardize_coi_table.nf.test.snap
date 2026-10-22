@@ -1,0 +1,64 @@
+{
+    "Should standardise a naive COI table": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "naive",
+                        "popidx_001.naive.coi_table.tsv:md5,447d7f4fc6ae62a329f8b691a241a7ed"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,6e4ac824cca8f2b4f5953e170007ee1f"
+                ],
+                "coi_table": [
+                    [
+                        "popidx_001",
+                        "naive",
+                        "popidx_001.naive.coi_table.tsv:md5,447d7f4fc6ae62a329f8b691a241a7ed"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,6e4ac824cca8f2b4f5953e170007ee1f"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:26:01.908494",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "naive",
+                        "popidx_001.naive.coi_table.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,6e4ac824cca8f2b4f5953e170007ee1f"
+                ],
+                "coi_table": [
+                    [
+                        "popidx_001",
+                        "naive",
+                        "popidx_001.naive.coi_table.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,6e4ac824cca8f2b4f5953e170007ee1f"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:26:06.19111",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}
