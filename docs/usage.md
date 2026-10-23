@@ -9,7 +9,7 @@ Provide exactly one of:
 
 Optional population stratification via `--population_assignment`, or (with `--pmo`) `--pmo_population_fields`. Without either, all samples are analysed as one group labelled by `--population_label` (default `pop1`).
 
-![nf-core/eupathpopgen metro map](images/nf-core-eupathpopgen_metromap.png)
+![nf-core/eupathpopgen metro map](../assets/eupathpopgen_metromap.svg)
 
 ## Allele table
 
