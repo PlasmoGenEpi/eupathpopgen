@@ -78,11 +78,6 @@
                 "pipeline_info/pmo",
                 "pipeline_info/pmo/allele_table.tsv",
                 "pipeline_info/pmo/population_map.tsv",
-                "populations",
-                "populations/popidx_001.allele_table.tsv.gz",
-                "populations/popidx_002.allele_table.tsv.gz",
-                "populations/population_index_lookup.tsv",
-                "populations/population_map_indexed.tsv",
                 "sample_count_per_coi.tsv"
             ],
             [
@@ -91,10 +86,6 @@
                 "per_locus_summary.tsv:md5,22ef7c2059e93fb16fa35be05a821fb7",
                 "allele_table.tsv:md5,e47cfc5c3adc0fe7e730d212abbc3ce5",
                 "population_map.tsv:md5,067d56492b997a48523e1d8fc728b0ab",
-                "popidx_001.allele_table.tsv.gz:md5,7671a16512872ba4e5490ad9d7fb0ff1",
-                "popidx_002.allele_table.tsv.gz:md5,9fc83dd8d5aaa9773c20e16a3a12424c",
-                "population_index_lookup.tsv:md5,765605ce10d628b731f057a2716191bb",
-                "population_map_indexed.tsv:md5,a0e30126c164888adf0e111d76bf7931",
                 "sample_count_per_coi.tsv:md5,f14c767f4a8792f1371aa37c24aa4072"
             ]
         ],

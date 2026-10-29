@@ -23,10 +23,6 @@ outdir/
 │   ├── within_host.tsv           # unless --skip_within_host_relatedness
 │   └── between_host.tsv          # unless --skip_between_host_relatedness
 ├── unassigned_specimens.txt      # only when some specimens are missing from the population assignment
-├── populations/                  # when --population_assignment or PMO population fields are set
-│   ├── population_map_indexed.tsv
-│   ├── population_index_lookup.tsv
-│   └── popidx_NNN.allele_table.tsv.gz
 ├── multiqc/
 └── pipeline_info/
     └── pmo/                      # extracted allele_table / population assignment when --pmo
@@ -56,4 +52,3 @@ outdir/
 - When `--coi_method` does not include `moire`, MOIRE COI files are not published (even if MOIRE ran for allele frequencies / relatedness).
 - `unassigned_specimens.txt` lists specimens in the allele table that are missing from the population assignment (`--population_assignment` or `--pmo_population_fields`), one per line. These specimens are excluded from all population-level outputs. It is only written when at least one specimen is unassigned, in which case the pipeline also logs a warning with the number of excluded specimens (mid-run and again after completion).
 - `he_summary.tsv` is published only under `raw_outputs/` (not at the results root).
-- Intermediate per-population files (`popidx_NNN.*`) are not published; only the concatenated summaries and the `populations/` split inputs are.

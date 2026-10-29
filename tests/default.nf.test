@@ -82,7 +82,6 @@ nextflow_pipeline {
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success },
-                { assert file("${params.outdir}/populations").exists() },
                 { assert snapshot(
                     removeNextflowVersion("$outputDir/pipeline_info/nf_core_eupathpopgen_software_mqc_versions.yml"),
                     stable_name,
