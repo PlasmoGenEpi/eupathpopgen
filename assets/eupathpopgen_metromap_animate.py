@@ -33,8 +33,8 @@ from dataclasses import dataclass, replace
 import nf_metro
 from nf_metro.cli import cli
 from nf_metro.layout import constants as layout_constants
-from nf_metro.layout import ordering, pass_metrics
-from nf_metro.layout.constants import LINE_GAP
+from nf_metro.layout import engine as layout_engine
+from nf_metro.layout import pass_metrics
 from nf_metro.layout.phases import off_track
 from nf_metro.layout.routing import common as routing_common
 import drawsvg as draw
@@ -168,35 +168,82 @@ def _render_choice_marker(d, graph, theme) -> None:
                        dominant_baseline="central"))
 
 
-def _stack_optional_estimate_files() -> None:
-    """Keep optional estimate files above per-locus without a dummy split branch.
+def _align_estimate_outputs() -> None:
+    """Stack estimate stations COI → … → per-locus, each file on the same row.
 
-    nf-metro otherwise overflows the extra optional file (between-host) below
-    the mandatory per-locus row, so the Dcifer line crosses the step line.
-    Dcifer is kept on the between-host row so the MOIRE → within-host line
-    does not pass through its marker.
+    A hidden pad into COI is required for nf-metro routing at split; without
+    this restack that join drops COI to the bottom of the section.
     """
-    original = ordering.assign_tracks
+    original = layout_engine.compute_layout
+    process_ids = ("coi", "af", "within", "between", "locus")
+    file_of = {
+        "coi": "coi_out",
+        "af": "af_out",
+        "within": "within_out",
+        "between": "between_out",
+        "locus": "locus_out",
+    }
 
-    def assign_tracks(graph, layers, *args, **kwargs):
-        tracks = original(graph, layers, *args, **kwargs)
-        needed = {"between_out", "locus_out", "within_out", "locus"}
-        if not needed <= set(tracks):
-            return tracks
-        if tracks["between_out"] > tracks["locus_out"] + 1e-6:
-            new_between = tracks["within_out"] + LINE_GAP
-            new_locus = new_between + LINE_GAP
-            for sid in ("between_out", "_between"):
-                if sid in tracks:
-                    tracks[sid] = new_between
-            for sid in ("locus", "_locus", "locus_out"):
-                if sid in tracks:
-                    tracks[sid] = new_locus
-        if "dcifer" in tracks:
-            tracks["dcifer"] = tracks["between_out"]
-        return tracks
+    def compute_layout(graph, *args, **kwargs):
+        original(graph, *args, **kwargs)
+        stations = graph.stations
+        if "coi" not in stations or "af" not in stations:
+            return
+        step = stations["within"].y - stations["af"].y
+        base_y = stations["af"].y
+        proc_x = stations["af"].x
+        file_x = stations["af_out"].x
+        for i, sid in enumerate(process_ids):
+            stations[sid].x = proc_x
+            stations[sid].y = base_y + i * step
+            fid = file_of[sid]
+            if fid in stations:
+                stations[fid].x = file_x
+                stations[fid].y = stations[sid].y
+        if "_pad" in stations:
+            stations["_pad"].x = proc_x
+            stations["_pad"].y = stations["coi"].y
+        if "estimates" in graph.sections:
+            sec = graph.sections["estimates"]
+            max_x = max(stations[s].x for s in sec.station_ids if s in stations)
+            max_y = max(stations[s].y for s in sec.station_ids if s in stations)
+            pad = 90.0
+            sec.bbox_w = max_x - sec.bbox_x + pad
+            sec.bbox_h = max(sec.bbox_h, max_y - sec.bbox_y + pad)
 
-    _rebind_everywhere({"assign_tracks": (original, assign_tracks)})
+    _rebind_everywhere({"compute_layout": (original, compute_layout)})
+
+
+def _skip_hidden_routes() -> None:
+    """Do not draw edges that only exist to satisfy nf-metro's router."""
+    original = svg._render_edges
+
+    def _render_edges(d, graph, routes, polylines, drawable_radii, bridge_breaks, *args, **kwargs):
+        keep = [
+            i
+            for i, route in enumerate(routes)
+            if not _route_touches_hidden(graph, route)
+        ]
+        return original(
+            d,
+            graph,
+            [routes[i] for i in keep],
+            [polylines[i] for i in keep],
+            [drawable_radii[i] for i in keep],
+            tuple(bridge_breaks[i] for i in keep),
+            *args,
+            **kwargs,
+        )
+
+    svg._render_edges = _render_edges
+
+
+def _route_touches_hidden(graph, route) -> bool:
+    for sid in (route.edge.source, route.edge.target):
+        station = graph.stations.get(sid)
+        if station is not None and station.is_hidden:
+            return True
+    return False
 
 
 def _pin_legend_below_prep() -> None:
@@ -347,6 +394,8 @@ def build_timeline(graph, routes, station_offsets, theme, curve_radius=None) -> 
     out_edges: dict[str, list[tuple[str, str]]] = {}
     has_incoming: set[str] = set()
     for route in routes:
+        if _route_touches_hidden(graph, route):
+            continue
         key = (route.edge.source, route.edge.target, route.line_id)
         polyline[key] = routing_common.apply_route_offsets(route, station_offsets)
         out_edges.setdefault(key[0], []).append((key[1], key[2]))
@@ -480,7 +529,8 @@ def frame_markup(timeline: Timeline, theme, phase: float) -> str:  # noqa: ARG00
 
 _enlarge_icons()
 _stack_legend()
-_stack_optional_estimate_files()
+_align_estimate_outputs()
+_skip_hidden_routes()
 _pin_legend_below_prep()
 _hide_section_numbers()
 _align_slots()

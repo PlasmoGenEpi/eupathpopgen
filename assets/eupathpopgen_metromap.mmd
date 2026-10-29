@@ -43,36 +43,32 @@ graph LR
     end
 
     subgraph estimates [Estimates]
-        naive[Naive COI]
-        moire[MOIRE]
-        dcifer[Dcifer IBD]
+        coi[COI\n(naive, MOIRE)]
+        af[Allele frequency\n(MOIRE)]
+        within[Within-host\n(MOIRE)]
+        between[Between-host\n(Dcifer)]
         locus[Per-locus\nsummaries]
-        _af
-        _within
-        _between
-        _locus
+        _pad
         coi_out[ ]
         af_out[ ]
         within_out[ ]
         between_out[ ]
         locus_out[ ]
 
-        naive -->|opt| coi_out
-        moire -->|opt| coi_out
-        moire -->|opt| _af
-        _af -->|opt| af_out
-        moire -->|opt| _within
-        _within -->|opt| within_out
-        dcifer -->|opt| _between
-        _between -->|opt| between_out
-        locus -->|step| _locus
-        _locus -->|step| locus_out
+        _pad -->|opt| coi
+        coi -->|opt| coi_out
+        af -->|opt| af_out
+        within -->|opt| within_out
+        between -->|opt| between_out
+        locus -->|step| locus_out
     end
 
     extract -->|step,opt| split
     gen_pop -->|opt| split
     allele_in -->|input| split
-    split -->|opt| naive
-    split -->|opt| moire
-    split -->|opt| dcifer
+    split -->|opt| coi
+    split -->|opt| _pad
+    split -->|opt| af
+    split -->|opt| within
+    split -->|opt| between
     split -->|step| locus
