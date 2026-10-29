@@ -18,7 +18,7 @@ Required columns (see [PGEcore input-formats](https://plasmogenepi.github.io/PGE
 | Column          | Description                                  |
 | --------------- | -------------------------------------------- |
 | `specimen_name` | Sample / specimen ID                         |
-| `target_name`   | Locus / amplicon ID                          |
+| `target_name`   | Target / amplicon ID                         |
 | `seq`           | Allele sequence                              |
 | `reads`         | Read count (needed for naive COI and Dcifer) |
 
@@ -37,7 +37,7 @@ nextflow run nf-core/eupathpopgen \
 - `--population_assignment` — if set, overrides PMO-derived population labels
 - `--population_label` — single-population label when no assignment is provided (default `pop1`)
 
-Extracted allele table / population assignment are published under `pipeline_info/pmo/`.
+The extracted population assignment is published under `pipeline_info/pmo/` when `--pmo_population_fields` is set. The extracted allele table is not published.
 
 ## Running the pipeline
 
@@ -69,7 +69,7 @@ nextflow run nf-core/eupathpopgen \
 | `--skip_within_host_relatedness`  | Skip within-host relatedness outputs (currently from MOIRE)                                                                                                          |
 | `--skip_between_host_relatedness` | Skip between-host IBD outputs (currently from Dcifer)                                                                                                                |
 
-Per-locus allele counts and popgen summaries always run.
+Per-target allele counts and popgen summaries always run.
 
 MOIRE is invoked **at most once**. It runs when `--coi_method` includes `moire` and/or allele frequencies / within-host relatedness are requested. Skipped MOIRE-backed estimates are not published even if produced as intermediates.
 

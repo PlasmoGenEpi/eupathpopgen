@@ -1,5 +1,5 @@
 name: merge_per_locus_summary
-description: Join allele-count and popgen per-locus summaries on target_name
+description: Join allele-count and popgen per-target summaries on target_name
 keywords:
   - popgen
   - microhaplotype

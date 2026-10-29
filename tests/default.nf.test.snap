@@ -5,7 +5,7 @@
                 "ADD_POP_COI_TABLE": {
                     "r-base": "4.5.3"
                 },
-                "ADD_POP_PER_LOCUS": {
+                "ADD_POP_PER_TARGET": {
                     "r-base": "4.5.3"
                 },
                 "ADD_POP_SAMPLE_COUNT": {
@@ -15,10 +15,10 @@
                     "r-base": "4.5.3",
                     "r-pgecore": "0.1.0"
                 },
-                "CONCAT_COI_TABLE": {
+                "CONCAT_COI_SUMMARY": {
                     "r-base": "4.5.3"
                 },
-                "CONCAT_PER_LOCUS": {
+                "CONCAT_PER_TARGET": {
                     "r-base": "4.5.3"
                 },
                 "CONCAT_SAMPLE_COUNT": {
@@ -62,7 +62,9 @@
                 }
             },
             [
-                "coi_table.tsv",
+                "coi",
+                "coi/coi_summary.tsv",
+                "coi/sample_count_per_coi.tsv",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/llms-full.txt",
@@ -73,18 +75,15 @@
                 "multiqc/multiqc_data/multiqc_software_versions.txt",
                 "multiqc/multiqc_data/multiqc_sources.txt",
                 "multiqc/multiqc_report.html",
-                "per_locus_summary.tsv",
+                "per_target_summary.tsv",
                 "pipeline_info",
                 "pipeline_info/pmo",
-                "pipeline_info/pmo/allele_table.tsv",
-                "pipeline_info/pmo/population_map.tsv",
-                "sample_count_per_coi.tsv"
+                "pipeline_info/pmo/population_map.tsv"
             ],
             [
-                "coi_table.tsv:md5,99abe149ed1b505992ecdab731eae3b1",
+                "coi_summary.tsv:md5,99abe149ed1b505992ecdab731eae3b1",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "per_locus_summary.tsv:md5,22ef7c2059e93fb16fa35be05a821fb7",
-                "allele_table.tsv:md5,e47cfc5c3adc0fe7e730d212abbc3ce5",
+                "per_target_summary.tsv:md5,22ef7c2059e93fb16fa35be05a821fb7",
                 "population_map.tsv:md5,067d56492b997a48523e1d8fc728b0ab",
                 "sample_count_per_coi.tsv:md5,f14c767f4a8792f1371aa37c24aa4072"
             ]
@@ -101,7 +100,7 @@
                 "ADD_POP_COI_TABLE": {
                     "r-base": "4.5.3"
                 },
-                "ADD_POP_PER_LOCUS": {
+                "ADD_POP_PER_TARGET": {
                     "r-base": "4.5.3"
                 },
                 "ADD_POP_SAMPLE_COUNT": {
@@ -111,10 +110,10 @@
                     "r-base": "4.5.3",
                     "r-pgecore": "0.1.0"
                 },
-                "CONCAT_COI_TABLE": {
+                "CONCAT_COI_SUMMARY": {
                     "r-base": "4.5.3"
                 },
-                "CONCAT_PER_LOCUS": {
+                "CONCAT_PER_TARGET": {
                     "r-base": "4.5.3"
                 },
                 "CONCAT_SAMPLE_COUNT": {
@@ -146,7 +145,9 @@
                 }
             },
             [
-                "coi_table.tsv",
+                "coi",
+                "coi/coi_summary.tsv",
+                "coi/sample_count_per_coi.tsv",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/llms-full.txt",
@@ -157,14 +158,13 @@
                 "multiqc/multiqc_data/multiqc_software_versions.txt",
                 "multiqc/multiqc_data/multiqc_sources.txt",
                 "multiqc/multiqc_report.html",
-                "per_locus_summary.tsv",
-                "pipeline_info",
-                "sample_count_per_coi.tsv"
+                "per_target_summary.tsv",
+                "pipeline_info"
             ],
             [
-                "coi_table.tsv:md5,2428e4b547bf7a39c86220cc9b320ec1",
+                "coi_summary.tsv:md5,2428e4b547bf7a39c86220cc9b320ec1",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "per_locus_summary.tsv:md5,dbaa2a680a5832ea8a18690bd5fed9ff",
+                "per_target_summary.tsv:md5,dbaa2a680a5832ea8a18690bd5fed9ff",
                 "sample_count_per_coi.tsv:md5,301bdfd9918bf7bcd06cc5096b1a13b1"
             ]
         ],

@@ -1,5 +1,5 @@
 name: per_locus_popgen_summary
-description: Per-locus popgen summary statistics via PGEcore
+description: Per-target popgen summary statistics via PGEcore
 keywords:
   - popgen
   - microhaplotype

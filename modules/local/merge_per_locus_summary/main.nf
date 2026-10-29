@@ -11,7 +11,7 @@ process MERGE_PER_LOCUS_SUMMARY {
     tuple val(prefix), path(allele_summary), path(popgen_summary), path(he_summary)
 
     output:
-    tuple val(prefix), path("${prefix}.per_locus_summary.tsv"), emit: per_locus_summary
+    tuple val(prefix), path("${prefix}.per_target_summary.tsv"), emit: per_target_summary
     path "versions.yml", emit: versions
 
     script:
@@ -37,7 +37,7 @@ process MERGE_PER_LOCUS_SUMMARY {
 
       utils::write.table(
         merged,
-        file = "${prefix}.per_locus_summary.tsv",
+        file = "${prefix}.per_target_summary.tsv",
         sep = "\\t",
         row.names = FALSE,
         quote = FALSE
@@ -52,7 +52,7 @@ process MERGE_PER_LOCUS_SUMMARY {
 
     stub:
     """
-    touch ${prefix}.per_locus_summary.tsv
+    touch ${prefix}.per_target_summary.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

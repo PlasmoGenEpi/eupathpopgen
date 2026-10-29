@@ -24,14 +24,15 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt,yml}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            def coi = file("${params.outdir}/coi_table.tsv")
+            def coi = file("${params.outdir}/coi/coi_summary.tsv")
             assertAll(
                 { assert workflow.success },
                 { assert coi.readLines()[0].split('\t').toList() == ['population', 'coi_method', 'specimen_name', 'coi'] },
-                { assert file("${params.outdir}/sample_count_per_coi.tsv").readLines()[0].startsWith('population\tcoi_method\t') },
+                { assert file("${params.outdir}/coi/sample_count_per_coi.tsv").readLines()[0].startsWith('population\tcoi_method\t') },
                 // test profile skips MOIRE-backed estimates and Dcifer
                 { assert !file("${params.outdir}/allele_freq_summary.tsv").exists() },
                 { assert !file("${params.outdir}/he_summary.tsv").exists() },
+                { assert !file("${params.outdir}/raw_outputs").exists() },
                 { assert !file("${params.outdir}/relatedness").exists() },
                 { assert snapshot(
                     // pipeline software versions.yml from which Nextflow version is removed because we test pipelines on multiple Nextflow versions

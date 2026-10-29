@@ -1,5 +1,5 @@
 name: allele_per_locus_summary
-description: Per-locus allele count summary via PGEcore
+description: Per-target allele count summary via PGEcore
 keywords:
   - popgen
   - microhaplotype

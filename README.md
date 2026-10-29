@@ -21,7 +21,7 @@
 
 ## Introduction
 
-**nf-core/eupathpopgen** estimates population-genetic metrics from **microhaplotype** data for eukaryotic pathogens (for example _Plasmodium_). Infections are often polyclonal, so the pipeline focuses on COI, allele frequencies, within-host relatedness, between-host IBD, and per-locus summaries using [PGEcore](https://github.com/PlasmoGenEpi/PGEcore) and specialist tools (MOIRE, Dcifer). Microhaplotype data can be supplied in the form of an allele table or a [PMO](https://plasmogenepi.github.io/PMO_Docs/).
+**nf-core/eupathpopgen** estimates population-genetic metrics from **microhaplotype** data for eukaryotic pathogens (for example _Plasmodium_). Infections are often polyclonal, so the pipeline focuses on COI, allele frequencies, within-host relatedness, between-host IBD, and per-target summaries using [PGEcore](https://github.com/PlasmoGenEpi/PGEcore) and specialist tools (MOIRE, Dcifer). Microhaplotype data can be supplied in the form of an allele table or a [PMO](https://plasmogenepi.github.io/PMO_Docs/).
 
 The scientific methods are Plasmodium-validated; use `-profile plasmodium` for recommended defaults. The pipeline name is pathogen-agnostic so other eukaryotic pathogens can share the same workflow as methods mature.
 
@@ -36,7 +36,7 @@ The scientific methods are Plasmodium-validated; use `-profile plasmodium` for r
    ii. [moire](https://github.com/EPPIcenter/moire) ([PGEcore wrapper](https://github.com/PlasmoGenEpi/PGEcore))
 4. Optionally estimate allele frequencies and within-host relatedness ([moire](https://github.com/EPPIcenter/moire); single run when needed)
 5. Optionally estimate between-host relatedness / IBD ([Dcifer](https://github.com/EPPIcenter/dcifer))
-6. Generate per-locus allele and popgen summaries
+6. Generate per-target allele and popgen summaries
 7. Collate software versions with MultiQC
 
 ## Usage
