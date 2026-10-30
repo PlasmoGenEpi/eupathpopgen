@@ -4,8 +4,8 @@ process DCIFER_IBD {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/b1/b136d93933a1fd1a035e54963270afeb7f4b6b3fd7b1d755dc994466987c62e7/data'
-:         'community.wave.seqera.io/library/dcifer_ibd:04eaabd9a8a3f281' }"
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/01/0192461d420f027fd4aad78e79a4bd5da267026b4dfb1c7626dea350db3537e1/data'
+:         'community.wave.seqera.io/library/dcifer_ibd:48b8a8d087f8ff8c' }"
 
     input:
     path allele_table

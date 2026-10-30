@@ -16,25 +16,25 @@ maintainers:
   - "@kathrynmurie"
 containers:
   docker:
-    linux/arm64:
-      name: community.wave.seqera.io/library/run_moire:4d7e4794a7a10dda
-      build_id: bd-4d7e4794a7a10dda_1
-      scan_id: sc-9ef737b7df3fafeb_1
     linux/amd64:
-      name: community.wave.seqera.io/library/run_moire:f74cf1676c557e50
-      build_id: bd-f74cf1676c557e50_1
-      scan_id: sc-1515f3522f084b4e_1
+      name: community.wave.seqera.io/library/run_moire:fc0f850602a4446b
+      build_id: bd-fc0f850602a4446b_1
+      scan_id: sc-7a954f523dc9dea3_1
+    linux/arm64:
+      name: community.wave.seqera.io/library/run_moire:8f74f7de890c0136
+      build_id: bd-8f74f7de890c0136_1
+      scan_id: sc-05df5877efdb1821_1
   singularity:
-    linux/arm64:
-      name: oras://community.wave.seqera.io/library/run_moire:ea52b2d3e70e511b
-      build_id: bd-ea52b2d3e70e511b_1
-      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/35/354b9239efc0f8fb7a8097ac44a481ee67a58235570c86d977f249b592fd8d4f/data
     linux/amd64:
-      name: oras://community.wave.seqera.io/library/run_moire:5973054b89230c1f
-      build_id: bd-5973054b89230c1f_1
-      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/a0/a008b0a1a8622f765e834e55c6b40deb06e5926eac2bd58e5d3e3742c5043dd2/data
+      name: oras://community.wave.seqera.io/library/run_moire:829516032532944a
+      build_id: bd-829516032532944a_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/42/426b6b3d29b0ef162b65d262f2c3fe3356b94e4e8c2dc367efe0372744a9082e/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/run_moire:438218513837ab65
+      build_id: bd-438218513837ab65_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/2e/2ebbc839642a171da01cbf0a0c63d1085f1f8c8a9134ccd92d73bc4c73d8d298/data
   conda:
     linux/amd64:
-      lock_file: modules/local/run_moire/.conda-lock/linux_amd64-bd-f74cf1676c557e50_1.txt
+      lock_file: modules/local/run_moire/.conda-lock/linux_amd64-bd-fc0f850602a4446b_1.txt
     linux/arm64:
-      lock_file: modules/local/run_moire/.conda-lock/linux_arm64-bd-4d7e4794a7a10dda_1.txt
+      lock_file: modules/local/run_moire/.conda-lock/linux_arm64-bd-8f74f7de890c0136_1.txt

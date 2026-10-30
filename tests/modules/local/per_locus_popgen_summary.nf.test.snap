@@ -9,7 +9,7 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,591c807d03e19a44b487b41955ab9886"
+                    "versions.yml:md5,22d9d266ee137da55d9dd74e1e446869"
                 ],
                 "per_locus_popgen_summary": [
                     [
@@ -18,13 +18,13 @@
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,591c807d03e19a44b487b41955ab9886"
+                    "versions.yml:md5,22d9d266ee137da55d9dd74e1e446869"
                 ]
             }
         ],
-        "timestamp": "2026-10-01T16:24:32.587393",
+        "timestamp": "2026-10-30T10:36:48.476266",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     },
@@ -38,7 +38,7 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,591c807d03e19a44b487b41955ab9886"
+                    "versions.yml:md5,22d9d266ee137da55d9dd74e1e446869"
                 ],
                 "per_locus_popgen_summary": [
                     [
@@ -47,13 +47,13 @@
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,591c807d03e19a44b487b41955ab9886"
+                    "versions.yml:md5,22d9d266ee137da55d9dd74e1e446869"
                 ]
             }
         ],
-        "timestamp": "2026-10-01T16:24:28.493481",
+        "timestamp": "2026-10-30T10:36:40.346221",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     }

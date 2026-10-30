@@ -17,24 +17,24 @@ maintainers:
 containers:
   docker:
     linux/amd64:
-      name: community.wave.seqera.io/library/dcifer_ibd:04eaabd9a8a3f281
-      build_id: bd-04eaabd9a8a3f281_1
-      scan_id: sc-0df6cf3127254204_1
+      name: community.wave.seqera.io/library/dcifer_ibd:48b8a8d087f8ff8c
+      build_id: bd-48b8a8d087f8ff8c_1
+      scan_id: sc-bca7d4ec033682dd_1
     linux/arm64:
-      name: community.wave.seqera.io/library/dcifer_ibd:d7e4b47f976552cf
-      build_id: bd-d7e4b47f976552cf_1
-      scan_id: sc-4855af4f0f48a1a4_1
+      name: community.wave.seqera.io/library/dcifer_ibd:499225c08ab6c9c4
+      build_id: bd-499225c08ab6c9c4_1
+      scan_id: sc-a456fc1039048ae4_1
   singularity:
     linux/amd64:
-      name: oras://community.wave.seqera.io/library/dcifer_ibd:aad70529bd12bf14
-      build_id: bd-aad70529bd12bf14_1
-      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/b1/b136d93933a1fd1a035e54963270afeb7f4b6b3fd7b1d755dc994466987c62e7/data
+      name: oras://community.wave.seqera.io/library/dcifer_ibd:7456e91fc5ba3e41
+      build_id: bd-7456e91fc5ba3e41_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/01/0192461d420f027fd4aad78e79a4bd5da267026b4dfb1c7626dea350db3537e1/data
     linux/arm64:
-      name: oras://community.wave.seqera.io/library/dcifer_ibd:3ea351d3f9aa904f
-      build_id: bd-3ea351d3f9aa904f_1
-      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/41/4144d38d1793fada128918fd1f5f57d3b89205652dc626953e9a60e66e9cbef9/data
+      name: oras://community.wave.seqera.io/library/dcifer_ibd:463ae50980f4e3d7
+      build_id: bd-463ae50980f4e3d7_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/43/43252e5350b7900fba76ae2d78ff4dfeb92218e6e9a4f7bea74cfe3730f42c9b/data
   conda:
     linux/amd64:
-      lock_file: modules/local/dcifer_ibd/.conda-lock/linux_amd64-bd-04eaabd9a8a3f281_1.txt
+      lock_file: modules/local/dcifer_ibd/.conda-lock/linux_amd64-bd-48b8a8d087f8ff8c_1.txt
     linux/arm64:
-      lock_file: modules/local/dcifer_ibd/.conda-lock/linux_arm64-bd-d7e4b47f976552cf_1.txt
+      lock_file: modules/local/dcifer_ibd/.conda-lock/linux_arm64-bd-499225c08ab6c9c4_1.txt
