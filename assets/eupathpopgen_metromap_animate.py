@@ -20,7 +20,7 @@ Requires nf-metro 2.1.0 (`uv tool install nf-metro==2.1.0 --python 3.12`). Run w
 the nf-metro tool's interpreter, from this directory, using the same arguments as `nf-metro`.
 The README embeds the animated SVG; the pipeline manifest uses the static PNG:
     python eupathpopgen_metromap_animate.py render eupathpopgen_metromap.mmd --animate -o eupathpopgen_metromap.svg
-    python eupathpopgen_metromap_animate.py render eupathpopgen_metromap.mmd -o eupathpopgen_metromap.png
+    python eupathpopgen_metromap_animate.py render eupathpopgen_metromap.mmd --mode light -o eupathpopgen_metromap.png
 """
 
 from __future__ import annotations
