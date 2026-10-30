@@ -5,16 +5,16 @@
                 "0": [
                     [
                         "popidx_001",
-                        "popidx_001.per_locus_summary.tsv:md5,caa9ef12832d935f1b5b2f3830bfae87"
+                        "popidx_001.per_target_summary.tsv:md5,caa9ef12832d935f1b5b2f3830bfae87"
                     ]
                 ],
                 "1": [
                     "versions.yml:md5,627631299a94b667e236506d0c2411bb"
                 ],
-                "per_locus_summary": [
+                "per_target_summary": [
                     [
                         "popidx_001",
-                        "popidx_001.per_locus_summary.tsv:md5,caa9ef12832d935f1b5b2f3830bfae87"
+                        "popidx_001.per_target_summary.tsv:md5,caa9ef12832d935f1b5b2f3830bfae87"
                     ]
                 ],
                 "versions": [
@@ -34,16 +34,16 @@
                 "0": [
                     [
                         "popidx_001",
-                        "popidx_001.per_locus_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "popidx_001.per_target_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "1": [
                     "versions.yml:md5,627631299a94b667e236506d0c2411bb"
                 ],
-                "per_locus_summary": [
+                "per_target_summary": [
                     [
                         "popidx_001",
-                        "popidx_001.per_locus_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "popidx_001.per_target_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "versions": [

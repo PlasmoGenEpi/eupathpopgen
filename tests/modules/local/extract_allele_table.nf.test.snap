@@ -6,19 +6,19 @@
                     "allele_table.tsv:md5,e47cfc5c3adc0fe7e730d212abbc3ce5"
                 ],
                 "1": [
-                    "versions.yml:md5,5b5051a999d29016079d414850476692"
+                    "versions.yml:md5,cea23e832a0cb6abc978c73c6b5c2585"
                 ],
                 "allele_table": [
                     "allele_table.tsv:md5,e47cfc5c3adc0fe7e730d212abbc3ce5"
                 ],
                 "versions": [
-                    "versions.yml:md5,5b5051a999d29016079d414850476692"
+                    "versions.yml:md5,cea23e832a0cb6abc978c73c6b5c2585"
                 ]
             }
         ],
-        "timestamp": "2026-10-01T16:23:49.322397",
+        "timestamp": "2026-10-30T10:34:56.942721",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     },
@@ -29,19 +29,19 @@
                     "allele_table.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ],
                 "1": [
-                    "versions.yml:md5,5b5051a999d29016079d414850476692"
+                    "versions.yml:md5,cea23e832a0cb6abc978c73c6b5c2585"
                 ],
                 "allele_table": [
                     "allele_table.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ],
                 "versions": [
-                    "versions.yml:md5,5b5051a999d29016079d414850476692"
+                    "versions.yml:md5,cea23e832a0cb6abc978c73c6b5c2585"
                 ]
             }
         ],
-        "timestamp": "2026-10-01T16:23:53.552843",
+        "timestamp": "2026-10-30T10:35:07.269914",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     }

@@ -25,8 +25,8 @@ nextflow_process {
         then {
             assertAll(
                 { assert process.success },
-                { assert path(process.out.per_locus_summary.get(0)[1]).readLines()[0].startsWith("target_name\t") },
-                { assert !path(process.out.per_locus_summary.get(0)[1]).readLines()[0].split('\t').contains('he') },
+                { assert path(process.out.per_target_summary.get(0)[1]).readLines()[0].startsWith("target_name\t") },
+                { assert !path(process.out.per_target_summary.get(0)[1]).readLines()[0].split('\t').contains('he') },
                 { assert snapshot(process.out).match() }
             )
         }

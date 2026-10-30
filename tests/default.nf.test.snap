@@ -5,7 +5,7 @@
                 "ADD_POP_COI_TABLE": {
                     "r-base": "4.5.3"
                 },
-                "ADD_POP_PER_LOCUS": {
+                "ADD_POP_PER_TARGET": {
                     "r-base": "4.5.3"
                 },
                 "ADD_POP_SAMPLE_COUNT": {
@@ -13,12 +13,12 @@
                 },
                 "ALLELE_PER_LOCUS_SUMMARY": {
                     "r-base": "4.5.3",
-                    "r-pgecore": "0.1.0"
+                    "r-pgecore": "0.2.0"
                 },
-                "CONCAT_COI_TABLE": {
+                "CONCAT_COI_SUMMARY": {
                     "r-base": "4.5.3"
                 },
-                "CONCAT_PER_LOCUS": {
+                "CONCAT_PER_TARGET": {
                     "r-base": "4.5.3"
                 },
                 "CONCAT_SAMPLE_COUNT": {
@@ -26,17 +26,17 @@
                 },
                 "COUNT_SAMPLES_BY_COI": {
                     "r-base": "4.5.3",
-                    "r-pgecore": "0.1.0"
+                    "r-pgecore": "0.2.0"
                 },
                 "ESTIMATE_COI_NAIVE": {
                     "r-base": "4.5.3",
-                    "r-pgecore": "0.1.0"
+                    "r-pgecore": "0.2.0"
                 },
                 "EXTRACT_ALLELE_TABLE": {
-                    "pmotools-python": "pmotools-python 1.1.0"
+                    "pmotools-python": "pmotools-python 1.2.1"
                 },
                 "EXTRACT_POPULATION_MAP_FROM_PMO": {
-                    "pmotools-python": "pmotools-python 1.1.0"
+                    "pmotools-python": "pmotools-python 1.2.1"
                 },
                 "INDEX_POPULATION_ASSIGNMENT": {
                     "r-base": "4.5.3"
@@ -46,10 +46,10 @@
                 },
                 "PER_LOCUS_POPGEN_SUMMARY": {
                     "r-base": "4.5.3",
-                    "r-pgecore": "0.1.0",
+                    "r-pgecore": "0.2.0",
                     "pegas": 1.4,
-                    "bioconductor-msa": "1.42.0",
-                    "muscle": 5.3
+                    "bioconductor-msa": "1.44.1",
+                    "muscle": null
                 },
                 "SPLIT_ALLELE_TABLE_BY_POP": {
                     "r-base": "4.5.3"
@@ -62,7 +62,9 @@
                 }
             },
             [
-                "coi_table.tsv",
+                "coi",
+                "coi/coi_summary.tsv",
+                "coi/sample_count_per_coi.tsv",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/llms-full.txt",
@@ -73,34 +75,22 @@
                 "multiqc/multiqc_data/multiqc_software_versions.txt",
                 "multiqc/multiqc_data/multiqc_sources.txt",
                 "multiqc/multiqc_report.html",
-                "per_locus_summary.tsv",
+                "per_target_summary.tsv",
                 "pipeline_info",
                 "pipeline_info/pmo",
-                "pipeline_info/pmo/allele_table.tsv",
-                "pipeline_info/pmo/population_map.tsv",
-                "populations",
-                "populations/popidx_001.allele_table.tsv.gz",
-                "populations/popidx_002.allele_table.tsv.gz",
-                "populations/population_index_lookup.tsv",
-                "populations/population_map_indexed.tsv",
-                "sample_count_per_coi.tsv"
+                "pipeline_info/pmo/population_map.tsv"
             ],
             [
-                "coi_table.tsv:md5,99abe149ed1b505992ecdab731eae3b1",
+                "coi_summary.tsv:md5,c5a3c7cd5e5bc45c4fd275374fd4e444",
+                "sample_count_per_coi.tsv:md5,f14c767f4a8792f1371aa37c24aa4072",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "per_locus_summary.tsv:md5,22ef7c2059e93fb16fa35be05a821fb7",
-                "allele_table.tsv:md5,e47cfc5c3adc0fe7e730d212abbc3ce5",
-                "population_map.tsv:md5,067d56492b997a48523e1d8fc728b0ab",
-                "popidx_001.allele_table.tsv.gz:md5,7671a16512872ba4e5490ad9d7fb0ff1",
-                "popidx_002.allele_table.tsv.gz:md5,9fc83dd8d5aaa9773c20e16a3a12424c",
-                "population_index_lookup.tsv:md5,765605ce10d628b731f057a2716191bb",
-                "population_map_indexed.tsv:md5,a0e30126c164888adf0e111d76bf7931",
-                "sample_count_per_coi.tsv:md5,f14c767f4a8792f1371aa37c24aa4072"
+                "per_target_summary.tsv:md5,22ef7c2059e93fb16fa35be05a821fb7",
+                "population_map.tsv:md5,067d56492b997a48523e1d8fc728b0ab"
             ]
         ],
-        "timestamp": "2026-10-01T15:57:34.258586",
+        "timestamp": "2026-10-30T10:31:01.853749",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     },
@@ -110,7 +100,7 @@
                 "ADD_POP_COI_TABLE": {
                     "r-base": "4.5.3"
                 },
-                "ADD_POP_PER_LOCUS": {
+                "ADD_POP_PER_TARGET": {
                     "r-base": "4.5.3"
                 },
                 "ADD_POP_SAMPLE_COUNT": {
@@ -118,12 +108,12 @@
                 },
                 "ALLELE_PER_LOCUS_SUMMARY": {
                     "r-base": "4.5.3",
-                    "r-pgecore": "0.1.0"
+                    "r-pgecore": "0.2.0"
                 },
-                "CONCAT_COI_TABLE": {
+                "CONCAT_COI_SUMMARY": {
                     "r-base": "4.5.3"
                 },
-                "CONCAT_PER_LOCUS": {
+                "CONCAT_PER_TARGET": {
                     "r-base": "4.5.3"
                 },
                 "CONCAT_SAMPLE_COUNT": {
@@ -131,21 +121,21 @@
                 },
                 "COUNT_SAMPLES_BY_COI": {
                     "r-base": "4.5.3",
-                    "r-pgecore": "0.1.0"
+                    "r-pgecore": "0.2.0"
                 },
                 "ESTIMATE_COI_NAIVE": {
                     "r-base": "4.5.3",
-                    "r-pgecore": "0.1.0"
+                    "r-pgecore": "0.2.0"
                 },
                 "MERGE_PER_LOCUS_SUMMARY": {
                     "r-base": "4.5.3"
                 },
                 "PER_LOCUS_POPGEN_SUMMARY": {
                     "r-base": "4.5.3",
-                    "r-pgecore": "0.1.0",
+                    "r-pgecore": "0.2.0",
                     "pegas": 1.4,
-                    "bioconductor-msa": "1.42.0",
-                    "muscle": 5.3
+                    "bioconductor-msa": "1.44.1",
+                    "muscle": null
                 },
                 "STANDARDIZE_COI_NAIVE": {
                     "r-base": "4.5.3"
@@ -155,7 +145,9 @@
                 }
             },
             [
-                "coi_table.tsv",
+                "coi",
+                "coi/coi_summary.tsv",
+                "coi/sample_count_per_coi.tsv",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/llms-full.txt",
@@ -166,20 +158,19 @@
                 "multiqc/multiqc_data/multiqc_software_versions.txt",
                 "multiqc/multiqc_data/multiqc_sources.txt",
                 "multiqc/multiqc_report.html",
-                "per_locus_summary.tsv",
-                "pipeline_info",
-                "sample_count_per_coi.tsv"
+                "per_target_summary.tsv",
+                "pipeline_info"
             ],
             [
-                "coi_table.tsv:md5,2428e4b547bf7a39c86220cc9b320ec1",
+                "coi_summary.tsv:md5,08458858bed07d605d4984d741a4ee3b",
+                "sample_count_per_coi.tsv:md5,301bdfd9918bf7bcd06cc5096b1a13b1",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "per_locus_summary.tsv:md5,dbaa2a680a5832ea8a18690bd5fed9ff",
-                "sample_count_per_coi.tsv:md5,301bdfd9918bf7bcd06cc5096b1a13b1"
+                "per_target_summary.tsv:md5,dbaa2a680a5832ea8a18690bd5fed9ff"
             ]
         ],
-        "timestamp": "2026-10-01T15:56:48.460213",
+        "timestamp": "2026-10-30T10:25:29.734406",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     }

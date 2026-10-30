@@ -9,7 +9,7 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,1220a877e88ba83c93570b1494d6d2af"
+                    "versions.yml:md5,40833699495e3214d1fec5058aa6eef5"
                 ],
                 "allele_summary_by_target": [
                     [
@@ -18,13 +18,13 @@
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,1220a877e88ba83c93570b1494d6d2af"
+                    "versions.yml:md5,40833699495e3214d1fec5058aa6eef5"
                 ]
             }
         ],
-        "timestamp": "2026-10-01T16:22:56.170778",
+        "timestamp": "2026-10-30T10:31:44.240933",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     },
@@ -38,7 +38,7 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,1220a877e88ba83c93570b1494d6d2af"
+                    "versions.yml:md5,40833699495e3214d1fec5058aa6eef5"
                 ],
                 "allele_summary_by_target": [
                     [
@@ -47,13 +47,13 @@
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,1220a877e88ba83c93570b1494d6d2af"
+                    "versions.yml:md5,40833699495e3214d1fec5058aa6eef5"
                 ]
             }
         ],
-        "timestamp": "2026-10-01T16:22:59.86245",
+        "timestamp": "2026-10-30T10:31:49.962483",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     }

@@ -9,7 +9,7 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,051c6080009b225b7206acdebd3524bb"
+                    "versions.yml:md5,db47edac66864de8e4a40611fcb1b1eb"
                 ],
                 "sample_count_per_coi": [
                     [
@@ -18,13 +18,13 @@
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,051c6080009b225b7206acdebd3524bb"
+                    "versions.yml:md5,db47edac66864de8e4a40611fcb1b1eb"
                 ]
             }
         ],
-        "timestamp": "2026-10-01T16:23:19.237074",
+        "timestamp": "2026-10-30T10:32:30.023183",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     },
@@ -38,7 +38,7 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,051c6080009b225b7206acdebd3524bb"
+                    "versions.yml:md5,db47edac66864de8e4a40611fcb1b1eb"
                 ],
                 "sample_count_per_coi": [
                     [
@@ -47,13 +47,13 @@
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,051c6080009b225b7206acdebd3524bb"
+                    "versions.yml:md5,db47edac66864de8e4a40611fcb1b1eb"
                 ]
             }
         ],
-        "timestamp": "2026-10-01T16:23:15.604796",
+        "timestamp": "2026-10-30T10:32:24.089146",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     }

@@ -29,17 +29,17 @@ include { ADD_POPULATION_COLUMN as ADD_POP_ALLELE_FREQ } from '../modules/local/
 include { ADD_POPULATION_COLUMN as ADD_POP_HE } from '../modules/local/add_population_column/main'
 include { ADD_POPULATION_COLUMN as ADD_POP_WITHIN_HOST } from '../modules/local/add_population_column/main'
 include { ADD_POPULATION_COLUMN as ADD_POP_BETWEEN_HOST } from '../modules/local/add_population_column/main'
-include { ADD_POPULATION_COLUMN as ADD_POP_PER_LOCUS } from '../modules/local/add_population_column/main'
-include { CONCAT_SUMMARY_TABLES as CONCAT_COI_TABLE } from '../modules/local/concat_summary_tables/main'
-include { CONCAT_SUMMARY_TABLES as CONCAT_SAMPLE_COUNT } from '../modules/local/concat_summary_tables/main'
+include { ADD_POPULATION_COLUMN as ADD_POP_PER_TARGET } from '../modules/local/add_population_column/main'
 include { CONCAT_SUMMARY_TABLES as CONCAT_COI_SUMMARY } from '../modules/local/concat_summary_tables/main'
+include { CONCAT_SUMMARY_TABLES as CONCAT_SAMPLE_COUNT } from '../modules/local/concat_summary_tables/main'
+include { CONCAT_SUMMARY_TABLES as CONCAT_MOIRE_COI } from '../modules/local/concat_summary_tables/main'
 include { CONCAT_SUMMARY_TABLES as CONCAT_EFFECTIVE_COI } from '../modules/local/concat_summary_tables/main'
 include { CONCAT_SUMMARY_TABLES as CONCAT_CONVERGENCE } from '../modules/local/concat_summary_tables/main'
 include { CONCAT_SUMMARY_TABLES as CONCAT_ALLELE_FREQ } from '../modules/local/concat_summary_tables/main'
 include { CONCAT_SUMMARY_TABLES as CONCAT_HE } from '../modules/local/concat_summary_tables/main'
 include { CONCAT_SUMMARY_TABLES as CONCAT_WITHIN_HOST } from '../modules/local/concat_summary_tables/main'
 include { CONCAT_SUMMARY_TABLES as CONCAT_BETWEEN_HOST } from '../modules/local/concat_summary_tables/main'
-include { CONCAT_SUMMARY_TABLES as CONCAT_PER_LOCUS } from '../modules/local/concat_summary_tables/main'
+include { CONCAT_SUMMARY_TABLES as CONCAT_PER_TARGET } from '../modules/local/concat_summary_tables/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,13 +97,17 @@ workflow EUPATHPOPGEN {
     }
 
     //
-    // COI: one or more methods (comma-separated --coi_method), combined into one long-format table
+    // COI: one or more methods (comma-separated --coi_method), unless --skip_coi.
+    // One method: coi_summary with a coi column (no coi_method). Several: wide (coi_<method>).
     //
     def allowed_coi_methods = ['naive', 'moire']
-    def coi_methods = params.coi_method.toString().tokenize(',')*.trim().findAll { it }.unique()
-    def invalid_coi_methods = coi_methods - allowed_coi_methods
-    if (!coi_methods || invalid_coi_methods) {
-        error("Invalid --coi_method '${params.coi_method}'. Use one or more of ${allowed_coi_methods.join(', ')}, comma-separated (e.g. 'naive,moire').")
+    def coi_methods = []
+    if (!params.skip_coi) {
+        coi_methods = params.coi_method.toString().tokenize(',')*.trim().findAll { it }.unique()
+        def invalid_coi_methods = coi_methods - allowed_coi_methods
+        if (!coi_methods || invalid_coi_methods) {
+            error("Invalid --coi_method '${params.coi_method}'. Use one or more of ${allowed_coi_methods.join(', ')}, comma-separated (e.g. 'naive,moire').")
+        }
     }
 
     // [popidx, coi_method, table(coi_method, specimen_name, coi)]
@@ -142,8 +146,8 @@ workflow EUPATHPOPGEN {
 
             ADD_POP_COI_SUMMARY(RUN_MOIRE.out.coi_summary.map(remap_pop), ch_lookup)
             ch_versions = ch_versions.mix(ADD_POP_COI_SUMMARY.out.versions)
-            CONCAT_COI_SUMMARY(ADD_POP_COI_SUMMARY.out.labeled_table.collect(), 'coi_summary.tsv')
-            ch_versions = ch_versions.mix(CONCAT_COI_SUMMARY.out.versions)
+            CONCAT_MOIRE_COI(ADD_POP_COI_SUMMARY.out.labeled_table.collect(), 'moire_coi_summary.tsv')
+            ch_versions = ch_versions.mix(CONCAT_MOIRE_COI.out.versions)
 
             ADD_POP_EFFECTIVE_COI(RUN_MOIRE.out.effective_coi_summary.map(remap_pop), ch_lookup)
             ch_versions = ch_versions.mix(ADD_POP_EFFECTIVE_COI.out.versions)
@@ -171,27 +175,29 @@ workflow EUPATHPOPGEN {
         if (!params.skip_within_host_relatedness) {
             ADD_POP_WITHIN_HOST(RUN_MOIRE.out.relatedness_summary.map(remap_pop), ch_lookup)
             ch_versions = ch_versions.mix(ADD_POP_WITHIN_HOST.out.versions)
-            CONCAT_WITHIN_HOST(ADD_POP_WITHIN_HOST.out.labeled_table.collect(), 'within_host.tsv')
+            CONCAT_WITHIN_HOST(ADD_POP_WITHIN_HOST.out.labeled_table.collect(), 'within_host_summary.tsv')
             ch_versions = ch_versions.mix(CONCAT_WITHIN_HOST.out.versions)
         }
     }
 
-    ADD_POP_COI_TABLE(
-        ch_coi_by_method.map { pop_index, _method, table ->
-            has_population_assignment ? [pop_index, table] : [params.population_label, table]
-        },
-        ch_lookup
-    )
-    ch_versions = ch_versions.mix(ADD_POP_COI_TABLE.out.versions)
-    CONCAT_COI_TABLE(ADD_POP_COI_TABLE.out.labeled_table.collect(), 'coi_table.tsv')
-    ch_versions = ch_versions.mix(CONCAT_COI_TABLE.out.versions)
+    if (!params.skip_coi) {
+        ADD_POP_COI_TABLE(
+            ch_coi_by_method.map { pop_index, _method, table ->
+                has_population_assignment ? [pop_index, table] : [params.population_label, table]
+            },
+            ch_lookup
+        )
+        ch_versions = ch_versions.mix(ADD_POP_COI_TABLE.out.versions)
+        CONCAT_COI_SUMMARY(ADD_POP_COI_TABLE.out.labeled_table.collect(), 'coi_summary.tsv')
+        ch_versions = ch_versions.mix(CONCAT_COI_SUMMARY.out.versions)
 
-    COUNT_SAMPLES_BY_COI(ch_coi_by_method)
-    ch_versions = ch_versions.mix(COUNT_SAMPLES_BY_COI.out.versions)
-    ADD_POP_SAMPLE_COUNT(COUNT_SAMPLES_BY_COI.out.sample_count_per_coi.map(remap_pop), ch_lookup)
-    ch_versions = ch_versions.mix(ADD_POP_SAMPLE_COUNT.out.versions)
-    CONCAT_SAMPLE_COUNT(ADD_POP_SAMPLE_COUNT.out.labeled_table.collect(), 'sample_count_per_coi.tsv')
-    ch_versions = ch_versions.mix(CONCAT_SAMPLE_COUNT.out.versions)
+        COUNT_SAMPLES_BY_COI(ch_coi_by_method)
+        ch_versions = ch_versions.mix(COUNT_SAMPLES_BY_COI.out.versions)
+        ADD_POP_SAMPLE_COUNT(COUNT_SAMPLES_BY_COI.out.sample_count_per_coi.map(remap_pop), ch_lookup)
+        ch_versions = ch_versions.mix(ADD_POP_SAMPLE_COUNT.out.versions)
+        CONCAT_SAMPLE_COUNT(ADD_POP_SAMPLE_COUNT.out.labeled_table.collect(), 'sample_count_per_coi.tsv')
+        ch_versions = ch_versions.mix(CONCAT_SAMPLE_COUNT.out.versions)
+    }
 
     //
     // Between-host relatedness (Dcifer)
@@ -202,33 +208,35 @@ workflow EUPATHPOPGEN {
 
         ADD_POP_BETWEEN_HOST(DCIFER_IBD.out.btwn_host_rel.map(remap_pop), ch_lookup)
         ch_versions = ch_versions.mix(ADD_POP_BETWEEN_HOST.out.versions)
-        CONCAT_BETWEEN_HOST(ADD_POP_BETWEEN_HOST.out.labeled_table.collect(), 'between_host.tsv')
+        CONCAT_BETWEEN_HOST(ADD_POP_BETWEEN_HOST.out.labeled_table.collect(), 'between_host_summary.tsv')
         ch_versions = ch_versions.mix(CONCAT_BETWEEN_HOST.out.versions)
     }
 
     //
-    // Per-locus summaries (always run) → merge columns → label → concat
+    // Per-target summaries → merge columns → label → concat
     //
-    ALLELE_PER_LOCUS_SUMMARY(ch_allele_for_tools)
-    ch_versions = ch_versions.mix(ALLELE_PER_LOCUS_SUMMARY.out.versions)
+    if (!params.skip_per_target_summaries) {
+        ALLELE_PER_LOCUS_SUMMARY(ch_allele_for_tools)
+        ch_versions = ch_versions.mix(ALLELE_PER_LOCUS_SUMMARY.out.versions)
 
-    PER_LOCUS_POPGEN_SUMMARY(ch_allele_for_tools)
-    ch_versions = ch_versions.mix(PER_LOCUS_POPGEN_SUMMARY.out.versions)
+        PER_LOCUS_POPGEN_SUMMARY(ch_allele_for_tools)
+        ch_versions = ch_versions.mix(PER_LOCUS_POPGEN_SUMMARY.out.versions)
 
-    MERGE_PER_LOCUS_SUMMARY(
-        ALLELE_PER_LOCUS_SUMMARY.out.allele_summary_by_target
-            .join(PER_LOCUS_POPGEN_SUMMARY.out.per_locus_popgen_summary)
-            .join(ch_he_by_table, remainder: true)
-            .map { prefix, allele_summary, popgen_summary, he_summary ->
-                [prefix, allele_summary, popgen_summary, he_summary ?: []]
-            }
-    )
-    ch_versions = ch_versions.mix(MERGE_PER_LOCUS_SUMMARY.out.versions)
+        MERGE_PER_LOCUS_SUMMARY(
+            ALLELE_PER_LOCUS_SUMMARY.out.allele_summary_by_target
+                .join(PER_LOCUS_POPGEN_SUMMARY.out.per_locus_popgen_summary)
+                .join(ch_he_by_table, remainder: true)
+                .map { prefix, allele_summary, popgen_summary, he_summary ->
+                    [prefix, allele_summary, popgen_summary, he_summary ?: []]
+                }
+        )
+        ch_versions = ch_versions.mix(MERGE_PER_LOCUS_SUMMARY.out.versions)
 
-    ADD_POP_PER_LOCUS(MERGE_PER_LOCUS_SUMMARY.out.per_locus_summary.map(remap_pop), ch_lookup)
-    ch_versions = ch_versions.mix(ADD_POP_PER_LOCUS.out.versions)
-    CONCAT_PER_LOCUS(ADD_POP_PER_LOCUS.out.labeled_table.collect(), 'per_locus_summary.tsv')
-    ch_versions = ch_versions.mix(CONCAT_PER_LOCUS.out.versions)
+        ADD_POP_PER_TARGET(MERGE_PER_LOCUS_SUMMARY.out.per_target_summary.map(remap_pop), ch_lookup)
+        ch_versions = ch_versions.mix(ADD_POP_PER_TARGET.out.versions)
+        CONCAT_PER_TARGET(ADD_POP_PER_TARGET.out.labeled_table.collect(), 'per_target_summary.tsv')
+        ch_versions = ch_versions.mix(CONCAT_PER_TARGET.out.versions)
+    }
 
     //
     // Collate and save software versions

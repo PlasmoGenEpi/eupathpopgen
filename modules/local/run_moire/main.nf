@@ -4,8 +4,8 @@ process RUN_MOIRE {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/a0/a008b0a1a8622f765e834e55c6b40deb06e5926eac2bd58e5d3e3742c5043dd2/data'
-:         'community.wave.seqera.io/library/run_moire:f74cf1676c557e50' }"
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/42/426b6b3d29b0ef162b65d262f2c3fe3356b94e4e8c2dc367efe0372744a9082e/data'
+:         'community.wave.seqera.io/library/run_moire:fc0f850602a4446b' }"
 
     input:
     path allele_table

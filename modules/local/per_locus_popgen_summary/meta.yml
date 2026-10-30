@@ -1,5 +1,5 @@
 name: per_locus_popgen_summary
-description: Per-locus popgen summary statistics via PGEcore
+description: Per-target popgen summary statistics via PGEcore
 keywords:
   - popgen
   - microhaplotype
@@ -17,24 +17,24 @@ maintainers:
 containers:
   docker:
     linux/amd64:
-      name: community.wave.seqera.io/library/per_locus_popgen_summary:7f6f43c8231ce06f
-      build_id: bd-7f6f43c8231ce06f_1
-      scan_id: sc-20bdd27f2a228a37_1
+      name: community.wave.seqera.io/library/per_locus_popgen_summary:d0ac73c2ce57f2a5
+      build_id: bd-d0ac73c2ce57f2a5_1
+      scan_id: sc-6e08d317967e1113_1
     linux/arm64:
-      name: community.wave.seqera.io/library/per_locus_popgen_summary:d2b418696a2a4930
-      build_id: bd-d2b418696a2a4930_1
-      scan_id: sc-9d05ede7e26a732e_1
+      name: community.wave.seqera.io/library/per_locus_popgen_summary:ac2d4a8e3b7e74e5
+      build_id: bd-ac2d4a8e3b7e74e5_1
+      scan_id: sc-73c91dd7763f1c1d_1
   singularity:
-    linux/arm64:
-      name: oras://community.wave.seqera.io/library/per_locus_popgen_summary:64b0fe46c60659d5
-      build_id: bd-64b0fe46c60659d5_1
-      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/db/dbb51b67dbbd6a08700210318fe04831dfe0dc5d88a28ce2653b5be516638cff/data
     linux/amd64:
-      name: oras://community.wave.seqera.io/library/per_locus_popgen_summary:c44e8b31ba4f812e
-      build_id: bd-c44e8b31ba4f812e_1
-      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/5c/5cf58632508eb0af0e240343c102a1aefa374dcd46458fbfc8a102f2e6328921/data
+      name: oras://community.wave.seqera.io/library/per_locus_popgen_summary:702815e2403713a8
+      build_id: bd-702815e2403713a8_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/4e/4eea538b840cfbb0298492f4bcab565f0b8e6869df4b3a2136a76646a547e12b/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/per_locus_popgen_summary:63b765c3762a71f0
+      build_id: bd-63b765c3762a71f0_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/03/03d25d0d7c6055796dc0a6024d5c155a45a6551abd949bb58e7774a69e3c47d2/data
   conda:
     linux/amd64:
-      lock_file: modules/local/per_locus_popgen_summary/.conda-lock/linux_amd64-bd-7f6f43c8231ce06f_1.txt
+      lock_file: modules/local/per_locus_popgen_summary/.conda-lock/linux_amd64-bd-d0ac73c2ce57f2a5_1.txt
     linux/arm64:
-      lock_file: modules/local/per_locus_popgen_summary/.conda-lock/linux_arm64-bd-d2b418696a2a4930_1.txt
+      lock_file: modules/local/per_locus_popgen_summary/.conda-lock/linux_arm64-bd-ac2d4a8e3b7e74e5_1.txt

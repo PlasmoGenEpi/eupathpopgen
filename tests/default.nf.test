@@ -24,14 +24,15 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt,yml}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            def coi = file("${params.outdir}/coi_table.tsv")
+            def coi = file("${params.outdir}/coi/coi_summary.tsv")
             assertAll(
                 { assert workflow.success },
-                { assert coi.readLines()[0].split('\t').toList() == ['population', 'coi_method', 'specimen_name', 'coi'] },
-                { assert file("${params.outdir}/sample_count_per_coi.tsv").readLines()[0].startsWith('population\tcoi_method\t') },
+                { assert coi.readLines()[0].split('\t').toList() == ['population', 'specimen_name', 'coi'] },
+                { assert file("${params.outdir}/coi/sample_count_per_coi.tsv").readLines()[0].startsWith('population\tcoi_method\t') },
                 // test profile skips MOIRE-backed estimates and Dcifer
                 { assert !file("${params.outdir}/allele_freq_summary.tsv").exists() },
                 { assert !file("${params.outdir}/he_summary.tsv").exists() },
+                { assert !file("${params.outdir}/raw_outputs").exists() },
                 { assert !file("${params.outdir}/relatedness").exists() },
                 { assert snapshot(
                     // pipeline software versions.yml from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
@@ -82,12 +83,38 @@ nextflow_pipeline {
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success },
-                { assert file("${params.outdir}/populations").exists() },
                 { assert snapshot(
                     removeNextflowVersion("$outputDir/pipeline_info/nf_core_eupathpopgen_software_mqc_versions.yml"),
                     stable_name,
                     stable_path
                 ).match() }
+            )
+        }
+    }
+
+    test("errors when all estimates are skipped") {
+
+        when {
+            params {
+                outdir                          = "$outputDir"
+                skip_coi                        = true
+                skip_allele_frequencies         = true
+                skip_within_host_relatedness    = true
+                skip_between_host_relatedness   = true
+                skip_per_target_summaries       = true
+            }
+        }
+
+        then {
+            def report = [
+                workflow.errorReport,
+                workflow.errorMessage,
+                workflow.stdout,
+                workflow.stderr
+            ].collect { it?.toString() ?: '' }.join('\n')
+            assertAll(
+                { assert workflow.failed },
+                { assert report.contains("All estimates were skipped") }
             )
         }
     }

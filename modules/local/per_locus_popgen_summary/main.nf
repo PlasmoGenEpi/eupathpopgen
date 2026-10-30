@@ -4,8 +4,8 @@ process PER_LOCUS_POPGEN_SUMMARY {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/5c/5cf58632508eb0af0e240343c102a1aefa374dcd46458fbfc8a102f2e6328921/data'
-:         'community.wave.seqera.io/library/per_locus_popgen_summary:7f6f43c8231ce06f' }"
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/4e/4eea538b840cfbb0298492f4bcab565f0b8e6869df4b3a2136a76646a547e12b/data'
+:         'community.wave.seqera.io/library/per_locus_popgen_summary:d0ac73c2ce57f2a5' }"
 
     input:
     path allele_table
