@@ -168,11 +168,19 @@ def _render_choice_marker(d, graph, theme) -> None:
                        dominant_baseline="central"))
 
 
+# These labels all hang the same way, so a row only has to clear one file
+# icon and its caption. The layout engine's pitch is much wider than that.
+ESTIMATE_ROW_STEP = 88.0
+ESTIMATE_SECTION_PAD_X = 72.0
+ESTIMATE_SECTION_PAD_Y = 56.0
+
+
 def _align_estimate_outputs() -> None:
     """Stack estimate stations COI → … → per-locus, each file on the same row.
 
     A hidden pad into COI is required for nf-metro routing at split; without
-    this restack that join drops COI to the bottom of the section.
+    this restack that join drops COI to the bottom of the section. The pitch
+    is the icon clearance, and the section box closes around that stack.
     """
     original = layout_engine.compute_layout
     process_ids = ("coi", "af", "within", "between", "locus")
@@ -189,13 +197,12 @@ def _align_estimate_outputs() -> None:
         stations = graph.stations
         if "coi" not in stations or "af" not in stations:
             return
-        step = stations["within"].y - stations["af"].y
         base_y = stations["af"].y
         proc_x = stations["af"].x
         file_x = stations["af_out"].x
         for i, sid in enumerate(process_ids):
             stations[sid].x = proc_x
-            stations[sid].y = base_y + i * step
+            stations[sid].y = base_y + i * ESTIMATE_ROW_STEP
             fid = file_of[sid]
             if fid in stations:
                 stations[fid].x = file_x
@@ -203,13 +210,34 @@ def _align_estimate_outputs() -> None:
         if "_pad" in stations:
             stations["_pad"].x = proc_x
             stations["_pad"].y = stations["coi"].y
-        if "estimates" in graph.sections:
-            sec = graph.sections["estimates"]
-            max_x = max(stations[s].x for s in sec.station_ids if s in stations)
-            max_y = max(stations[s].y for s in sec.station_ids if s in stations)
-            pad = 90.0
-            sec.bbox_w = max_x - sec.bbox_x + pad
-            sec.bbox_h = max(sec.bbox_h, max_y - sec.bbox_y + pad)
+        if "estimates" not in graph.sections or "split_sec" not in graph.sections:
+            return
+        sec = graph.sections["estimates"]
+        # Line the Estimates box up with Split by population. Stations keep
+        # their offset inside the box, so the whole column moves together.
+        shift = graph.sections["split_sec"].bbox_y - sec.bbox_y
+        sec.bbox_y += shift
+        for sid in sec.station_ids:
+            if sid in stations:
+                stations[sid].y += shift
+        # Meet the split station on its own row so the trunk stays horizontal
+        # until it enters Estimates and fans out.
+        entry_y = stations["split"].y
+        for pid in sec.entry_ports:
+            port = graph.ports.get(pid)
+            if port is not None:
+                port.y = entry_y
+            if pid in stations:
+                stations[pid].y = entry_y
+        members = [
+            s
+            for s in sec.station_ids
+            if s in stations and not stations[s].is_hidden and not stations[s].is_port
+        ]
+        max_x = max(stations[s].x for s in members)
+        max_y = max(stations[s].y for s in members)
+        sec.bbox_w = max_x - sec.bbox_x + ESTIMATE_SECTION_PAD_X
+        sec.bbox_h = max_y - sec.bbox_y + ESTIMATE_SECTION_PAD_Y
 
     _rebind_everywhere({"compute_layout": (original, compute_layout)})
 
@@ -246,8 +274,8 @@ def _route_touches_hidden(graph, route) -> bool:
     return False
 
 
-def _pin_legend_below_prep() -> None:
-    """Sit the legend in the empty pocket under PMO input, not below the map."""
+def _pin_legend_below_split() -> None:
+    """Sit the legend under Split by population, in the pocket the trunk used to cross."""
     original = svg._position_legend
 
     def _position_legend(
@@ -260,10 +288,10 @@ def _pin_legend_below_prep() -> None:
         )
         if not show:
             return _x, _y, width, height, show
-        prep = graph.sections["prep"]
+        split = graph.sections["split_sec"]
         return (
-            content_origin[0],
-            prep.bbox_y + prep.bbox_h + render_constants.LEGEND_GAP,
+            split.bbox_x,
+            split.bbox_y + split.bbox_h + render_constants.LEGEND_GAP,
             width,
             height,
             show,
@@ -531,7 +559,7 @@ _enlarge_icons()
 _stack_legend()
 _align_estimate_outputs()
 _skip_hidden_routes()
-_pin_legend_below_prep()
+_pin_legend_below_split()
 _hide_section_numbers()
 _align_slots()
 animate.render_animation = render_animation
