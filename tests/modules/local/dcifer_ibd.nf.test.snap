@@ -1,0 +1,60 @@
+{
+    "Should estimate between-host relatedness for one population": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "popidx_001.btwn_host_rel.tsv:md5,72bb1513d2137b515c8a3b1884bf42ad"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,58da43bd578ba540aabd02bd156f9479"
+                ],
+                "btwn_host_rel": [
+                    [
+                        "popidx_001",
+                        "popidx_001.btwn_host_rel.tsv:md5,72bb1513d2137b515c8a3b1884bf42ad"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,58da43bd578ba540aabd02bd156f9479"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-30T10:33:38.855953",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "popidx_001.btwn_host_rel.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,58da43bd578ba540aabd02bd156f9479"
+                ],
+                "btwn_host_rel": [
+                    [
+                        "popidx_001",
+                        "popidx_001.btwn_host_rel.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,58da43bd578ba540aabd02bd156f9479"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-30T10:34:01.896979",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

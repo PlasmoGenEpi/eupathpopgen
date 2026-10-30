@@ -1,0 +1,74 @@
+%%metro title: nf-core/eupathpopgen
+%%metro style: nfcore
+%%metro logo: ../docs/images/nf-core-eupathpopgen_logo_light.png | ../docs/images/nf-core-eupathpopgen_logo_dark.png
+%%metro diamond_style: symmetric
+%%metro section_x_gap: 90
+%%metro x_spacing: 45
+%%metro y_spacing: 75
+%%metro section_y_gap: 40
+%%metro legend: tl
+%%metro line: opt   | Optional step   | #fbdae6
+%%metro line: step  | Mandatory step  | #ff4181
+%%metro line: input | Mandatory input | #7589c3
+%%metro line: optin | Optional input  | #dded3b
+
+%%metro file: pmo_in      | PMO | PMO
+%%metro file: allele_in   | TSV | Allele table
+%%metro file: pop_in      | TSV | Populations
+%%metro file: coi_out     | TSV | COI table
+%%metro file: af_out      | TSV | Allele frequencies
+%%metro file: within_out  | TSV | Within-host
+%%metro file: between_out | TSV | Between-host
+%%metro file: locus_out   | TSV | Per-target
+%%metro off_track: pop_in
+
+graph LR
+    subgraph table_input [Allele table input]
+        allele_in[ ]
+    end
+
+    subgraph prep [PMO input]
+        pmo_in[ ]
+        extract[Extract allele table]
+        gen_pop[Generate populations]
+
+        pmo_in -->|input| extract
+        pmo_in -->|opt| gen_pop
+    end
+
+    subgraph split_sec [Split by population]
+        pop_in[ ]
+        split[Split by\npopulation]
+        pop_in -->|optin| split
+    end
+
+    subgraph estimates [Estimates]
+        coi[COI\n(naive, MOIRE)]
+        af[Allele frequency\n(MOIRE)]
+        within[Within-host relatedness\n(MOIRE)]
+        between[Between-host relatedness\n(Dcifer)]
+        locus[Per-target\nsummaries]
+        _pad
+        coi_out[ ]
+        af_out[ ]
+        within_out[ ]
+        between_out[ ]
+        locus_out[ ]
+
+        _pad -->|opt| coi
+        coi -->|opt| coi_out
+        af -->|opt| af_out
+        within -->|opt| within_out
+        between -->|opt| between_out
+        locus -->|opt| locus_out
+    end
+
+    extract -->|step,opt| split
+    gen_pop -->|opt| split
+    allele_in -->|input| split
+    split -->|opt| coi
+    split -->|opt| _pad
+    split -->|opt| af
+    split -->|opt| within
+    split -->|opt| between
+    split -->|opt| locus

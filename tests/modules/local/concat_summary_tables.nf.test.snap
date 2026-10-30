@@ -1,0 +1,71 @@
+{
+    "Should accept a single table": {
+        "content": [
+            {
+                "0": [
+                    "coi_table.tsv:md5,db27c172181335c1023da5320373e9cc"
+                ],
+                "1": [
+                    "versions.yml:md5,198f7e72dc57655642d9aff5ad43fe0a"
+                ],
+                "summary": [
+                    "coi_table.tsv:md5,db27c172181335c1023da5320373e9cc"
+                ],
+                "versions": [
+                    "versions.yml:md5,198f7e72dc57655642d9aff5ad43fe0a"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:23:07.71473",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Should concatenate labelled tables from two populations": {
+        "content": [
+            {
+                "0": [
+                    "coi_table.tsv:md5,82290aa1e00aa303c39292f7f8df5787"
+                ],
+                "1": [
+                    "versions.yml:md5,198f7e72dc57655642d9aff5ad43fe0a"
+                ],
+                "summary": [
+                    "coi_table.tsv:md5,82290aa1e00aa303c39292f7f8df5787"
+                ],
+                "versions": [
+                    "versions.yml:md5,198f7e72dc57655642d9aff5ad43fe0a"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:23:03.806673",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Stub": {
+        "content": [
+            {
+                "0": [
+                    "coi_table.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "versions.yml:md5,198f7e72dc57655642d9aff5ad43fe0a"
+                ],
+                "summary": [
+                    "coi_table.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "versions": [
+                    "versions.yml:md5,198f7e72dc57655642d9aff5ad43fe0a"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-01T16:23:11.445319",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

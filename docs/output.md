@@ -2,60 +2,57 @@
 
 ## Introduction
 
-This document describes the output produced by the pipeline. Most of the plots are taken from the MultiQC report, which summarises results at the end of the pipeline.
+Results are written under `--outdir`. Combined COI tables sit under `coi/`; relatedness under `relatedness/`. `raw_outputs/` holds tool tables that are not the same as the final processed summaries. Every estimate table includes a leading `population` column.
 
-The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
+When `--population_assignment` (or PMO population fields) is set, each population is analysed in parallel under a stable `popidx_NNN` key, then labeled and concatenated into these final summaries.
 
-<!-- TODO nf-core: Write this documentation describing your workflow's output -->
+## Output layout
 
-## Pipeline overview
+```
+outdir/
+├── coi/
+│   ├── coi_summary.tsv               # unless --skip_coi; one row per sample per COI method
+│   ├── sample_count_per_coi.tsv      # unless --skip_coi; COI sample counts per COI method
+│   └── effective_coi_summary.tsv     # unless --skip_coi, when --coi_method includes moire
+├── allele_freq_summary.tsv           # unless --skip_allele_frequencies
+├── per_target_summary.tsv            # unless --skip_per_target_summaries (allele counts + popgen; + he when MOIRE ran)
+├── raw_outputs/
+│   ├── moire_coi_summary.tsv         # when --coi_method includes moire (full MOIRE posterior)
+│   ├── convergence_summary.tsv       # when --coi_method includes moire
+│   └── he_summary.tsv                # when MOIRE ran (full HE table only)
+├── relatedness/
+│   ├── within_host_summary.tsv       # unless --skip_within_host_relatedness
+│   └── between_host_summary.tsv      # unless --skip_between_host_relatedness
+├── unassigned_specimens.txt          # only when some specimens are missing from the population assignment
+├── multiqc/
+└── pipeline_info/
+    └── pmo/                          # extracted population assignment when --pmo_population_fields is set
+```
 
-The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
+## Grain (what each row is)
 
-- [FastQC](#fastqc) - Raw read QC
-- [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
-- [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
+| File                                   | Grain                                                                                                                                                            |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `coi/coi_summary.tsv`                  | **Per sample** within each `population`. One method: `population`, `specimen_name`, `coi`. Several methods: wide (`population`, `specimen_name`, `coi_<method>`) |
+| `coi/effective_coi_summary.tsv`        | **Per sample** (`specimen_name`) within each `population`                                                                                                        |
+| `raw_outputs/moire_coi_summary.tsv`    | **Per sample** (`specimen_name`) within each `population` (full MOIRE posterior)                                                                                 |
+| `relatedness/within_host_summary.tsv`  | **Per sample** within each `population`                                                                                                                          |
+| `relatedness/between_host_summary.tsv` | **Per sample pair** (`specimen_name_a`, `specimen_name_b`) within each `population`                                                                              |
+| `coi/sample_count_per_coi.tsv`         | Per COI method × COI value (counts of samples) within each `population`                                                                                          |
+| `allele_freq_summary.tsv`              | Per target × allele (`target_name`, `seq`) within each `population` — columns start `population`, `target_name`, `seq`, `freq`, then CI/other                    |
+| `per_target_summary.tsv`               | **Per target** (`target_name`) within each `population`                                                                                                          |
+| `raw_outputs/he_summary.tsv`           | **Per target** within each `population`                                                                                                                          |
+| `raw_outputs/convergence_summary.tsv`  | Run-level per `population`                                                                                                                                       |
 
-### FastQC
+## Notes
 
-<details markdown="1">
-<summary>Output files</summary>
-
-- `fastqc/`
-  - `*_fastqc.html`: FastQC report containing quality metrics.
-  - `*_fastqc.zip`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
-
-</details>
-
-[FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) gives general quality metrics about your sequenced reads. It provides information about the quality score distribution across your reads, per base sequence content (%A/T/G/C), adapter contamination and overrepresented sequences. For further reading and documentation see the [FastQC help pages](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/).
-
-### MultiQC
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `multiqc/`
-  - `multiqc_report.html`: a standalone HTML file that can be viewed in your web browser.
-  - `multiqc_data/`: directory containing parsed statistics from the different tools used in the pipeline.
-  - `multiqc_plots/`: directory containing static images from the report in various formats.
-
-</details>
-
-[MultiQC](http://multiqc.info) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
-
-Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQC. The pipeline has special steps which also allow the software versions to be reported in the MultiQC output for future traceability. For more information about how to use MultiQC reports, see <http://multiqc.info>.
-
-### Pipeline information
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `pipeline_info/`
-  - Reports generated by Nextflow: `execution_report.html`, `execution_timeline.html`, `execution_trace.txt` and `pipeline_dag.dot`/`pipeline_dag.svg`.
-  - Reports generated by the pipeline: `pipeline_report.html`, `pipeline_report.txt` and `software_versions.yml`. The `pipeline_report*` files will only be present if the `--email` / `--email_on_fail` parameter's are used when running the pipeline.
-  - Reformatted samplesheet files used as input to the pipeline: `samplesheet.valid.csv`.
-  - Parameters used by the pipeline run: `params.json`.
-
-</details>
-
-[Nextflow](https://docs.seqera.io/platform-cloud/reports/overview) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.
+- Every published estimate table starts with a `population` column. Single-population runs use `--population_label` (default `pop1`).
+- `--skip_coi` omits `coi/`. `--skip_per_target_summaries` omits `per_target_summary.tsv`. Setting every estimate skip flag is an error.
+- `per_target_summary.tsv` merges allele-count and popgen columns on `target_name`. When MOIRE runs, it also adds `he` (posterior mean expected heterozygosity).
+- Allele frequencies and within-host relatedness currently come from MOIRE; between-host relatedness from Dcifer.
+- MOIRE runs at most once per allele table / population split even when it supplies several estimates.
+- `--coi_method` accepts a comma-separated list (e.g. `naive,moire`). One method writes `coi/coi_summary.tsv` as `population`, `specimen_name`, `coi`. Several methods write one row per sample with `coi_<method>` columns (e.g. `coi_naive`, `coi_moire`). `sample_count_per_coi.tsv` stays long, distinguished by `coi_method`. For MOIRE, `coi` is the posterior mean; `sample_count_per_coi.tsv` rounds it to the nearest integer.
+- When `--coi_method` does not include `moire`, MOIRE COI files are not published (even if MOIRE ran for allele frequencies / relatedness).
+- Raw COI tables include the tool name (e.g. `moire_coi_summary.tsv`). Naive COI is not copied to `raw_outputs/` because it matches the processed `coi/coi_summary.tsv` rows.
+- `unassigned_specimens.txt` lists specimens in the allele table that are missing from the population assignment (`--population_assignment` or `--pmo_population_fields`), one per line. These specimens are excluded from all population-level outputs. It is only written when at least one specimen is unassigned, in which case the pipeline also logs a warning with the number of excluded specimens (mid-run and again after completion).
+- `moire_coi_summary.tsv`, `convergence_summary.tsv`, and `he_summary.tsv` are published only under `raw_outputs/`.

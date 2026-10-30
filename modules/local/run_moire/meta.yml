@@ -1,0 +1,40 @@
+name: run_moire
+description: Run MOIRE via PGEcore for COI, allele frequencies, and within-host relatedness
+keywords:
+  - popgen
+  - microhaplotype
+  - plasmodium
+tools:
+  - PGEcore:
+      description: R package / CLIs for malaria genomics analysis
+      homepage: https://github.com/PlasmoGenEpi/PGEcore
+      documentation: https://plasmogenepi.github.io/PGEcore/
+      licence: ["MIT"]
+authors:
+  - "@kathrynmurie"
+maintainers:
+  - "@kathrynmurie"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/run_moire:fc0f850602a4446b
+      build_id: bd-fc0f850602a4446b_1
+      scan_id: sc-7a954f523dc9dea3_1
+    linux/arm64:
+      name: community.wave.seqera.io/library/run_moire:8f74f7de890c0136
+      build_id: bd-8f74f7de890c0136_1
+      scan_id: sc-05df5877efdb1821_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/run_moire:829516032532944a
+      build_id: bd-829516032532944a_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/42/426b6b3d29b0ef162b65d262f2c3fe3356b94e4e8c2dc367efe0372744a9082e/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/run_moire:438218513837ab65
+      build_id: bd-438218513837ab65_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/2e/2ebbc839642a171da01cbf0a0c63d1085f1f8c8a9134ccd92d73bc4c73d8d298/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/run_moire/.conda-lock/linux_amd64-bd-fc0f850602a4446b_1.txt
+    linux/arm64:
+      lock_file: modules/local/run_moire/.conda-lock/linux_arm64-bd-8f74f7de890c0136_1.txt

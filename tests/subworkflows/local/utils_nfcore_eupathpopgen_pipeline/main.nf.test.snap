@@ -1,0 +1,43 @@
+{
+    "Allele table with population assignment": {
+        "content": [
+            [
+                "population_map_indexed.tsv:md5,0ffec6e94352e9b80c8eced4037e4312"
+            ],
+            [
+                "population_index_lookup.tsv:md5,7562b16d798dcfe889d7138a4f06a1a9"
+            ],
+            [
+                "versions.yml:md5,2e07c047ccb0eee1a81634d190c17ab4"
+            ]
+        ],
+        "timestamp": "2026-10-01T16:26:23.343536",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "PMO with population fields": {
+        "content": [
+            [
+                "allele_table.tsv:md5,e47cfc5c3adc0fe7e730d212abbc3ce5"
+            ],
+            [
+                "population_map_indexed.tsv:md5,0ffec6e94352e9b80c8eced4037e4312"
+            ],
+            [
+                "population_index_lookup.tsv:md5,7562b16d798dcfe889d7138a4f06a1a9"
+            ],
+            [
+                "versions.yml:md5,2e07c047ccb0eee1a81634d190c17ab4",
+                "versions.yml:md5,7002449d65160686f15af6f24e78b584",
+                "versions.yml:md5,fc734cd505f65e7a8343da60aef42c49"
+            ]
+        ],
+        "timestamp": "2026-10-30T10:40:02.056575",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

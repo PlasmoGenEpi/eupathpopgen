@@ -1,0 +1,39 @@
+name: merge_per_locus_summary
+description: Join allele-count and popgen per-target summaries on target_name
+keywords:
+  - popgen
+  - microhaplotype
+  - summary
+tools:
+  - r-base:
+      description: R statistical computing environment
+      homepage: https://www.r-project.org/
+      licence: ["GPL-2", "GPL-3"]
+authors:
+  - "@kathrynmurie"
+maintainers:
+  - "@kathrynmurie"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/merge_per_locus_summary:cd27cc7980d17f7e
+      build_id: bd-cd27cc7980d17f7e_1
+      scan_id: sc-21ea0639c7d00e38_1
+    linux/arm64:
+      name: community.wave.seqera.io/library/merge_per_locus_summary:9ab9500dc4702234
+      build_id: bd-9ab9500dc4702234_1
+      scan_id: sc-2443cd0b322cff94_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/merge_per_locus_summary:90bcc3ed939d598d
+      build_id: bd-90bcc3ed939d598d_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/50/50c7890c34e1947af8358cb959dec80816bdb20368162fdbc2643c116105445b/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/merge_per_locus_summary:bc5f17a0831ce5fe
+      build_id: bd-bc5f17a0831ce5fe_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/61/61ac78409409007c6959a7d707b319efb736241cbb904d2dd61f14b19944ae7a/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/merge_per_locus_summary/.conda-lock/linux_amd64-bd-cd27cc7980d17f7e_1.txt
+    linux/arm64:
+      lock_file: modules/local/merge_per_locus_summary/.conda-lock/linux_arm64-bd-9ab9500dc4702234_1.txt

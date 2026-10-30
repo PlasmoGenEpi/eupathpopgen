@@ -2,9 +2,12 @@
 work/
 data/
 results/
+output/
 .DS_Store
 testing/
 testing*
 *.pyc
 null/
 .lineage/
+.nf-test/
+.nf-test.log

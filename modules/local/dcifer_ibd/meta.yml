@@ -1,0 +1,40 @@
+name: dcifer_ibd
+description: Estimate between-host relatedness with Dcifer via PGEcore
+keywords:
+  - popgen
+  - microhaplotype
+  - plasmodium
+tools:
+  - PGEcore:
+      description: R package / CLIs for malaria genomics analysis
+      homepage: https://github.com/PlasmoGenEpi/PGEcore
+      documentation: https://plasmogenepi.github.io/PGEcore/
+      licence: ["MIT"]
+authors:
+  - "@kathrynmurie"
+maintainers:
+  - "@kathrynmurie"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/dcifer_ibd:48b8a8d087f8ff8c
+      build_id: bd-48b8a8d087f8ff8c_1
+      scan_id: sc-bca7d4ec033682dd_1
+    linux/arm64:
+      name: community.wave.seqera.io/library/dcifer_ibd:499225c08ab6c9c4
+      build_id: bd-499225c08ab6c9c4_1
+      scan_id: sc-a456fc1039048ae4_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/dcifer_ibd:7456e91fc5ba3e41
+      build_id: bd-7456e91fc5ba3e41_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/01/0192461d420f027fd4aad78e79a4bd5da267026b4dfb1c7626dea350db3537e1/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/dcifer_ibd:463ae50980f4e3d7
+      build_id: bd-463ae50980f4e3d7_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/43/43252e5350b7900fba76ae2d78ff4dfeb92218e6e9a4f7bea74cfe3730f42c9b/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/dcifer_ibd/.conda-lock/linux_amd64-bd-48b8a8d087f8ff8c_1.txt
+    linux/arm64:
+      lock_file: modules/local/dcifer_ibd/.conda-lock/linux_arm64-bd-499225c08ab6c9c4_1.txt

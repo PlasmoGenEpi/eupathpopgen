@@ -1,0 +1,59 @@
+nextflow_process {
+
+    name "Test Process MERGE_PER_LOCUS_SUMMARY"
+    script "modules/local/merge_per_locus_summary/main.nf"
+    process "MERGE_PER_LOCUS_SUMMARY"
+    tag "modules"
+    tag "modules_local"
+    tag "merge_per_locus_summary"
+
+    test("Should merge allele and popgen summaries without heterozygosity") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'popidx_001',
+                    file(params.pipelines_testdata_base_path + 'testdata/popidx_001.allele_summary_by_target.tsv', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/popidx_001.per_locus_popgen_summary.tsv', checkIfExists: true),
+                    []
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.per_target_summary.get(0)[1]).readLines()[0].startsWith("target_name\t") },
+                { assert !path(process.out.per_target_summary.get(0)[1]).readLines()[0].split('\t').contains('he') },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("Stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'popidx_001',
+                    file(params.pipelines_testdata_base_path + 'testdata/popidx_001.allele_summary_by_target.tsv', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/popidx_001.per_locus_popgen_summary.tsv', checkIfExists: true),
+                    []
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+}

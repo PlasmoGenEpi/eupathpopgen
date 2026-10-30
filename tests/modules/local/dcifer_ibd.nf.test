@@ -1,0 +1,48 @@
+nextflow_process {
+
+    name "Test Process DCIFER_IBD"
+    script "modules/local/dcifer_ibd/main.nf"
+    process "DCIFER_IBD"
+    tag "modules"
+    tag "modules_local"
+    tag "dcifer_ibd"
+
+    test("Should estimate between-host relatedness for one population") {
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/popidx_001.allele_table.tsv.gz', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.btwn_host_rel.get(0)[0] == 'popidx_001' },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("Stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/popidx_001.allele_table.tsv.gz', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+}

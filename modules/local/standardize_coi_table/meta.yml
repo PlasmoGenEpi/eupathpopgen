@@ -1,0 +1,52 @@
+name: standardize_coi_table
+description: Reduce a COI estimate table to coi_method, specimen_name and coi so results from multiple COI methods can be combined.
+keywords:
+  - coi
+  - merge
+tools:
+  - r:
+      description: R scripting
+      homepage: https://www.r-project.org/
+input:
+  - prefix:
+      type: string
+      description: Population index key (e.g. popidx_001)
+  - coi_table:
+      type: file
+      description: COI TSV with specimen_name and coi columns (naive coi_table or MOIRE coi_summary)
+  - method:
+      type: string
+      description: COI method label written to the coi_method column (e.g. naive, moire)
+output:
+  - coi_table:
+      - "*.coi_table.tsv":
+          description: TSV with columns coi_method, specimen_name, coi
+  - versions:
+      - versions.yml:
+          description: Software versions
+authors:
+  - "@kathrynmurie"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/r_tidyverse:a278c76367350736
+      build_id: bd-a278c76367350736_1
+      scan_id: sc-8ec90a2503b5f13a_1
+    linux/arm64:
+      name: community.wave.seqera.io/library/r_tidyverse:2f572930ee0b9941
+      build_id: bd-2f572930ee0b9941_1
+      scan_id: sc-2122b8f54e682407_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/r_tidyverse:4d4a945577ad957d
+      build_id: bd-4d4a945577ad957d_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/31/3121e85b4799b81b8428434939f60e7c7647b4b0093893ea3277872ceeae4229/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/r_tidyverse:77254a1558f71646
+      build_id: bd-77254a1558f71646_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/95/95aee2a47076b42b1f8c69084c3de58ae1de8705bc69433d8f8b8a101ba4d64b/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/standardize_coi_table/.conda-lock/linux_amd64-bd-a278c76367350736_1.txt
+    linux/arm64:
+      lock_file: modules/local/standardize_coi_table/.conda-lock/linux_arm64-bd-2f572930ee0b9941_1.txt

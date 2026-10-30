@@ -1,0 +1,77 @@
+nextflow_process {
+
+    name "Test Process CONCAT_SUMMARY_TABLES"
+    script "modules/local/concat_summary_tables/main.nf"
+    process "CONCAT_SUMMARY_TABLES"
+    tag "modules"
+    tag "modules_local"
+    tag "concat_summary_tables"
+
+    test("Should concatenate labelled tables from two populations") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    file(params.pipelines_testdata_base_path + 'testdata/popidx_001.naive.coi_table.labeled.tsv', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/popidx_002.naive.coi_table.labeled.tsv', checkIfExists: true)
+                ]
+                input[1] = 'coi_table.tsv'
+                """
+            }
+        }
+
+        then {
+            def lines = path(process.out.summary.get(0)).readLines()
+            assertAll(
+                { assert process.success },
+                { assert lines[0] == "population\tcoi_method\tspecimen_name\tcoi" },
+                { assert lines.drop(1).collect { line -> line.split('\t')[0] }.unique().sort() == ['Laos_201701-01', 'Vietnam_201701-01'] },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("Should accept a single table") {
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/popidx_001.naive.coi_table.labeled.tsv', checkIfExists: true)
+                input[1] = 'coi_table.tsv'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("Stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    file(params.pipelines_testdata_base_path + 'testdata/popidx_001.naive.coi_table.labeled.tsv', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/popidx_002.naive.coi_table.labeled.tsv', checkIfExists: true)
+                ]
+                input[1] = 'coi_table.tsv'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+}

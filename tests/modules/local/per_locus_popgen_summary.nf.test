@@ -1,0 +1,48 @@
+nextflow_process {
+
+    name "Test Process PER_LOCUS_POPGEN_SUMMARY"
+    script "modules/local/per_locus_popgen_summary/main.nf"
+    process "PER_LOCUS_POPGEN_SUMMARY"
+    tag "modules"
+    tag "modules_local"
+    tag "per_locus_popgen_summary"
+
+    test("Should compute per-locus popgen statistics for one population") {
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/popidx_001.allele_table.tsv.gz', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.per_locus_popgen_summary.get(0)[0] == 'popidx_001' },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("Stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = file(params.pipelines_testdata_base_path + 'testdata/popidx_001.allele_table.tsv.gz', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+}

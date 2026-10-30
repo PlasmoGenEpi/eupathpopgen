@@ -1,0 +1,89 @@
+{
+    "Should estimate COI with the integer method": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "popidx_001.coi_table.tsv:md5,258a7809a989de0a9b2e38393527cf4f"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,6692dd07efe9dfb4ee4b65653d92df56"
+                ],
+                "coi_table": [
+                    [
+                        "popidx_001",
+                        "popidx_001.coi_table.tsv:md5,258a7809a989de0a9b2e38393527cf4f"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,6692dd07efe9dfb4ee4b65653d92df56"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-30T10:34:17.899505",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "popidx_001.coi_table.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,6692dd07efe9dfb4ee4b65653d92df56"
+                ],
+                "coi_table": [
+                    [
+                        "popidx_001",
+                        "popidx_001.coi_table.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,6692dd07efe9dfb4ee4b65653d92df56"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-30T10:34:39.38295",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Should estimate COI with the quantile method": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "popidx_001",
+                        "popidx_001.coi_table.tsv:md5,d6bf3c2d55f80b7cb21cbc6679bab509"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,6692dd07efe9dfb4ee4b65653d92df56"
+                ],
+                "coi_table": [
+                    [
+                        "popidx_001",
+                        "popidx_001.coi_table.tsv:md5,d6bf3c2d55f80b7cb21cbc6679bab509"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,6692dd07efe9dfb4ee4b65653d92df56"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-30T10:34:30.352928",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}
