@@ -34,6 +34,7 @@ import nf_metro
 from nf_metro.cli import cli
 from nf_metro.layout import constants as layout_constants
 from nf_metro.layout import engine as layout_engine
+from nf_metro.layout import labels as layout_labels
 from nf_metro.layout import pass_metrics
 from nf_metro.layout.phases import off_track
 from nf_metro.layout.routing import common as routing_common
@@ -63,6 +64,8 @@ ALIGNED_SLOTS = {
 # Input sections that are alternatives to each other (upper, lower), joined by an "OR" marker.
 ALTERNATIVE_SECTIONS = ("table_input", "prep")
 CHOICE_PILL_WIDTH = 54
+# Pull the OR pill left of the allele-table box's right edge.
+OR_NUDGE_X = 64.0
 
 
 def _rebind_everywhere(replacements: dict[str, tuple[object, object]]) -> None:
@@ -159,7 +162,7 @@ def _stack_legend() -> None:
 
 def _render_choice_marker(d, graph, theme) -> None:
     upper, lower = (graph.sections[s] for s in ALTERNATIVE_SECTIONS)
-    cx = upper.bbox_x + upper.bbox_w - CHOICE_PILL_WIDTH / 2
+    cx = upper.bbox_x + upper.bbox_w - CHOICE_PILL_WIDTH / 2 - OR_NUDGE_X
     cy = (upper.bbox_y + upper.bbox_h + lower.bbox_y) / 2
     d.append(draw.Rectangle(cx - CHOICE_PILL_WIDTH / 2, cy - 13, CHOICE_PILL_WIDTH, 26,
                             rx=13, ry=13, fill=theme.legend_text_color))
@@ -168,19 +171,73 @@ def _render_choice_marker(d, graph, theme) -> None:
                        dominant_baseline="central"))
 
 
-# These labels all hang the same way, so a row only has to clear one file
-# icon and its caption. The layout engine's pitch is much wider than that.
-ESTIMATE_ROW_STEP = 88.0
+# Room under the last estimate row for its file caption.
+ESTIMATE_BOTTOM_PAD = 52.0
+# Room above the first file icon, inside the section box.
+ESTIMATE_TOP_PAD = 8.0
 ESTIMATE_SECTION_PAD_X = 72.0
-ESTIMATE_SECTION_PAD_Y = 56.0
+# Gap between the Split by population box and the Estimates box.
+ESTIMATE_LEFT_GAP = 36.0
+
+
+def _legend_block_height(graph) -> float:
+    """Height of the stacked logo-and-key legend."""
+    from nf_metro.themes import THEMES
+
+    theme = THEMES["nfcore"]
+    show, logo_w, logo_h, _path = svg._resolve_logo(graph, True, theme.mode)
+    _width, height = legend.compute_legend_dimensions(
+        graph, theme, logo_size=(logo_w, logo_h) if show else None
+    )
+    return height
+
+
+def _align_allele_table_with_pmo(graph) -> None:
+    """Shift Allele table input so its left edge matches PMO input."""
+    table = graph.sections.get("table_input")
+    prep = graph.sections.get("prep")
+    if table is None or prep is None:
+        return
+    dx = prep.bbox_x - table.bbox_x
+    if abs(dx) < 0.5:
+        return
+    table.bbox_x += dx
+    for sid in table.station_ids:
+        station = graph.stations.get(sid)
+        if station is not None:
+            station.x += dx
+        port = graph.ports.get(sid)
+        if port is not None:
+            port.x += dx
+
+
+def _coi_label_below() -> None:
+    """Hang the COI caption under its dot, like the other estimate labels."""
+    original = layout_labels.place_labels
+
+    def place_labels(graph, *args, **kwargs):
+        placements = original(graph, *args, **kwargs)
+        station = graph.stations.get("coi")
+        if station is None:
+            return placements
+        for placement in placements:
+            if placement.station_id != "coi":
+                continue
+            placement.above = False
+            placement.dominant_baseline = ""
+            placement.y = station.y + layout_constants.LABEL_OFFSET
+        return placements
+
+    _rebind_everywhere({"place_labels": (original, place_labels)})
 
 
 def _align_estimate_outputs() -> None:
-    """Stack estimate stations COI → … → per-locus, each file on the same row.
+    """Stack estimate stations COI → … → per-target, each file on the same row.
 
     A hidden pad into COI is required for nf-metro routing at split; without
-    this restack that join drops COI to the bottom of the section. The pitch
-    is the icon clearance, and the section box closes around that stack.
+    this restack that join drops COI to the bottom of the section. The column
+    is pulled toward Split by population. The middle row sits on the opt trunk,
+    and the section box wraps the rows.
     """
     original = layout_engine.compute_layout
     process_ids = ("coi", "af", "within", "between", "locus")
@@ -197,12 +254,32 @@ def _align_estimate_outputs() -> None:
         stations = graph.stations
         if "coi" not in stations or "af" not in stations:
             return
-        base_y = stations["af"].y
-        proc_x = stations["af"].x
-        file_x = stations["af_out"].x
+        if "estimates" not in graph.sections or "split_sec" not in graph.sections:
+            return
+        sec = graph.sections["estimates"]
+        split_sec = graph.sections["split_sec"]
+        box_top = split_sec.bbox_y
+        box_bottom = (
+            split_sec.bbox_y
+            + split_sec.bbox_h
+            + render_constants.LEGEND_GAP
+            + _legend_block_height(graph)
+        )
+        # The opt line leaves split at the station's own y. Pin the middle
+        # estimate row to it, and keep the file icon inside the section box.
+        middle = (len(process_ids) - 1) / 2.0
+        trunk_y = stations["split"].y
+        min_first = box_top + pass_metrics.icon_half_height_approx() + 6.0
+        max_last = box_bottom - ESTIMATE_BOTTOM_PAD
+        step = min((trunk_y - min_first) / middle, (max_last - trunk_y) / middle)
+        first_y = trunk_y - middle * step
+        box_left = split_sec.bbox_x + split_sec.bbox_w + ESTIMATE_LEFT_GAP
+        file_dx = stations["af_out"].x - stations["af"].x
+        proc_x = stations["af"].x + (box_left - sec.bbox_x)
+        file_x = proc_x + file_dx
         for i, sid in enumerate(process_ids):
             stations[sid].x = proc_x
-            stations[sid].y = base_y + i * ESTIMATE_ROW_STEP
+            stations[sid].y = first_y + i * step
             fid = file_of[sid]
             if fid in stations:
                 stations[fid].x = file_x
@@ -210,34 +287,22 @@ def _align_estimate_outputs() -> None:
         if "_pad" in stations:
             stations["_pad"].x = proc_x
             stations["_pad"].y = stations["coi"].y
-        if "estimates" not in graph.sections or "split_sec" not in graph.sections:
-            return
-        sec = graph.sections["estimates"]
-        # Line the Estimates box up with Split by population. Stations keep
-        # their offset inside the box, so the whole column moves together.
-        shift = graph.sections["split_sec"].bbox_y - sec.bbox_y
-        sec.bbox_y += shift
-        for sid in sec.station_ids:
-            if sid in stations:
-                stations[sid].y += shift
         # Meet the split station on its own row so the trunk stays horizontal
         # until it enters Estimates and fans out.
         entry_y = stations["split"].y
         for pid in sec.entry_ports:
             port = graph.ports.get(pid)
             if port is not None:
+                port.x = box_left
                 port.y = entry_y
             if pid in stations:
+                stations[pid].x = box_left
                 stations[pid].y = entry_y
-        members = [
-            s
-            for s in sec.station_ids
-            if s in stations and not stations[s].is_hidden and not stations[s].is_port
-        ]
-        max_x = max(stations[s].x for s in members)
-        max_y = max(stations[s].y for s in members)
-        sec.bbox_w = max_x - sec.bbox_x + ESTIMATE_SECTION_PAD_X
-        sec.bbox_h = max_y - sec.bbox_y + ESTIMATE_SECTION_PAD_Y
+        sec.bbox_x = box_left
+        sec.bbox_y = first_y - pass_metrics.icon_half_height_approx() - ESTIMATE_TOP_PAD
+        sec.bbox_w = file_x - box_left + ESTIMATE_SECTION_PAD_X
+        sec.bbox_h = stations["locus"].y + ESTIMATE_BOTTOM_PAD - sec.bbox_y
+        _align_allele_table_with_pmo(graph)
 
     _rebind_everywhere({"compute_layout": (original, compute_layout)})
 
@@ -557,6 +622,7 @@ def frame_markup(timeline: Timeline, theme, phase: float) -> str:  # noqa: ARG00
 
 _enlarge_icons()
 _stack_legend()
+_coi_label_below()
 _align_estimate_outputs()
 _skip_hidden_routes()
 _pin_legend_below_split()

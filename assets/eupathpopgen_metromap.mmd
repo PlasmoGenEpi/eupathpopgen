@@ -19,7 +19,7 @@
 %%metro file: af_out      | TSV | Allele frequencies
 %%metro file: within_out  | TSV | Within-host
 %%metro file: between_out | TSV | Between-host
-%%metro file: locus_out   | TSV | Per-locus
+%%metro file: locus_out   | TSV | Per-target
 %%metro off_track: pop_in
 
 graph LR
@@ -45,9 +45,9 @@ graph LR
     subgraph estimates [Estimates]
         coi[COI\n(naive, MOIRE)]
         af[Allele frequency\n(MOIRE)]
-        within[Within-host\n(MOIRE)]
-        between[Between-host\n(Dcifer)]
-        locus[Per-locus\nsummaries]
+        within[Within-host relatedness\n(MOIRE)]
+        between[Between-host relatedness\n(Dcifer)]
+        locus[Per-target\nsummaries]
         _pad
         coi_out[ ]
         af_out[ ]
@@ -60,7 +60,7 @@ graph LR
         af -->|opt| af_out
         within -->|opt| within_out
         between -->|opt| between_out
-        locus -->|step| locus_out
+        locus -->|opt| locus_out
     end
 
     extract -->|step,opt| split
@@ -71,4 +71,4 @@ graph LR
     split -->|opt| af
     split -->|opt| within
     split -->|opt| between
-    split -->|step| locus
+    split -->|opt| locus
