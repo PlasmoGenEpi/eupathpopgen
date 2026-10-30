@@ -62,7 +62,7 @@ nextflow run nf-core/eupathpopgen \
 
 | Parameter                         | Meaning                                                                                                                                                              |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--coi_method`                    | `naive`, `moire`, or a comma-separated list such as `naive,moire` (COI is always estimated; multiple methods are combined into one table with a `coi_method` column) |
+| `--coi_method`                    | `naive`, `moire`, or a comma-separated list such as `naive,moire` (COI is always estimated; one method writes `coi`, several methods write wide `coi_<method>` columns) |
 | `--naive_coi_method`              | `integer_method` or `quantile_method` when `--coi_method` includes `naive`                                                                                           |
 | `--naive_coi_threshold`           | Integer index or quantile in \[0, 1]                                                                                                                                 |
 | `--skip_allele_frequencies`       | Skip allele-frequency outputs (currently from MOIRE)                                                                                                                 |

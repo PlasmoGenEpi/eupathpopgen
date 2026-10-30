@@ -27,7 +27,7 @@ nextflow_pipeline {
             def coi = file("${params.outdir}/coi/coi_summary.tsv")
             assertAll(
                 { assert workflow.success },
-                { assert coi.readLines()[0].split('\t').toList() == ['population', 'coi_method', 'specimen_name', 'coi'] },
+                { assert coi.readLines()[0].split('\t').toList() == ['population', 'specimen_name', 'coi'] },
                 { assert file("${params.outdir}/coi/sample_count_per_coi.tsv").readLines()[0].startsWith('population\tcoi_method\t') },
                 // test profile skips MOIRE-backed estimates and Dcifer
                 { assert !file("${params.outdir}/allele_freq_summary.tsv").exists() },

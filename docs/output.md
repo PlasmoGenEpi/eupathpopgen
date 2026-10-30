@@ -33,7 +33,7 @@ outdir/
 
 | File                                            | Grain                                                                                                                                             |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `coi/coi_summary.tsv`                               | **Per sample × COI method** (`specimen_name`, `coi_method`) within each `population` — columns `population`, `coi_method`, `specimen_name`, `coi` |
+| `coi/coi_summary.tsv`                               | **Per sample** within each `population`. One method: `population`, `specimen_name`, `coi`. Several methods: wide (`population`, `specimen_name`, `coi_<method>`) |
 | `coi/effective_coi_summary.tsv`                     | **Per sample** (`specimen_name`) within each `population`                                                                                         |
 | `raw_outputs/moire_coi_summary.tsv`                 | **Per sample** (`specimen_name`) within each `population` (full MOIRE posterior)                                                                  |
 | `relatedness/within_host_summary.tsv`               | **Per sample** within each `population`                                                                                                           |
@@ -50,7 +50,7 @@ outdir/
 - `per_target_summary.tsv` merges allele-count and popgen columns on `target_name`. When MOIRE runs, it also adds `he` (posterior mean expected heterozygosity).
 - Allele frequencies and within-host relatedness currently come from MOIRE; between-host relatedness from Dcifer.
 - MOIRE runs at most once per allele table / population split even when it supplies several estimates.
-- `--coi_method` accepts a comma-separated list (e.g. `naive,moire`). Every requested method contributes rows to `coi/coi_summary.tsv` and `coi/sample_count_per_coi.tsv`, distinguished by `coi_method`. For MOIRE, `coi` is the posterior mean; `sample_count_per_coi.tsv` rounds it to the nearest integer.
+- `--coi_method` accepts a comma-separated list (e.g. `naive,moire`). One method writes `coi/coi_summary.tsv` as `population`, `specimen_name`, `coi`. Several methods write one row per sample with `coi_<method>` columns (e.g. `coi_naive`, `coi_moire`). `sample_count_per_coi.tsv` stays long, distinguished by `coi_method`. For MOIRE, `coi` is the posterior mean; `sample_count_per_coi.tsv` rounds it to the nearest integer.
 - When `--coi_method` does not include `moire`, MOIRE COI files are not published (even if MOIRE ran for allele frequencies / relatedness).
 - Raw COI tables include the tool name (e.g. `moire_coi_summary.tsv`). Naive COI is not copied to `raw_outputs/` because it matches the processed `coi/coi_summary.tsv` rows.
 - `unassigned_specimens.txt` lists specimens in the allele table that are missing from the population assignment (`--population_assignment` or `--pmo_population_fields`), one per line. These specimens are excluded from all population-level outputs. It is only written when at least one specimen is unassigned, in which case the pipeline also logs a warning with the number of excluded specimens (mid-run and again after completion).

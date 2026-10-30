@@ -97,7 +97,8 @@ workflow EUPATHPOPGEN {
     }
 
     //
-    // COI: one or more methods (comma-separated --coi_method), combined into one long-format table
+    // COI: one or more methods (comma-separated --coi_method).
+    // One method: coi_summary with a coi column (no coi_method). Several: wide (coi_<method>).
     //
     def allowed_coi_methods = ['naive', 'moire']
     def coi_methods = params.coi_method.toString().tokenize(',')*.trim().findAll { it }.unique()

@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Allele-table or PMO population genetics workflow organised around estimates (`--coi_method`, skip flags for AF / relatedness)
-- Multiple COI methods in one run (`--coi_method naive,moire`), combined into `coi/coi_summary.tsv` / `coi/sample_count_per_coi.tsv` with a `coi_method` column
+- Multiple COI methods in one run (`--coi_method naive,moire`), combined into a wide `coi/coi_summary.tsv` (`coi_naive`, `coi_moire`, …); `sample_count_per_coi.tsv` stays long with a `coi_method` column
 - Optional PMO entry via `--pmo` (pmotools extract) with optional `--pmo_population_fields`
 - Optional population split via `--population_assignment` (or PMO-derived map); parallel `popidx` runs are labeled and concatenated into final summaries. Specimens missing from the population assignment are listed in `unassigned_specimens.txt` and reported with a warning rather than dropped silently
 - Estimate outputs grouped as `coi/` (combined `coi_summary.tsv`, effective COI, sample counts), `relatedness/`, and `raw_outputs/` (tool tables that differ from the finals, including `moire_coi_summary.tsv`); merged `per_target_summary.tsv`

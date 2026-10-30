@@ -17,10 +17,12 @@ process CONCAT_SUMMARY_TABLES {
 
     script:
     def table_list = tables instanceof List ? tables : [tables]
+    def extra_args = task.ext.args ?: ''
     """
     Rscript ${projectDir}/bin/concat_summary_tables.R \\
         --files "${table_list.join(',')}" \\
-        --output ${out_name}
+        --output ${out_name} \\
+        ${extra_args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

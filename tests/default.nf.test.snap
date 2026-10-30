@@ -81,7 +81,7 @@
                 "pipeline_info/pmo/population_map.tsv"
             ],
             [
-                "coi_summary.tsv:md5,99abe149ed1b505992ecdab731eae3b1",
+                "coi_summary.tsv:md5,c5a3c7cd5e5bc45c4fd275374fd4e444",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "per_target_summary.tsv:md5,22ef7c2059e93fb16fa35be05a821fb7",
                 "population_map.tsv:md5,067d56492b997a48523e1d8fc728b0ab",
@@ -162,7 +162,7 @@
                 "pipeline_info"
             ],
             [
-                "coi_summary.tsv:md5,2428e4b547bf7a39c86220cc9b320ec1",
+                "coi_summary.tsv:md5,08458858bed07d605d4984d741a4ee3b",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "per_target_summary.tsv:md5,dbaa2a680a5832ea8a18690bd5fed9ff",
                 "sample_count_per_coi.tsv:md5,301bdfd9918bf7bcd06cc5096b1a13b1"

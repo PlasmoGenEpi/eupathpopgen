@@ -98,7 +98,7 @@
                     "default": "naive",
                     "pattern": "^\\s*(naive|moire)\\s*(,\\s*(naive|moire)\\s*)*$",
                     "description": "Method(s) for complexity of infection (COI) estimation. Comma-separate to run several (e.g. 'naive,moire').",
-                    "help_text": "Always estimated. Allowed values: naive, moire. When several methods are given, each is run and the results are combined into coi_table.tsv and sample_count_per_coi.tsv with a coi_method column. If moire is also needed for allele frequencies or within-host relatedness, MOIRE still runs only once.",
+                    "help_text": "Always estimated. Allowed values: naive, moire. One method writes coi/coi_summary.tsv with a coi column (no coi_method). Several methods write wide columns (coi_naive, coi_moire, …). sample_count_per_coi.tsv stays long with a coi_method column. If moire is also needed for allele frequencies or within-host relatedness, MOIRE still runs only once.",
                     "fa_icon": "fas fa-users-cog"
                 },
                 "naive_coi_method": {
