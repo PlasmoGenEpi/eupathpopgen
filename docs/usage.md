@@ -60,14 +60,14 @@ nextflow run nf-core/eupathpopgen \
 
 ### Estimates (not tools)
 
-| Parameter                         | Meaning                                                                                                                                                              |
-| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Parameter                         | Meaning                                                                                                                                                                 |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--coi_method`                    | `naive`, `moire`, or a comma-separated list such as `naive,moire` (COI is always estimated; one method writes `coi`, several methods write wide `coi_<method>` columns) |
-| `--naive_coi_method`              | `integer_method` or `quantile_method` when `--coi_method` includes `naive`                                                                                           |
-| `--naive_coi_threshold`           | Integer index or quantile in \[0, 1]                                                                                                                                 |
-| `--skip_allele_frequencies`       | Skip allele-frequency outputs (currently from MOIRE)                                                                                                                 |
-| `--skip_within_host_relatedness`  | Skip within-host relatedness outputs (currently from MOIRE)                                                                                                          |
-| `--skip_between_host_relatedness` | Skip between-host IBD outputs (currently from Dcifer)                                                                                                                |
+| `--naive_coi_method`              | `integer_method` or `quantile_method` when `--coi_method` includes `naive`                                                                                              |
+| `--naive_coi_threshold`           | Integer index or quantile in \[0, 1]                                                                                                                                    |
+| `--skip_allele_frequencies`       | Skip allele-frequency outputs (currently from MOIRE)                                                                                                                    |
+| `--skip_within_host_relatedness`  | Skip within-host relatedness outputs (currently from MOIRE)                                                                                                             |
+| `--skip_between_host_relatedness` | Skip between-host IBD outputs (currently from Dcifer)                                                                                                                   |
 
 Per-target allele counts and popgen summaries always run.
 

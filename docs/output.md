@@ -31,18 +31,18 @@ outdir/
 
 ## Grain (what each row is)
 
-| File                                            | Grain                                                                                                                                             |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `coi/coi_summary.tsv`                               | **Per sample** within each `population`. One method: `population`, `specimen_name`, `coi`. Several methods: wide (`population`, `specimen_name`, `coi_<method>`) |
-| `coi/effective_coi_summary.tsv`                     | **Per sample** (`specimen_name`) within each `population`                                                                                         |
-| `raw_outputs/moire_coi_summary.tsv`                 | **Per sample** (`specimen_name`) within each `population` (full MOIRE posterior)                                                                  |
-| `relatedness/within_host_summary.tsv`               | **Per sample** within each `population`                                                                                                           |
-| `relatedness/between_host_summary.tsv`              | **Per sample pair** (`specimen_name_a`, `specimen_name_b`) within each `population`                                                               |
-| `coi/sample_count_per_coi.tsv`                      | Per COI method × COI value (counts of samples) within each `population`                                                                           |
-| `allele_freq_summary.tsv`                           | Per target × allele (`target_name`, `seq`) within each `population` — columns start `population`, `target_name`, `seq`, `freq`, then CI/other     |
-| `per_target_summary.tsv`                            | **Per target** (`target_name`) within each `population`                                                                                           |
-| `raw_outputs/he_summary.tsv`                        | **Per target** within each `population`                                                                                                           |
-| `raw_outputs/convergence_summary.tsv`               | Run-level per `population`                                                                                                                        |
+| File                                   | Grain                                                                                                                                                            |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `coi/coi_summary.tsv`                  | **Per sample** within each `population`. One method: `population`, `specimen_name`, `coi`. Several methods: wide (`population`, `specimen_name`, `coi_<method>`) |
+| `coi/effective_coi_summary.tsv`        | **Per sample** (`specimen_name`) within each `population`                                                                                                        |
+| `raw_outputs/moire_coi_summary.tsv`    | **Per sample** (`specimen_name`) within each `population` (full MOIRE posterior)                                                                                 |
+| `relatedness/within_host_summary.tsv`  | **Per sample** within each `population`                                                                                                                          |
+| `relatedness/between_host_summary.tsv` | **Per sample pair** (`specimen_name_a`, `specimen_name_b`) within each `population`                                                                              |
+| `coi/sample_count_per_coi.tsv`         | Per COI method × COI value (counts of samples) within each `population`                                                                                          |
+| `allele_freq_summary.tsv`              | Per target × allele (`target_name`, `seq`) within each `population` — columns start `population`, `target_name`, `seq`, `freq`, then CI/other                    |
+| `per_target_summary.tsv`               | **Per target** (`target_name`) within each `population`                                                                                                          |
+| `raw_outputs/he_summary.tsv`           | **Per target** within each `population`                                                                                                                          |
+| `raw_outputs/convergence_summary.tsv`  | Run-level per `population`                                                                                                                                       |
 
 ## Notes
 
