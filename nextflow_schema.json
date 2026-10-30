@@ -98,7 +98,7 @@
                     "default": "naive",
                     "pattern": "^\\s*(naive|moire)\\s*(,\\s*(naive|moire)\\s*)*$",
                     "description": "Method(s) for complexity of infection (COI) estimation. Comma-separate to run several (e.g. 'naive,moire').",
-                    "help_text": "Always estimated. Allowed values: naive, moire. One method writes coi/coi_summary.tsv with a coi column (no coi_method). Several methods write wide columns (coi_naive, coi_moire, …). sample_count_per_coi.tsv stays long with a coi_method column. If moire is also needed for allele frequencies or within-host relatedness, MOIRE still runs only once.",
+                    "help_text": "Ignored when --skip_coi is set. Allowed values: naive, moire. One method writes coi/coi_summary.tsv with a coi column (no coi_method). Several methods write wide columns (coi_naive, coi_moire, …). sample_count_per_coi.tsv stays long with a coi_method column. If moire is also needed for allele frequencies or within-host relatedness, MOIRE still runs only once.",
                     "fa_icon": "fas fa-users-cog"
                 },
                 "naive_coi_method": {
@@ -113,6 +113,13 @@
                     "default": 1,
                     "description": "Integer index (integer_method) or quantile in 0-1 (quantile_method) for naive COI.",
                     "fa_icon": "fas fa-users-cog"
+                },
+                "skip_coi": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Skip complexity of infection (COI) estimation.",
+                    "help_text": "Skips naive and/or MOIRE COI outputs under coi/. At least one estimate must remain enabled (COI, allele frequencies, within-host relatedness, between-host relatedness, or per-target summaries).",
+                    "fa_icon": "fas fa-forward"
                 },
                 "skip_allele_frequencies": {
                     "type": "boolean",
@@ -130,6 +137,13 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Skip between-host relatedness / IBD estimation (currently via Dcifer).",
+                    "fa_icon": "fas fa-forward"
+                },
+                "skip_per_target_summaries": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Skip per-target allele-count and popgen summaries.",
+                    "help_text": "Skips per_target_summary.tsv. At least one estimate must remain enabled (COI, allele frequencies, within-host relatedness, between-host relatedness, or per-target summaries).",
                     "fa_icon": "fas fa-forward"
                 },
                 "skip_multiqc": {

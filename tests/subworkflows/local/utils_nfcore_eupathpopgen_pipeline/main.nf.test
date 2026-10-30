@@ -140,4 +140,42 @@ nextflow_workflow {
             )
         }
     }
+
+    test("All estimate skip flags error") {
+
+        when {
+            params {
+                skip_coi                      = true
+                skip_allele_frequencies       = true
+                skip_within_host_relatedness  = true
+                skip_between_host_relatedness = true
+                skip_per_target_summaries     = true
+            }
+            workflow {
+                """
+                input[0] = false
+                input[1] = true
+                input[2] = true
+                input[3] = []
+                input[4] = "$outputDir"
+                input[5] = false
+                input[6] = false
+                input[7] = false
+                """
+            }
+        }
+
+        then {
+            def report = [
+                workflow.errorReport,
+                workflow.errorMessage,
+                workflow.stdout,
+                workflow.stderr
+            ].collect { it?.toString() ?: '' }.join('\n')
+            assertAll(
+                { assert workflow.failed },
+                { assert report.contains("All estimates were skipped") }
+            )
+        }
+    }
 }

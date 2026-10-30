@@ -194,10 +194,18 @@ def validateInputParameters() {
     if (params.population_assignment && params.population_label != 'pop1') {
         log.warn "`--population_assignment` takes precedence; `--population_label` will be ignored."
     }
+    if (params.skip_coi &&
+        params.skip_allele_frequencies &&
+        params.skip_within_host_relatedness &&
+        params.skip_between_host_relatedness &&
+        params.skip_per_target_summaries) {
+        error("All estimates were skipped. Unset at least one of `--skip_coi`, `--skip_allele_frequencies`, `--skip_within_host_relatedness`, `--skip_between_host_relatedness`, or `--skip_per_target_summaries`.")
+    }
 }
 
 def moireUsed() {
-    return ('moire' in params.coi_method.toString().tokenize(',')*.trim()) || !params.skip_allele_frequencies || !params.skip_within_host_relatedness
+    def coi_methods = params.skip_coi ? [] : params.coi_method.toString().tokenize(',')*.trim()
+    return ('moire' in coi_methods) || !params.skip_allele_frequencies || !params.skip_within_host_relatedness
 }
 
 def toolCitationText() {
@@ -207,7 +215,7 @@ def toolCitationText() {
             params.pmo ? "pmotools (PlasmoGenEpi)," : "",
             moireUsed() ? "MOIRE (Murphy and Greenhouse 2024)," : "",
             params.skip_between_host_relatedness ? "" : "Dcifer (Gerlovina et al. 2022),",
-            "pegas (Paradis 2010),",
+            params.skip_per_target_summaries ? "" : "pegas (Paradis 2010),",
             "MultiQC (Ewels et al. 2016)",
             "."
         ].findAll { it }.join(' ').trim()
@@ -221,7 +229,7 @@ def toolBibliographyText() {
             params.pmo ? "<li>PlasmoGenEpi. pmotools-python: CLI tools for Portable Microhaplotype Objects (PMO). <a href=\"https://github.com/PlasmoGenEpi/pmotools-python\">https://github.com/PlasmoGenEpi/pmotools-python</a></li>" : "",
             moireUsed() ? "<li>Murphy, M., & Greenhouse, B. (2024). MOIRE: a software package for the estimation of allele frequencies and effective multiplicity of infection from polyallelic data. Bioinformatics, 40(10), btae619. doi: <a href=\"https://doi.org/10.1093/bioinformatics/btae619\">10.1093/bioinformatics/btae619</a></li>" : "",
             params.skip_between_host_relatedness ? "" : "<li>Gerlovina, I., Gerlovin, B., Rodríguez-Barraquer, I., & Greenhouse, B. (2022). Dcifer: an IBD-based method to calculate genetic distance between polyclonal infections. Genetics, 222(2), iyac126. doi: <a href=\"https://doi.org/10.1093/genetics/iyac126\">10.1093/genetics/iyac126</a></li>",
-            "<li>Paradis, E. (2010). pegas: an R package for population genetics with an integrated-modular approach. Bioinformatics, 26(3), 419–420. doi: <a href=\"https://doi.org/10.1093/bioinformatics/btp696\">10.1093/bioinformatics/btp696</a></li>",
+            params.skip_per_target_summaries ? "" : "<li>Paradis, E. (2010). pegas: an R package for population genetics with an integrated-modular approach. Bioinformatics, 26(3), 419–420. doi: <a href=\"https://doi.org/10.1093/bioinformatics/btp696\">10.1093/bioinformatics/btp696</a></li>",
             "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics, 32(19), 3047–3048. doi: <a href=\"https://doi.org/10.1093/bioinformatics/btw354\">10.1093/bioinformatics/btw354</a></li>"
         ].findAll { it }.join(' ').trim()
 

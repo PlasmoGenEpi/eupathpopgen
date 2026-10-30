@@ -91,4 +91,31 @@ nextflow_pipeline {
             )
         }
     }
+
+    test("errors when all estimates are skipped") {
+
+        when {
+            params {
+                outdir                          = "$outputDir"
+                skip_coi                        = true
+                skip_allele_frequencies         = true
+                skip_within_host_relatedness    = true
+                skip_between_host_relatedness   = true
+                skip_per_target_summaries       = true
+            }
+        }
+
+        then {
+            def report = [
+                workflow.errorReport,
+                workflow.errorMessage,
+                workflow.stdout,
+                workflow.stderr
+            ].collect { it?.toString() ?: '' }.join('\n')
+            assertAll(
+                { assert workflow.failed },
+                { assert report.contains("All estimates were skipped") }
+            )
+        }
+    }
 }

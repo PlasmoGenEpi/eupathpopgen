@@ -31,12 +31,12 @@ The scientific methods are Plasmodium-validated; use `-profile plasmodium` for r
 
 1. Optionally extract an allele table (and population assignment) from `--pmo` ([pmotools-python](https://github.com/PlasmoGenEpi/pmotools-python))
 2. Optionally split the allele table by user-defined populations
-3. Estimate COI. Choice of method between:
+3. Optionally estimate COI. Choice of method between:
    i. naive method ([PGEcore](https://github.com/PlasmoGenEpi/PGEcore))
    ii. [moire](https://github.com/EPPIcenter/moire) ([PGEcore wrapper](https://github.com/PlasmoGenEpi/PGEcore))
 4. Optionally estimate allele frequencies and within-host relatedness ([moire](https://github.com/EPPIcenter/moire); single run when needed)
 5. Optionally estimate between-host relatedness / IBD ([Dcifer](https://github.com/EPPIcenter/dcifer))
-6. Generate per-target allele and popgen summaries
+6. Optionally generate per-target allele and popgen summaries
 7. Collate software versions with MultiQC
 
 ## Usage

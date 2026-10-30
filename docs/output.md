@@ -11,11 +11,11 @@ When `--population_assignment` (or PMO population fields) is set, each populatio
 ```
 outdir/
 ├── coi/
-│   ├── coi_summary.tsv               # always; one row per sample per COI method
-│   ├── sample_count_per_coi.tsv      # always; COI sample counts per COI method
-│   └── effective_coi_summary.tsv     # when --coi_method includes moire
+│   ├── coi_summary.tsv               # unless --skip_coi; one row per sample per COI method
+│   ├── sample_count_per_coi.tsv      # unless --skip_coi; COI sample counts per COI method
+│   └── effective_coi_summary.tsv     # unless --skip_coi, when --coi_method includes moire
 ├── allele_freq_summary.tsv           # unless --skip_allele_frequencies
-├── per_target_summary.tsv            # always (allele counts + popgen; + he when MOIRE ran)
+├── per_target_summary.tsv            # unless --skip_per_target_summaries (allele counts + popgen; + he when MOIRE ran)
 ├── raw_outputs/
 │   ├── moire_coi_summary.tsv         # when --coi_method includes moire (full MOIRE posterior)
 │   ├── convergence_summary.tsv       # when --coi_method includes moire
@@ -47,6 +47,7 @@ outdir/
 ## Notes
 
 - Every published estimate table starts with a `population` column. Single-population runs use `--population_label` (default `pop1`).
+- `--skip_coi` omits `coi/`. `--skip_per_target_summaries` omits `per_target_summary.tsv`. Setting every estimate skip flag is an error.
 - `per_target_summary.tsv` merges allele-count and popgen columns on `target_name`. When MOIRE runs, it also adds `he` (posterior mean expected heterozygosity).
 - Allele frequencies and within-host relatedness currently come from MOIRE; between-host relatedness from Dcifer.
 - MOIRE runs at most once per allele table / population split even when it supplies several estimates.
