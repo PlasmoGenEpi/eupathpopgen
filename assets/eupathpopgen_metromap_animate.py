@@ -178,6 +178,8 @@ ESTIMATE_TOP_PAD = 8.0
 ESTIMATE_SECTION_PAD_X = 72.0
 # Gap between the Split by population box and the Estimates box.
 ESTIMATE_LEFT_GAP = 36.0
+# Gap between the Split by population box and the legend.
+LEGEND_BELOW_SPLIT = 12.0
 
 
 def _legend_block_height(graph) -> float:
@@ -231,6 +233,39 @@ def _coi_label_below() -> None:
     _rebind_everywhere({"place_labels": (original, place_labels)})
 
 
+def _shift_section(graph, section, dy: float) -> None:
+    """Move a section and its stations by dy, keeping their layout inside the box."""
+    if abs(dy) < 0.5:
+        return
+    section.bbox_y += dy
+    for sid in section.station_ids:
+        station = graph.stations.get(sid)
+        if station is not None:
+            station.y += dy
+        port = graph.ports.get(sid)
+        if port is not None:
+            port.y += dy
+
+
+def _shift_pmo_inline_with_legend(graph) -> None:
+    """Level Allele table input with Split by population, and PMO input with the legend.
+
+    PMO's top stays with the legend top and its box grows so the bottom matches too.
+    """
+    split = graph.sections.get("split_sec")
+    if split is None:
+        return
+    table = graph.sections.get("table_input")
+    if table is not None:
+        _shift_section(graph, table, split.bbox_y - table.bbox_y)
+    prep = graph.sections.get("prep")
+    if prep is None:
+        return
+    legend_y = split.bbox_y + split.bbox_h + LEGEND_BELOW_SPLIT
+    _shift_section(graph, prep, legend_y - prep.bbox_y)
+    prep.bbox_h = legend_y + _legend_block_height(graph) - prep.bbox_y
+
+
 def _align_estimate_outputs() -> None:
     """Stack estimate stations COI → … → per-target, each file on the same row.
 
@@ -251,6 +286,7 @@ def _align_estimate_outputs() -> None:
 
     def compute_layout(graph, *args, **kwargs):
         original(graph, *args, **kwargs)
+        _shift_pmo_inline_with_legend(graph)
         stations = graph.stations
         if "coi" not in stations or "af" not in stations:
             return
@@ -356,7 +392,7 @@ def _pin_legend_below_split() -> None:
         split = graph.sections["split_sec"]
         return (
             split.bbox_x,
-            split.bbox_y + split.bbox_h + render_constants.LEGEND_GAP,
+            split.bbox_y + split.bbox_h + LEGEND_BELOW_SPLIT,
             width,
             height,
             show,
